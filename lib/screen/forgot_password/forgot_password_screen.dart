@@ -1,24 +1,24 @@
-import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
+import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/widgets/custom_edittext.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
-import 'package:cjspoton/widgets/phone_edittext.dart';
+import 'package:cjspoton/widgets/password_edittext.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-  static const String LOGIN_ROUTE = '/login';
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({Key? key}) : super(key: key);
+  static const String FORGOT_PASSWORD_ROUTE = '/forgotPassword';
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late VideoPlayerController _controller;
   late Size screenSize;
-  TextEditingController _phoneCtrl = TextEditingController();
-
+  TextEditingController _emaildCtrl = TextEditingController();
   void initState() {
     super.initState();
 
@@ -36,11 +36,18 @@ class _LoginScreenState extends State<LoginScreen> {
     _controller.dispose();
   }
 
+  bool _isPasswordHidden = true;
+  _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordHidden = !_isPasswordHidden;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: body(),
       resizeToAvoidBottomInset: false,
+      body: body(),
     );
   }
 
@@ -63,16 +70,17 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  'Welcome Back',
+                  'Forgot Password',
                   style: Theme.of(context)
                       .textTheme
                       .headline4
                       ?.copyWith(color: Colors.white),
                 ),
                 Text(
-                  'Sign in to continue',
+                  'Password reset link will be sent to this email',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1
@@ -81,7 +89,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: defaultPadding * 4,
                 ),
-                PhoneTextField(phoneCtrl: _phoneCtrl),
+                CustomTextField(
+                  teCtrl: _emaildCtrl,
+                  hint: 'Email',
+                  inputType: TextInputType.emailAddress,
+                ),
                 SizedBox(
                   width: screenSize.width,
                   child: TextButton(
@@ -90,87 +102,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
                     },
                     child: Text(
-                      'Send OTP',
+                      'Login',
                       style: Theme.of(context).textTheme.button?.copyWith(
                             color: Colors.white,
                           ),
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: defaultPadding * 2,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        color: hintColor.withOpacity(0.5),
-                      ),
+                Container(
+                  margin: EdgeInsets.only(
+                      bottom: defaultPadding, top: defaultPadding * 1.5),
+                  alignment: Alignment.center,
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                        RegisterScreen.REGISTER_ROUTE, (route) => false),
+                    child: Text(
+                      'New to Combo Jumbo, register',
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          ?.copyWith(color: Colors.white),
                     ),
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 15,
-                      child: Text(
-                        'OR',
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                              color: Colors.white,
-                              fontSize: 12,
-                            ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        color: hintColor.withOpacity(0.5),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                IconTextButton(
-                  context: context,
-                  iconAssetPath: 'assets/svg/envelope.svg',
-                  onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(LoginEmailScreen.EMAIL_LOGIN_ROUTE);
-                  },
-                  text: 'Continue with Email',
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: IconTextButton(
-                        context: context,
-                        iconAssetPath: 'assets/svg/facebook.svg',
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                              OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                        },
-                        text: 'Facebook',
-                      ),
-                    ),
-                    SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Expanded(
-                      child: IconTextButton(
-                        context: context,
-                        iconAssetPath: 'assets/svg/google.svg',
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                              OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                        },
-                        text: 'Google',
-                      ),
-                    )
-                  ],
+                  ),
                 ),
                 Spacer(),
                 Align(

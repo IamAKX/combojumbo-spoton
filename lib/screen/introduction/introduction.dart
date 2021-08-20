@@ -1,3 +1,4 @@
+import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,8 @@ class _IntroductionState extends State<Introduction> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             OutlinedButton.icon(
-              onPressed: () {},
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(ChooseOutletScreen.CHOOSE_OUTLET_ROUTE),
               label: Text(
                 'Skip',
                 style: Theme.of(context)

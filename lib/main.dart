@@ -1,4 +1,5 @@
 import 'package:cjspoton/screen/login/login_screen.dart';
+import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/utils/navigator.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
