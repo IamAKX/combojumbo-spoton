@@ -3,6 +3,7 @@ import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
+import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,8 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => Introduction());
       case ChooseOutletScreen.CHOOSE_OUTLET_ROUTE:
         return MaterialPageRoute(builder: (_) => ChooseOutletScreen());
+      case MainContainer.MAIN_CONTAINER_ROUTE:
+        return MaterialPageRoute(builder: (_) => MainContainer());
 
       default:
         return _errorRoute();

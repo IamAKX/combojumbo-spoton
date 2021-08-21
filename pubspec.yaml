@@ -21,7 +21,10 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  cached_network_image: ^3.1.0
+  carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
+  floating_bottom_navigation_bar: ^1.5.2
   flutter:
     sdk: flutter
   flutter_svg: ^0.22.0
@@ -34,7 +37,6 @@ dependencies:
   provider: ^5.0.0
   shared_preferences: ^2.0.6
   video_player: ^2.1.14
-  cached_network_image: ^3.1.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"

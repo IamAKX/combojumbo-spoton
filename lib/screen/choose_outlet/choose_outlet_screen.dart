@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,8 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
       appBar: AppBar(
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false),
             child: Container(
               padding: EdgeInsets.all(15),
               child: Text(
@@ -88,7 +90,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       CircularProgressIndicator(
                           value: downloadProgress.progress),
                   errorWidget: (context, url, error) => Icon(Icons.error),
-                  width: 80,
+                  width: 100,
                   height: 100,
                   fit: BoxFit.cover,
                 ),
