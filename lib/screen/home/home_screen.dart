@@ -348,7 +348,8 @@ class RecomendedItems extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
-      childAspectRatio: 0.77,
+      childAspectRatio:
+          (screenSize.width - (2 * defaultPadding)) / (screenSize.height / 1.7),
       mainAxisSpacing: defaultPadding,
       physics: NeverScrollableScrollPhysics(),
       children: [

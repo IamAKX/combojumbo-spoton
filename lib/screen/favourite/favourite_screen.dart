@@ -18,7 +18,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
     return GridView.count(
       crossAxisCount: 2,
       // shrinkWrap: true,
-      childAspectRatio: 0.77,
+      childAspectRatio:
+          (screenSize.width - (2 * defaultPadding)) / (screenSize.height / 1.7),
       mainAxisSpacing: defaultPadding,
       children: [
         for (int i = 0; i < 20; i++) ...{
