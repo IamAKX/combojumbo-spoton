@@ -1,3 +1,4 @@
+import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
@@ -27,6 +28,8 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => ChooseOutletScreen());
       case MainContainer.MAIN_CONTAINER_ROUTE:
         return MaterialPageRoute(builder: (_) => MainContainer());
+      case AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE:
+        return MaterialPageRoute(builder: (_) => AddDeliveryAddress());
 
       default:
         return _errorRoute();
