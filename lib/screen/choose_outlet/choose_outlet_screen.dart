@@ -87,8 +87,10 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                   imageUrl:
                       "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
                   progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
+                      Center(
+                    child: CircularProgressIndicator(
+                        value: downloadProgress.progress),
+                  ),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   width: 100,
                   height: 100,
@@ -149,9 +151,10 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       imageUrl:
                           "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
                       progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              CircularProgressIndicator(
-                                  value: downloadProgress.progress),
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
+                      ),
                       errorWidget: (context, url, error) => Icon(Icons.error),
                       width: 80,
                       height: 100,

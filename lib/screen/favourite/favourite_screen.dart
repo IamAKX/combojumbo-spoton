@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({Key? key}) : super(key: key);
@@ -15,12 +16,16 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   @override
   Widget build(BuildContext context) {
     screenSize = MediaQuery.of(context).size;
-    return GridView.count(
+    return StaggeredGridView.count(
       crossAxisCount: 2,
+
       // shrinkWrap: true,
-      childAspectRatio:
-          (screenSize.width - (2 * defaultPadding)) / (screenSize.height / 1.7),
+      // childAspectRatio:
+      //     (screenSize.width - (2 * defaultPadding)) / (screenSize.height / 1.7),
       mainAxisSpacing: defaultPadding,
+      staggeredTiles: [
+        for (int i = 0; i < 20; i++) ...{StaggeredTile.fit(1)}
+      ],
       children: [
         for (int i = 0; i < 20; i++) ...{
           Container(
@@ -49,9 +54,10 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                           imageUrl:
                               'https://www.combojumbo.in/master/food/images/107image16632021-06-29-18-57-17paneer-tikka.jpg',
                           progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                                      value: downloadProgress.progress),
+                              (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                          ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                         ),

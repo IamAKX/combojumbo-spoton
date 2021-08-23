@@ -5,6 +5,7 @@ import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/subheading.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,9 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             imageUrl: cjRouteModel.image,
                             width: 30,
                             progressIndicatorBuilder:
-                                (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(
-                                        value: downloadProgress.progress),
+                                (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                            ),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
                           ),
@@ -345,11 +347,12 @@ class RecomendedItems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
+    return StaggeredGridView.count(
       crossAxisCount: 2,
       shrinkWrap: true,
-      childAspectRatio:
-          (screenSize.width - (2 * defaultPadding)) / (screenSize.height / 1.7),
+      staggeredTiles: [
+        for (int i = 0; i < 4; i++) ...{StaggeredTile.fit(1)}
+      ],
       mainAxisSpacing: defaultPadding,
       physics: NeverScrollableScrollPhysics(),
       children: [
@@ -380,9 +383,10 @@ class RecomendedItems extends StatelessWidget {
                           imageUrl:
                               'https://www.combojumbo.in/master/food/images/107image16632021-06-29-18-57-17paneer-tikka.jpg',
                           progressIndicatorBuilder:
-                              (context, url, downloadProgress) =>
-                                  CircularProgressIndicator(
-                                      value: downloadProgress.progress),
+                              (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress),
+                          ),
                           errorWidget: (context, url, error) =>
                               Icon(Icons.error),
                         ),
@@ -527,9 +531,10 @@ class CategoryCard extends StatelessWidget {
                     imageUrl:
                         'https://www.combojumbo.in/master/category/images/image17612021-05-06-00-08-29charcoal-night.jpg',
                     progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
+                        (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                    ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
