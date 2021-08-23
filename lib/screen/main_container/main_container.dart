@@ -1,4 +1,5 @@
 import 'package:cjspoton/profile/profile_screen.dart';
+import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
@@ -167,7 +168,9 @@ class GetCartButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).pushNamed(CartScreen.CART_ROUTE);
+      },
       icon: Icon(
         Icons.shopping_bag_outlined,
       ),
