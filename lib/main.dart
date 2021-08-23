@@ -1,3 +1,4 @@
+import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'FastCheque',
       theme: globalTheme(context),
       onGenerateRoute: NavRoute.generatedRoute,
-      home: MainContainer(),
+      home: LoginScreen(),
     );
   }
 }

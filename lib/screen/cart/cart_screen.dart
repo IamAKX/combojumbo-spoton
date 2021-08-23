@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
@@ -21,7 +22,8 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: InkWell(
-        onTap: () {},
+        onTap: () =>
+            Navigator.of(context).pushNamed(CheckoutScreen.CHECKOUT_ROUTE),
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),

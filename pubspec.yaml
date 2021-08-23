@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.0.6
   toggle_switch: ^1.2.0
   video_player: ^2.1.14
+  awesome_dialog: ^2.1.1
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"
