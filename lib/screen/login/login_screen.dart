@@ -1,5 +1,7 @@
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
+import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
+import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
@@ -186,7 +188,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(TermOfUseSceen.TERMS_ROUTE);
+                      },
                       child: Text(
                         'Terms of Service',
                         style: Theme.of(context)
@@ -196,7 +201,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(PrivacyPolicyScreen.PRIVACY_ROUTE);
+                      },
                       child: Text(
                         'Privacy Policy',
                         style: Theme.of(context)

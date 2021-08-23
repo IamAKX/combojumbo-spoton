@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
+import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
+import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
@@ -169,6 +171,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 1,
         ),
         ListTile(
+          onTap: () =>
+              Navigator.of(context).pushNamed(TermOfUseSceen.TERMS_ROUTE),
           leading: CircleAvatar(
             backgroundColor: Colors.green,
             child: Icon(
@@ -190,6 +194,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 1,
         ),
         ListTile(
+          onTap: () => Navigator.of(context)
+              .pushNamed(PrivacyPolicyScreen.PRIVACY_ROUTE),
           leading: CircleAvatar(
             backgroundColor: Colors.amber,
             child: Icon(

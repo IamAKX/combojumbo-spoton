@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
       title: 'FastCheque',
       theme: globalTheme(context),
       onGenerateRoute: NavRoute.generatedRoute,
-      home: MainContainer(),
+      home: LoginScreen(),
     );
   }
 }

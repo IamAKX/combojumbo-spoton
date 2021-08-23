@@ -6,7 +6,9 @@ import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
+import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
+import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavRoute {
@@ -30,6 +32,10 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => MainContainer());
       case AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE:
         return MaterialPageRoute(builder: (_) => AddDeliveryAddress());
+      case TermOfUseSceen.TERMS_ROUTE:
+        return MaterialPageRoute(builder: (_) => TermOfUseSceen());
+      case PrivacyPolicyScreen.PRIVACY_ROUTE:
+        return MaterialPageRoute(builder: (_) => PrivacyPolicyScreen());
 
       default:
         return _errorRoute();

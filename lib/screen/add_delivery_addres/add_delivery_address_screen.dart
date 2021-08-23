@@ -1,6 +1,5 @@
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
-import 'package:cjspoton/widgets/custom_edittext.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/custom_heading_textfield_with_actionbutton.dart';
 import 'package:flutter/material.dart';
