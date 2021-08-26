@@ -183,12 +183,14 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             for (var i = 0; i < 4; i++) ...{
               MenuItem(
-                  title: 'Veg Nesista Soup',
-                  subTitle:
-                      'Indian vegetables cooked with fresh corriander and garnished with chopped veggies',
-                  amount: '120.50',
-                  imageUrl:
-                      'https://www.combojumbo.in/master/food/images/95image19122021-07-24-10-50-35nesista.jpg'),
+                title: 'Veg Nesista Soup',
+                subTitle:
+                    'Indian vegetables cooked with fresh corriander and garnished with chopped veggies',
+                amount: '120.50',
+                imageUrl:
+                    'https://www.combojumbo.in/master/food/images/95image19122021-07-24-10-50-35nesista.jpg',
+                parentContext: context,
+              ),
             },
             SizedBox(
               height: defaultPadding * 2,
@@ -199,12 +201,14 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             for (var i = 0; i < 6; i++) ...{
               MenuItem(
-                  title: 'Paneer Tikka',
-                  subTitle:
-                      'Paneer marinated in curd and indian spices cooked in tandoor',
-                  amount: '230.50',
-                  imageUrl:
-                      'https://www.combojumbo.in/master/food/images/107image16632021-06-29-18-57-17paneer-tikka.jpg'),
+                title: 'Paneer Tikka',
+                subTitle:
+                    'Paneer marinated in curd and indian spices cooked in tandoor',
+                amount: '230.50',
+                imageUrl:
+                    'https://www.combojumbo.in/master/food/images/107image16632021-06-29-18-57-17paneer-tikka.jpg',
+                parentContext: context,
+              ),
             },
             SizedBox(
               height: defaultPadding * 2,
@@ -215,11 +219,13 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             for (var i = 0; i < 6; i++) ...{
               MenuItem(
-                  title: 'Cj special platter (Jumbo-12pcs)',
-                  subTitle: 'A combination of our chef\'s specials',
-                  amount: '180.50',
-                  imageUrl:
-                      'https://www.combojumbo.in/master/food/images/293image18192021-07-24-10-58-35paneer-seekh-kebab--1.jpg'),
+                title: 'Cj special platter (Jumbo-12pcs)',
+                subTitle: 'A combination of our chef\'s specials',
+                amount: '180.50',
+                imageUrl:
+                    'https://www.combojumbo.in/master/food/images/293image18192021-07-24-10-58-35paneer-seekh-kebab--1.jpg',
+                parentContext: context,
+              ),
             },
             SizedBox(
               height: defaultPadding,
