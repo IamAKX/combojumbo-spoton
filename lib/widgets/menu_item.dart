@@ -41,7 +41,9 @@ class MenuItem extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        addNewItemToCart(context);
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(
                             horizontal: defaultPadding,
@@ -97,6 +99,41 @@ class MenuItem extends StatelessWidget {
           color: hintColor,
         ),
       ],
+    );
+  }
+
+  Future<void> addNewItemToCart(BuildContext context) {
+    return showModalBottomSheet<void>(
+      builder: (BuildContext context) {
+        return FractionallySizedBox(
+          heightFactor: 0.8,
+          child: StatefulBuilder(builder: (context, setState) {
+            return Column(
+                crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Row(
+                    children: [
+                      Text(
+                        "Add on",
+                        style: GoogleFonts.manrope(
+                          fontWeight: FontWeight.bold,
+                          color: TEXT_COLOR,
+                          fontSize: 18,
+                        ),
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                ]);
+          }),
+        );
+      },
+      context: context,
+      isScrollControlled: true,
+      isDismissible: false,
     );
   }
 }
