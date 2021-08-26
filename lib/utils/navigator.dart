@@ -7,6 +7,7 @@ import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
@@ -42,6 +43,8 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => CartScreen());
       case CheckoutScreen.CHECKOUT_ROUTE:
         return MaterialPageRoute(builder: (_) => CheckoutScreen());
+      case MenuScreen.MENU_SCREEN_ROUTE:
+        return MaterialPageRoute(builder: (_) => MenuScreen());
 
       default:
         return _errorRoute();

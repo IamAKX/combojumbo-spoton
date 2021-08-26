@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         SubHeading(
           context: context,
-          routePath: '',
+          routePath: MenuScreen.MENU_SCREEN_ROUTE,
           title: 'Category',
         ),
         Container(
