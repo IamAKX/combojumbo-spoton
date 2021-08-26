@@ -2,6 +2,7 @@ import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
+import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
@@ -45,6 +46,9 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => CheckoutScreen());
       case MenuScreen.MENU_SCREEN_ROUTE:
         return MaterialPageRoute(builder: (_) => MenuScreen());
+
+      case FeedbackScreen.FEEDBACK_ROUTE:
+        return MaterialPageRoute(builder: (_) => FeedbackScreen());
 
       default:
         return _errorRoute();

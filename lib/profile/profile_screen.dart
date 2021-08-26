@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
+import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -129,16 +130,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 1,
         ),
         ListTile(
+          onTap: () =>
+              Navigator.of(context).pushNamed(FeedbackScreen.FEEDBACK_ROUTE),
           leading: CircleAvatar(
             backgroundColor: Colors.red,
             child: Icon(
-              Icons.car_rental,
+              Icons.support_agent_outlined,
               color: bgColor,
             ),
           ),
           tileColor: bgColor,
           title: Text(
-            'Delivery Support',
+            'Support',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),
