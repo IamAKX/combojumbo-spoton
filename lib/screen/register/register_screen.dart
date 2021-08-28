@@ -19,10 +19,10 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   late VideoPlayerController _controller;
   late Size screenSize;
+  bool agreement = false;
   TextEditingController _nameCtrl = TextEditingController();
   TextEditingController _phoneCtrl = TextEditingController();
   TextEditingController _passwordCtrl = TextEditingController();
-  TextEditingController _emaildCtrl = TextEditingController();
   void initState() {
     super.initState();
 
@@ -76,6 +76,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
+                SizedBox(
+                  height: 40,
+                ),
                 Text(
                   'Welcome',
                   style: Theme.of(context)
@@ -98,16 +101,32 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hint: 'Name',
                   inputType: TextInputType.name,
                 ),
-                CustomTextField(
-                  teCtrl: _emaildCtrl,
-                  hint: 'Email',
-                  inputType: TextInputType.emailAddress,
-                ),
                 PhoneTextField(phoneCtrl: _phoneCtrl),
                 PasswordTextField(
                     passwordCtrl: _passwordCtrl,
                     isPasswordVisible: _isPasswordHidden,
                     tooglePasswordVisibility: _togglePasswordVisibility),
+                Row(
+                  children: [
+                    Theme(
+                      data: Theme.of(context)
+                          .copyWith(unselectedWidgetColor: hintColor),
+                      child: Checkbox(
+                        value: agreement,
+                        onChanged: (value) {
+                          setState(() {
+                            agreement = !agreement;
+                          });
+                        },
+                      ),
+                    ),
+                    Text(
+                      'I agree all terms and conditions',
+                      style: TextStyle(color: bgColor),
+                    ),
+                  ],
+                ),
+                SizedBox(height: defaultPadding * 0.5),
                 SizedBox(
                   width: screenSize.width,
                   child: TextButton(
@@ -140,6 +159,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ?.copyWith(color: Colors.white),
                     ),
                   ),
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                IconTextButton(
+                  context: context,
+                  iconAssetPath: 'assets/svg/facebook.svg',
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
+                  },
+                  text: 'Continue with Facebook',
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                IconTextButton(
+                  context: context,
+                  iconAssetPath: 'assets/svg/google.svg',
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
+                  },
+                  text: 'Continue with Google',
                 ),
                 Spacer(),
                 Align(
@@ -174,16 +217,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ?.copyWith(decoration: TextDecoration.underline),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Content Policy',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(

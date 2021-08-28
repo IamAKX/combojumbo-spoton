@@ -19,6 +19,9 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: defaultPadding),
       child: TextField(
+        textCapitalization: inputType == TextInputType.name
+            ? TextCapitalization.words
+            : TextCapitalization.sentences,
         keyboardType: inputType,
         autocorrect: true,
         controller: _teCtrl,

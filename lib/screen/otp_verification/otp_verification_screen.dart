@@ -27,12 +27,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         ),
         centerTitle: false,
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.help_outline_outlined,
-            ),
-          )
+          // IconButton(
+          //   onPressed: () {},
+          //   icon: Icon(
+          //     Icons.help_outline_outlined,
+          //   ),
+          // )
         ],
       ),
       body: body(),
@@ -49,10 +49,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       children: [
         Text(
           'Verify your\nphone number',
-          style: Theme.of(context)
-              .textTheme
-              .headline4
-              ?.copyWith(color: textColor, fontWeight: FontWeight.bold),
+          style: Theme.of(context).textTheme.headline4?.copyWith(
+              color: textColor, fontWeight: FontWeight.bold, height: 0.98),
+        ),
+        SizedBox(
+          height: 5,
         ),
         Text(
           'Enter your OTP code',

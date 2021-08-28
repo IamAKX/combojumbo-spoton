@@ -40,6 +40,9 @@ class CustomTextFieldWithHeadingActionButton extends StatelessWidget {
             keyboardType: inputType,
             autocorrect: true,
             controller: _teCtrl,
+            textCapitalization: inputType == TextInputType.name
+                ? TextCapitalization.words
+                : TextCapitalization.sentences,
             decoration: InputDecoration(
               suffixIcon: IconButton(onPressed: onTap, icon: Icon(icondata)),
               hintText: hint,

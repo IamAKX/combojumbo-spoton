@@ -112,7 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: 250,
                 width: 200,
-                padding: EdgeInsets.all(defaultPadding),
+                padding: EdgeInsets.only(
+                  left: defaultPadding,
+                  top: defaultPadding,
+                ),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   gradient: LinearGradient(
@@ -151,11 +154,32 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                     ),
                     Spacer(),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SvgPicture.asset(
-                        'assets/svg/landing2.svg',
-                        height: 130,
+                    Container(
+                      height: 130,
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            bottom: -10,
+                            right: -10,
+                            child: SvgPicture.asset(
+                              'assets/svg/landing2.svg',
+                              height: 130,
+                            ),
+                          ),
+                          Positioned(
+                            top: 10,
+                            left: 0,
+                            child: CircleAvatar(
+                              backgroundColor: bgColor,
+                              radius: 20,
+                              child: Icon(
+                                Icons.keyboard_arrow_right,
+                                size: 30,
+                                color: textColor,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   ],
@@ -399,7 +423,7 @@ class RecomendedItems extends StatelessWidget {
                           backgroundColor: bgColor,
                           radius: 15,
                           child: Icon(
-                            Icons.bookmark_outline,
+                            Icons.favorite_outline,
                             size: 20,
                             color: textColor,
                           ),
@@ -545,11 +569,7 @@ class CategoryCard extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: bgColor,
                     radius: 15,
-                    child: Icon(
-                      Icons.bookmark_outline,
-                      size: 20,
-                      color: textColor,
-                    ),
+                    child: Text('5'),
                   ),
                 ),
                 Positioned(

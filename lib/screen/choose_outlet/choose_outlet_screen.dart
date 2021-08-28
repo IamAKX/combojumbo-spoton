@@ -74,7 +74,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
             height: defaultPadding * 1.5,
           ),
           Card(
-            elevation: 5,
+            elevation: 15,
             child: ListTile(
                 minVerticalPadding: 1.0,
                 contentPadding: EdgeInsets.only(

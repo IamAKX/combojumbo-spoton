@@ -74,6 +74,9 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
+                SizedBox(
+                  height: 40,
+                ),
                 Text(
                   'Welcome Back',
                   style: Theme.of(context)
@@ -181,16 +184,6 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                             ?.copyWith(decoration: TextDecoration.underline),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Content Policy',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(

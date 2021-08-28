@@ -36,6 +36,9 @@ class CustomTextFieldWithHeading extends StatelessWidget {
             keyboardType: inputType,
             autocorrect: true,
             controller: _teCtrl,
+            textCapitalization: inputType == TextInputType.name
+                ? TextCapitalization.words
+                : TextCapitalization.sentences,
             decoration: InputDecoration(
               hintText: hint,
               focusColor: primaryColor,

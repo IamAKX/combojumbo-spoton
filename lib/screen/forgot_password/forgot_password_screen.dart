@@ -5,6 +5,7 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
 import 'package:cjspoton/widgets/password_edittext.dart';
+import 'package:cjspoton/widgets/phone_edittext.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -18,7 +19,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late VideoPlayerController _controller;
   late Size screenSize;
-  TextEditingController _emaildCtrl = TextEditingController();
+  TextEditingController _phoneCtrl = TextEditingController();
   void initState() {
     super.initState();
 
@@ -72,6 +73,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: [
+                SizedBox(
+                  height: 40,
+                ),
                 Text(
                   'Forgot Password',
                   style: Theme.of(context)
@@ -89,11 +93,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(
                   height: defaultPadding * 4,
                 ),
-                CustomTextField(
-                  teCtrl: _emaildCtrl,
-                  hint: 'Email',
-                  inputType: TextInputType.emailAddress,
-                ),
+                PhoneTextField(phoneCtrl: _phoneCtrl),
                 SizedBox(
                   width: screenSize.width,
                   child: TextButton(
@@ -102,7 +102,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
                     },
                     child: Text(
-                      'Login',
+                      'Send OTP',
                       style: Theme.of(context).textTheme.button?.copyWith(
                             color: Colors.white,
                           ),
@@ -158,16 +158,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ?.copyWith(decoration: TextDecoration.underline),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Content Policy',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(

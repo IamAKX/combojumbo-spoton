@@ -1,3 +1,4 @@
+import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 
@@ -14,16 +15,49 @@ class PhoneTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: defaultPadding),
-      child: TextField(
-        keyboardType: TextInputType.phone,
-        autocorrect: true,
-        controller: _phoneCtrl,
-        maxLength: 10,
-        decoration: InputDecoration(
-          hintText: 'Phone Number',
-          prefixText: '+91  ',
-          counterText: "",
-        ),
+      child: Row(
+        children: [
+          Container(
+            height: 64,
+            width: 60,
+            alignment: Alignment.center,
+            child: Text(
+              '+91',
+              style: Theme.of(context).textTheme.subtitle1,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.amber[100],
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                bottomLeft: Radius.circular(10),
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              keyboardType: TextInputType.phone,
+              autocorrect: true,
+              controller: _phoneCtrl,
+              maxLength: 10,
+              decoration: InputDecoration(
+                hintText: 'Phone Number',
+                counterText: "",
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

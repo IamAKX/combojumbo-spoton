@@ -69,7 +69,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                           backgroundColor: bgColor,
                           radius: 15,
                           child: Icon(
-                            Icons.bookmark,
+                            Icons.favorite,
                             size: 20,
                             color: textColor,
                           ),

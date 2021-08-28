@@ -1,10 +1,13 @@
+import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
+import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
+import 'package:cjspoton/widgets/password_edittext.dart';
 import 'package:cjspoton/widgets/phone_edittext.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -20,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late VideoPlayerController _controller;
   late Size screenSize;
   TextEditingController _phoneCtrl = TextEditingController();
+  TextEditingController _passwordCtrl = TextEditingController();
 
   void initState() {
     super.initState();
@@ -30,6 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
         _controller.setLooping(true);
         setState(() {});
       });
+  }
+
+  bool _isPasswordHidden = true;
+  _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordHidden = !_isPasswordHidden;
+    });
   }
 
   @override
@@ -66,6 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: 40,
+                ),
                 Text(
                   'Welcome Back',
                   style: Theme.of(context)
@@ -84,6 +98,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: defaultPadding * 4,
                 ),
                 PhoneTextField(phoneCtrl: _phoneCtrl),
+                PasswordTextField(
+                    passwordCtrl: _passwordCtrl,
+                    isPasswordVisible: _isPasswordHidden,
+                    tooglePasswordVisibility: _togglePasswordVisibility),
+                Container(
+                  margin: EdgeInsets.only(bottom: defaultPadding),
+                  alignment: Alignment.centerRight,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                          ForgotPasswordScreen.FORGOT_PASSWORD_ROUTE);
+                    },
+                    child: Text(
+                      'Forgot password?',
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: screenSize.width,
                   child: TextButton(
@@ -92,15 +127,31 @@ class _LoginScreenState extends State<LoginScreen> {
                           OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
                     },
                     child: Text(
-                      'Send OTP',
+                      'Login',
                       style: Theme.of(context).textTheme.button?.copyWith(
                             color: Colors.white,
                           ),
                     ),
                   ),
                 ),
+                Container(
+                  margin: EdgeInsets.only(
+                      bottom: defaultPadding, top: defaultPadding * 1.5),
+                  alignment: Alignment.center,
+                  child: InkWell(
+                    onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
+                        RegisterScreen.REGISTER_ROUTE, (route) => false),
+                    child: Text(
+                      'New to Combo Jumbo, register',
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption
+                          ?.copyWith(color: Colors.white),
+                    ),
+                  ),
+                ),
                 SizedBox(
-                  height: defaultPadding * 2,
+                  height: defaultPadding,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,44 +186,27 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 IconTextButton(
                   context: context,
-                  iconAssetPath: 'assets/svg/envelope.svg',
+                  iconAssetPath: 'assets/svg/facebook.svg',
                   onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(LoginEmailScreen.EMAIL_LOGIN_ROUTE);
+                    Navigator.of(context).pushNamed(
+                        OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
                   },
-                  text: 'Continue with Email',
+                  text: 'Continue with Facebook',
                 ),
                 SizedBox(
                   height: defaultPadding,
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: IconTextButton(
-                        context: context,
-                        iconAssetPath: 'assets/svg/facebook.svg',
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                              OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                        },
-                        text: 'Facebook',
-                      ),
-                    ),
-                    SizedBox(
-                      width: defaultPadding,
-                    ),
-                    Expanded(
-                      child: IconTextButton(
-                        context: context,
-                        iconAssetPath: 'assets/svg/google.svg',
-                        onTap: () {
-                          Navigator.of(context).pushNamed(
-                              OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                        },
-                        text: 'Google',
-                      ),
-                    )
-                  ],
+                IconTextButton(
+                  context: context,
+                  iconAssetPath: 'assets/svg/google.svg',
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                        OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
+                  },
+                  text: 'Continue with Google',
+                ),
+                SizedBox(
+                  height: defaultPadding,
                 ),
                 Spacer(),
                 Align(
@@ -213,16 +247,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ?.copyWith(decoration: TextDecoration.underline),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Content Policy',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(

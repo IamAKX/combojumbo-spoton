@@ -18,7 +18,7 @@ class _TermOfUseSceenState extends State<TermOfUseSceen> {
     return Scaffold(
       backgroundColor: greyedBgColor,
       appBar: AppBar(
-        title: Text('Term of Use'),
+        title: Text('Terms of Service'),
         backgroundColor: bgColor,
         centerTitle: false,
       ),

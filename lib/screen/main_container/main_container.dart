@@ -40,7 +40,7 @@ class _MainContainerState extends State<MainContainer> {
           FloatingNavbarItem(icon: Icons.home_outlined, title: 'Home'),
           FloatingNavbarItem(icon: Icons.history, title: 'Orders'),
           FloatingNavbarItem(
-              icon: Icons.bookmark_border_outlined, title: 'Favourite'),
+              icon: Icons.favorite_border_outlined, title: 'Favourite'),
           FloatingNavbarItem(icon: Icons.person_outline, title: 'Profile'),
         ],
       ),
