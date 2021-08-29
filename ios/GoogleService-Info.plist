@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>598871225530-jrl507v4d7jof97vfu6pi87g5pntall3.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.598871225530-jrl507v4d7jof97vfu6pi87g5pntall3</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>598871225530-kdsrevk78halgaers89oqcf27o6bugra.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCaWOCU43jJicuQ_CW-bdIu-YNNGm3FJGw</string>
+	<key>GCM_SENDER_ID</key>
+	<string>598871225530</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.combojumbo.cjspoton</string>
+	<key>PROJECT_ID</key>
+	<string>combojumbo-social</string>
+	<key>STORAGE_BUCKET</key>
+	<string>combojumbo-social.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:598871225530:ios:853f539e47a7e55c8ebe83</string>
+</dict>
+</plist>
