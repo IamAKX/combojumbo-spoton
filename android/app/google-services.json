@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "598871225530",
+    "project_id": "combojumbo-social",
+    "storage_bucket": "combojumbo-social.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:598871225530:android:ea7df0e33d97990d8ebe83",
+        "android_client_info": {
+          "package_name": "com.combojumbo.cjspoton"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "598871225530-avb4gi1ddgmovl40rln1alj4seuvq28n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCGsI6aviEZ6bmy0V41OMdfLMbWYuCJHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "598871225530-avb4gi1ddgmovl40rln1alj4seuvq28n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
