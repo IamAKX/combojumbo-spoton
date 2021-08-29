@@ -4,8 +4,10 @@ import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
+import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +22,21 @@ class MainContainer extends StatefulWidget {
 class _MainContainerState extends State<MainContainer> {
   int _selectedIndex = 0;
   TextEditingController _searchCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    NotificationApi.init();
+    listenNotification();
+
+    configureFCM();
+  }
+
+  void listenNotification() =>
+      NotificationApi.onNotifications.stream.listen((String? payload) {
+        print(payload);
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -158,6 +175,20 @@ class _MainContainerState extends State<MainContainer> {
         );
     }
   }
+}
+
+void configureFCM() {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    NotificationApi.showNotification(
+        id: message.hashCode,
+        body: message.notification!.body,
+        title: message.notification!.title,
+        payload: message.data.toString());
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('onMessageOpenedApp');
+  });
 }
 
 class GetCartButton extends StatelessWidget {

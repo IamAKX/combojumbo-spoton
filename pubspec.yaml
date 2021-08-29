@@ -21,16 +21,21 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  awesome_dialog: ^2.1.1
   cached_network_image: ^3.1.0
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2
+  firebase_core: ^1.6.0
+  firebase_messaging: ^10.0.6
   floating_bottom_navigation_bar: ^1.5.2
   flutter:
     sdk: flutter
   flutter_html: ^2.1.1
+  flutter_local_notifications: ^8.1.1+1
   flutter_staggered_grid_view: ^0.4.0
   flutter_svg: ^0.22.0
   fluttertoast: ^8.0.7
+  font_awesome_flutter: ^9.1.0
   google_fonts: ^2.1.0
   intl: ^0.17.0
   introduction_screen: ^2.1.0
@@ -40,8 +45,6 @@ dependencies:
   shared_preferences: ^2.0.6
   toggle_switch: ^1.2.0
   video_player: ^2.1.14
-  awesome_dialog: ^2.1.1
-  font_awesome_flutter: ^9.1.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"
