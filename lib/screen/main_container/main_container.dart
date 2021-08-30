@@ -1,9 +1,9 @@
-import 'package:cjspoton/profile/profile_screen.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
+import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';

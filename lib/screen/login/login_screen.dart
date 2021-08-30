@@ -4,12 +4,15 @@ import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
+import 'package:cjspoton/services/auth_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
 import 'package:cjspoton/widgets/password_edittext.dart';
 import 'package:cjspoton/widgets/phone_edittext.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late Size screenSize;
   TextEditingController _phoneCtrl = TextEditingController();
   TextEditingController _passwordCtrl = TextEditingController();
-
+  late AuthenticationService _auth;
   void initState() {
     super.initState();
 
@@ -51,6 +54,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SnackBarService.instance.buildContext = context;
+    _auth = Provider.of<AuthenticationService>(context);
     return Scaffold(
       body: body(),
       resizeToAvoidBottomInset: false,
@@ -75,140 +80,156 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding * 2),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: 40,
-                ),
-                Text(
-                  'Welcome Back',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline4
-                      ?.copyWith(color: Colors.white),
-                ),
-                Text(
-                  'Sign in to continue',
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle1
-                      ?.copyWith(color: Colors.white),
-                ),
-                SizedBox(
-                  height: defaultPadding * 4,
-                ),
-                PhoneTextField(phoneCtrl: _phoneCtrl),
-                PasswordTextField(
-                    passwordCtrl: _passwordCtrl,
-                    isPasswordVisible: _isPasswordHidden,
-                    tooglePasswordVisibility: _togglePasswordVisibility),
-                Container(
-                  margin: EdgeInsets.only(bottom: defaultPadding),
-                  alignment: Alignment.centerRight,
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                          ForgotPasswordScreen.FORGOT_PASSWORD_ROUTE);
-                    },
-                    child: Text(
-                      'Forgot password?',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: screenSize.width,
-                  child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed(
-                          OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                    },
-                    child: Text(
-                      'Login',
-                      style: Theme.of(context).textTheme.button?.copyWith(
-                            color: Colors.white,
+                Expanded(
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 40,
+                      ),
+                      Text(
+                        'Welcome Back',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(color: Colors.white),
+                      ),
+                      Text(
+                        'Sign in to continue',
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            ?.copyWith(color: Colors.white),
+                      ),
+                      SizedBox(
+                        height: defaultPadding * 4,
+                      ),
+                      PhoneTextField(phoneCtrl: _phoneCtrl),
+                      PasswordTextField(
+                          passwordCtrl: _passwordCtrl,
+                          isPasswordVisible: _isPasswordHidden,
+                          tooglePasswordVisibility: _togglePasswordVisibility),
+                      Container(
+                        margin: EdgeInsets.only(bottom: defaultPadding),
+                        alignment: Alignment.centerRight,
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                                ForgotPasswordScreen.FORGOT_PASSWORD_ROUTE);
+                          },
+                          child: Text(
+                            'Forgot password?',
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption
+                                ?.copyWith(color: Colors.white),
                           ),
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                      bottom: defaultPadding, top: defaultPadding * 1.5),
-                  alignment: Alignment.center,
-                  child: InkWell(
-                    onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                        RegisterScreen.REGISTER_ROUTE, (route) => false),
-                    child: Text(
-                      'New to Combo Jumbo, register',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          ?.copyWith(color: Colors.white),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        color: hintColor.withOpacity(0.5),
+                        ),
                       ),
-                    ),
-                    CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 15,
-                      child: Text(
-                        'OR',
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                              color: Colors.white,
-                              fontSize: 12,
+                      SizedBox(
+                        width: screenSize.width,
+                        child: TextButton(
+                          onPressed: () {
+                            if (_auth.status != AuthStatus.Authenticating)
+                              _auth.loginUserWithPhoneAndPassword(
+                                  _phoneCtrl.text, _passwordCtrl.text, context);
+                          },
+                          child: Text(
+                            _auth.status == AuthStatus.Authenticating
+                                ? 'Please wait...'
+                                : 'Login',
+                            style: Theme.of(context).textTheme.button?.copyWith(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(
+                            bottom: defaultPadding, top: defaultPadding * 1.5),
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () => Navigator.of(context)
+                              .pushNamedAndRemoveUntil(
+                                  RegisterScreen.REGISTER_ROUTE,
+                                  (route) => false),
+                          child: Text(
+                            'New to Combo Jumbo, register',
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption
+                                ?.copyWith(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: defaultPadding,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Divider(
+                              height: 1,
+                              color: hintColor.withOpacity(0.5),
                             ),
+                          ),
+                          CircleAvatar(
+                            backgroundColor: Colors.black,
+                            radius: 15,
+                            child: Text(
+                              'OR',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 12,
+                                  ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(
+                              height: 1,
+                              color: hintColor.withOpacity(0.5),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        height: 1,
-                        color: hintColor.withOpacity(0.5),
+                      SizedBox(
+                        height: defaultPadding,
                       ),
-                    ),
-                  ],
+                      IconTextButton(
+                        context: context,
+                        iconAssetPath: 'assets/svg/facebook.svg',
+                        onTap: () {
+                          if (_auth.status != AuthStatus.Authenticating)
+                            _auth.registerUserWithFacebook(context);
+                        },
+                        text: _auth.status != AuthStatus.Authenticating
+                            ? 'Continue with Facebook'
+                            : 'Please wait...',
+                      ),
+                      SizedBox(
+                        height: defaultPadding,
+                      ),
+                      IconTextButton(
+                        context: context,
+                        iconAssetPath: 'assets/svg/google.svg',
+                        onTap: () {
+                          if (_auth.status != AuthStatus.Authenticating)
+                            _auth.registerUserWithGoogle(context);
+                        },
+                        text: _auth.status != AuthStatus.Authenticating
+                            ? 'Continue with Google'
+                            : 'Please wait...',
+                      ),
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: defaultPadding,
                 ),
-                IconTextButton(
-                  context: context,
-                  iconAssetPath: 'assets/svg/facebook.svg',
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                        OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                  },
-                  text: 'Continue with Facebook',
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                IconTextButton(
-                  context: context,
-                  iconAssetPath: 'assets/svg/google.svg',
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                        OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
-                  },
-                  text: 'Continue with Google',
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Spacer(),
                 Align(
                   alignment: Alignment.center,
                   child: Text(

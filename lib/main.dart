@@ -2,16 +2,22 @@ import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/notification_api.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/navigator.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+late SharedPreferences prefs;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  prefs = await SharedPreferences.getInstance();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -34,12 +40,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'FastCheque',
-      theme: globalTheme(context),
-      onGenerateRoute: NavRoute.generatedRoute,
-      home: LoginScreen(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (BuildContext context) => AuthenticationService(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'FastCheque',
+        theme: globalTheme(context),
+        onGenerateRoute: NavRoute.generatedRoute,
+        home: LoginScreen(),
+      ),
     );
   }
 }
