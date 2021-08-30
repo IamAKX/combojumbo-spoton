@@ -27,7 +27,11 @@ class NavRoute {
       case ForgotPasswordScreen.FORGOT_PASSWORD_ROUTE:
         return MaterialPageRoute(builder: (_) => ForgotPasswordScreen());
       case OtpVerificationScreen.OTP_VERIFICATION_ROUTE:
-        return MaterialPageRoute(builder: (_) => OtpVerificationScreen());
+        return MaterialPageRoute(
+          builder: (_) => OtpVerificationScreen(
+            previousScreen: settings.arguments.toString(),
+          ),
+        );
       case Introduction.INTRODUCTION_ROUTE:
         return MaterialPageRoute(builder: (_) => Introduction());
       case ChooseOutletScreen.CHOOSE_OUTLET_ROUTE:

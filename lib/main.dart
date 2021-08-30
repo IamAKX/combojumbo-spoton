@@ -2,6 +2,7 @@ import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -47,12 +48,11 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'FastCheque',
-        theme: globalTheme(context),
-        onGenerateRoute: NavRoute.generatedRoute,
-        home: LoginScreen(),
-      ),
+          debugShowCheckedModeBanner: false,
+          title: 'FastCheque',
+          theme: globalTheme(context),
+          onGenerateRoute: NavRoute.generatedRoute,
+          home: LoginScreen()),
     );
   }
 }

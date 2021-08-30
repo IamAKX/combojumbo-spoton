@@ -125,7 +125,8 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(
-                          OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
+                          OtpVerificationScreen.OTP_VERIFICATION_ROUTE,
+                          arguments: 'LoginEmailScreen');
                     },
                     child: Text(
                       'Login',

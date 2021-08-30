@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
@@ -236,8 +237,9 @@ class AuthenticationService extends ChangeNotifier {
           status = AuthStatus.Authenticated;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
-          Navigator.of(context)
-              .pushNamed(OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
+          Navigator.of(context).pushNamed(
+              OtpVerificationScreen.OTP_VERIFICATION_ROUTE,
+              arguments: 'RegisterScreen');
         } else {
           status = AuthStatus.Error;
           notifyListeners();
@@ -303,6 +305,109 @@ class AuthenticationService extends ChangeNotifier {
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
           Navigator.of(context).pushNamed(MainContainer.MAIN_CONTAINER_ROUTE);
+        } else {
+          status = AuthStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = AuthStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+  }
+
+  Future<void> verifyOTP(
+      String otp, String currentScreen, BuildContext context) async {
+    status = AuthStatus.Authenticating;
+    notifyListeners();
+    if (otp.isEmpty) {
+      status = AuthStatus.Error;
+      SnackBarService.instance.showSnackBarError('All fields are mandatory');
+      return;
+    }
+
+    try {
+      UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+      var reqBody = FormData.fromMap({
+        'otp': otp,
+        'cust_id': user.id,
+      });
+
+      Response response = await _dio.post(
+        API.VerifyOTP,
+        data: reqBody,
+      );
+      print('Request : ${reqBody.fields}');
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 1) {
+          status = AuthStatus.Authenticated;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          if (currentScreen == 'RegisterScreen' ||
+              currentScreen == 'LoginScreen')
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                Introduction.INTRODUCTION_ROUTE, (route) => false);
+          else if (currentScreen == 'ForgotPasswordScreen')
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
+          else
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
+        } else {
+          status = AuthStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = AuthStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+  }
+
+  Future<void> resendOTP(BuildContext context) async {
+    status = AuthStatus.Authenticating;
+    notifyListeners();
+
+    try {
+      UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+      var reqBody = FormData.fromMap({
+        'cust_id': user.id,
+      });
+
+      Response response = await _dio.post(
+        API.ResendOTP,
+        data: reqBody,
+      );
+      print('Request : ${reqBody.fields}');
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 1) {
+          status = AuthStatus.Authenticated;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess(body['msg']);
         } else {
           status = AuthStatus.Error;
           notifyListeners();

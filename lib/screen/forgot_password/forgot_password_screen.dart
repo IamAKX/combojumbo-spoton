@@ -99,7 +99,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: TextButton(
                     onPressed: () {
                       Navigator.of(context).pushNamed(
-                          OtpVerificationScreen.OTP_VERIFICATION_ROUTE);
+                          OtpVerificationScreen.OTP_VERIFICATION_ROUTE,
+                          arguments: 'ForgotPasswordScreen');
                     },
                     child: Text(
                       'Send OTP',
