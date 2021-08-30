@@ -304,7 +304,8 @@ class AuthenticationService extends ChangeNotifier {
           status = AuthStatus.Authenticated;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
-          Navigator.of(context).pushNamed(MainContainer.MAIN_CONTAINER_ROUTE);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
         } else {
           status = AuthStatus.Error;
           notifyListeners();
