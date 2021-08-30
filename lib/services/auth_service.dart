@@ -425,4 +425,58 @@ class AuthenticationService extends ChangeNotifier {
       SnackBarService.instance.showSnackBarError(e.toString());
     }
   }
+
+  Future<void> forgotPassword(String phone, BuildContext context) async {
+    status = AuthStatus.Authenticating;
+    notifyListeners();
+    if (phone.isEmpty) {
+      status = AuthStatus.Error;
+      SnackBarService.instance.showSnackBarError('All fields are mandatory');
+      return;
+    }
+    if (phone.length != 10) {
+      status = AuthStatus.Error;
+      SnackBarService.instance.showSnackBarError('Invalid phone number');
+      return;
+    }
+    try {
+      var reqBody = FormData.fromMap({
+        'contact': phone,
+      });
+
+      Response response = await _dio.post(
+        API.ResendOTP,
+        data: reqBody,
+      );
+      print('Request : ${reqBody.fields}');
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 1) {
+          status = AuthStatus.Authenticated;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          Navigator.of(context).pushNamed(
+              OtpVerificationScreen.OTP_VERIFICATION_ROUTE,
+              arguments: 'ForgotPasswordScreen');
+        } else {
+          status = AuthStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = AuthStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+  }
 }

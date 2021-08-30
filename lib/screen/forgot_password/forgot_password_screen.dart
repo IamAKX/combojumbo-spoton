@@ -1,5 +1,7 @@
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
+import 'package:cjspoton/services/auth_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext.dart';
@@ -7,6 +9,7 @@ import 'package:cjspoton/widgets/icon_text_button.dart';
 import 'package:cjspoton/widgets/password_edittext.dart';
 import 'package:cjspoton/widgets/phone_edittext.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -19,6 +22,7 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   late VideoPlayerController _controller;
   late Size screenSize;
+  late AuthenticationService _auth;
   TextEditingController _phoneCtrl = TextEditingController();
   void initState() {
     super.initState();
@@ -46,6 +50,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SnackBarService.instance.buildContext = context;
+    _auth = Provider.of<AuthenticationService>(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: body(),
@@ -98,12 +104,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   width: screenSize.width,
                   child: TextButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed(
-                          OtpVerificationScreen.OTP_VERIFICATION_ROUTE,
-                          arguments: 'ForgotPasswordScreen');
+                      if (_auth.status != AuthStatus.Authenticating)
+                        _auth.forgotPassword(_phoneCtrl.text, context);
                     },
                     child: Text(
-                      'Send OTP',
+                      _auth.status != AuthStatus.Authenticating
+                          ? 'Send OTP'
+                          : 'Please wait...',
                       style: Theme.of(context).textTheme.button?.copyWith(
                             color: Colors.white,
                           ),
