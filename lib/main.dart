@@ -5,6 +5,7 @@ import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/notification_api.dart';
+import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/navigator.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (BuildContext context) => AuthenticationService(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => ProfileManagementService(),
         ),
       ],
       child: MaterialApp(

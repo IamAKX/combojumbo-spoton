@@ -5,15 +5,18 @@ import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/services/notification_api.dart';
+import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MainContainer extends StatefulWidget {
   const MainContainer({Key? key}) : super(key: key);
   static const String MAIN_CONTAINER_ROUTE = '/mainContainer';
+  static late ProfileManagementService profileManagementService;
 
   @override
   _MainContainerState createState() => _MainContainerState();
@@ -40,6 +43,8 @@ class _MainContainerState extends State<MainContainer> {
 
   @override
   Widget build(BuildContext context) {
+    MainContainer.profileManagementService =
+        Provider.of<ProfileManagementService>(context);
     return Scaffold(
       extendBody: true,
       backgroundColor: greyedBgColor,

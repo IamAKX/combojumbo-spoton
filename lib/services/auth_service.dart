@@ -298,7 +298,7 @@ class AuthenticationService extends ChangeNotifier {
               id: body['user_id'],
               name: body['name'],
               phone: phone,
-              token: body['token'],
+              token: body['token'] == null ? '' : body['token'],
               fcmToken: fcmToken!,
               email: '',
               profileImage: '');

@@ -8,4 +8,6 @@ class API {
   static const String PhoneLogin = '${BASE_URL}login.php';
   static const String VerifyOTP = '${BASE_URL}otpverify.php';
   static const String ResendOTP = '${BASE_URL}resend-otp.php';
+
+  static const String Profile = '${BASE_URL}myprofile.php';
 }

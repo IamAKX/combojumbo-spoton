@@ -3,13 +3,17 @@ import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
+import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
+import 'package:cjspoton/services/profile_management_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -22,9 +26,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late UserModel user;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    SnackBarService.instance.buildContext = context;
     if (null != prefs.getString(PrefernceKey.USER))
       user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    if (MainContainer.profileManagementService.status ==
+        ProfileStatus.Success) {
+      setState(() {
+        if (null != prefs.getString(PrefernceKey.USER))
+          user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+      });
+    }
+    MainContainer.profileManagementService.fetchProfile(context);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ListView(
       children: [
         SizedBox(
