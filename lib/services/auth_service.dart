@@ -45,7 +45,7 @@ class AuthenticationService extends ChangeNotifier {
       return;
     }
     _googleSignInAccount = googleUser;
-    final googleAuth = await googleUser!.authentication;
+    final googleAuth = await googleUser.authentication;
     final credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -454,7 +454,7 @@ class AuthenticationService extends ChangeNotifier {
       });
 
       Response response = await _dio.post(
-        API.ResendOTP,
+        API.ForgotPassword,
         data: reqBody,
       );
       print('Request : ${reqBody.fields}');
@@ -468,6 +468,16 @@ class AuthenticationService extends ChangeNotifier {
           status = AuthStatus.Authenticated;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          UserModel userModel = UserModel(
+              id: body['user_id'],
+              name: body['name'],
+              phone: phone,
+              token: body['token'] == null ? '' : body['token'],
+              fcmToken: '',
+              email: '',
+              profileImage: '');
+
+          prefs.setString(PrefernceKey.USER, userModel.toJson());
           Navigator.of(context).pushNamed(
               OtpVerificationScreen.OTP_VERIFICATION_ROUTE,
               arguments: 'ForgotPasswordScreen');
