@@ -7,6 +7,7 @@ import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/navigator.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,10 +16,13 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences prefs;
+late String? CURRENT_USER = null;
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance();
+  CURRENT_USER = prefs.getString(PrefernceKey.USER);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -52,7 +56,7 @@ class MyApp extends StatelessWidget {
           title: 'FastCheque',
           theme: globalTheme(context),
           onGenerateRoute: NavRoute.generatedRoute,
-          home: LoginScreen()),
+          home: (CURRENT_USER == null) ? LoginScreen() : MainContainer()),
     );
   }
 }

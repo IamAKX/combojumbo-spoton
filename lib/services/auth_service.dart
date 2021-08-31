@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
-import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
@@ -13,7 +12,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 enum AuthStatus {
@@ -37,8 +36,6 @@ class AuthenticationService extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _googleSignInAccount;
   GoogleSignInAccount get googleSignInAccount => _googleSignInAccount!;
-
-  FacebookLogin facebookLogin = FacebookLogin();
 
   Future registerUserWithGoogle(BuildContext context) async {
     final googleUser = await googleSignIn.signIn();
@@ -80,7 +77,8 @@ class AuthenticationService extends ChangeNotifier {
               phone: '',
               token: '',
               email: body['email'],
-              fcmToken: fcmToken!);
+              fcmToken: fcmToken!,
+              profileImage: googleSignInAccount.photoUrl!);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;
@@ -106,50 +104,52 @@ class AuthenticationService extends ChangeNotifier {
   }
 
   Future registerUserWithFacebook(BuildContext context) async {
-    final FacebookLoginResult result =
-        await facebookLogin.logIn(['email', 'public_profile']);
-    late User _facebookUser;
-    switch (result.status) {
-      case FacebookLoginStatus.cancelledByUser:
-        SnackBarService.instance.showSnackBarError('Cancelled by user');
-        return;
-      case FacebookLoginStatus.error:
-        SnackBarService.instance.showSnackBarError('Sign in error');
-        return;
-      case FacebookLoginStatus.loggedIn:
-        try {
-          final FacebookAccessToken accessToken = result.accessToken;
-          AuthCredential credential =
-              FacebookAuthProvider.credential(accessToken.token);
-          var userCred = await _auth.signInWithCredential(credential);
-          if (userCred.user == null) {
-            SnackBarService.instance.showSnackBarError('No user found');
-            return;
-          }
-          _facebookUser = userCred.user!;
-        } catch (e) {
-          SnackBarService.instance.showSnackBarError(e.toString());
-          return;
-        }
-        break;
-    }
-
+    // final FacebookLoginResult result =
+    //     await facebookLogin.logIn(['email', 'public_profile']);
+    // late User _facebookUser;
+    // switch (result.status) {
+    //   case FacebookLoginStatus.cancelledByUser:
+    //     SnackBarService.instance.showSnackBarError('Cancelled by user');
+    //     return;
+    //   case FacebookLoginStatus.error:
+    //     SnackBarService.instance.showSnackBarError('Sign in error');
+    //     return;
+    //   case FacebookLoginStatus.loggedIn:
+    //     try {
+    //       final FacebookAccessToken accessToken = result.accessToken;
+    //       AuthCredential credential =
+    //           FacebookAuthProvider.credential(accessToken.token);
+    //       var userCred = await _auth.signInWithCredential(credential);
+    //       if (userCred.user == null) {
+    //         SnackBarService.instance.showSnackBarError('No user found');
+    //         return;
+    //       }
+    //       _facebookUser = userCred.user!;
+    //     } catch (e) {
+    //       SnackBarService.instance.showSnackBarError(e.toString());
+    //       return;
+    //     }
+    //     break;
+    // }
+    var _accessToken = await FacebookAuth.instance.login(
+      permissions: ['email', 'public_profile'],
+    );
+    // _printCredentials(_accessToken);
+    Map<String, dynamic> _facebookUser =
+        await FacebookAuth.instance.getUserData();
+    print('Facebook data : ${prettyPrint(_facebookUser)}');
     status = AuthStatus.Authenticating;
     notifyListeners();
     try {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
       var reqBody = FormData.fromMap({
-        'fb_name': _facebookUser.displayName,
-        'fb_email': _facebookUser.email == null ? '' : _facebookUser.email,
-        'fb_id': _facebookUser.uid,
+        'fb_name': _facebookUser['name'],
+        'fb_email':
+            _facebookUser['email'] == null ? '' : _facebookUser['email'],
+        'fb_id': _facebookUser['id'],
         'mobileid': fcmToken
       });
-      print('Request : ${{
-        'fb_name': _facebookUser.displayName,
-        'fb_email': _facebookUser.email == null ? '' : _facebookUser.email,
-        'fb_id': _facebookUser.uid,
-        'mobileid': fcmToken
-      }}');
+
       Response response = await _dio.post(
         API.FacebookRegisteration,
         data: reqBody,
@@ -161,11 +161,12 @@ class AuthenticationService extends ChangeNotifier {
         if (responseBody['status'] == 1) {
           UserModel userModel = UserModel(
               id: body['user_id'],
-              name: _facebookUser.displayName!,
-              phone: _facebookUser.phoneNumber!,
+              name: _facebookUser['name'],
+              phone: _facebookUser['phone'],
               token: '',
               fcmToken: fcmToken!,
-              email: _facebookUser.email!);
+              email: _facebookUser['email'],
+              profileImage: _facebookUser['picture']['data']['url']);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;
@@ -231,7 +232,8 @@ class AuthenticationService extends ChangeNotifier {
               phone: phone,
               token: body['token'],
               fcmToken: fcmToken!,
-              email: '');
+              email: '',
+              profileImage: '');
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;
@@ -298,7 +300,8 @@ class AuthenticationService extends ChangeNotifier {
               phone: phone,
               token: body['token'],
               fcmToken: fcmToken!,
-              email: '');
+              email: '',
+              profileImage: '');
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;
@@ -480,4 +483,16 @@ class AuthenticationService extends ChangeNotifier {
       SnackBarService.instance.showSnackBarError(e.toString());
     }
   }
+}
+
+String prettyPrint(Map json) {
+  JsonEncoder encoder = new JsonEncoder.withIndent('  ');
+  String pretty = encoder.convert(json);
+  return pretty;
+}
+
+void _printCredentials(var _accessToken) {
+  print(
+    prettyPrint(_accessToken.toJson()),
+  );
 }

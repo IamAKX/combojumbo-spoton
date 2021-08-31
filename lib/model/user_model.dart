@@ -7,6 +7,7 @@ class UserModel {
   String email;
   String token;
   String fcmToken;
+  String profileImage;
   UserModel({
     required this.id,
     required this.name,
@@ -14,6 +15,7 @@ class UserModel {
     required this.email,
     required this.token,
     required this.fcmToken,
+    required this.profileImage,
   });
 
   UserModel copyWith({
@@ -23,6 +25,7 @@ class UserModel {
     String? email,
     String? token,
     String? fcmToken,
+    String? profileImage,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -31,6 +34,7 @@ class UserModel {
       email: email ?? this.email,
       token: token ?? this.token,
       fcmToken: fcmToken ?? this.fcmToken,
+      profileImage: profileImage ?? this.profileImage,
     );
   }
 
@@ -42,6 +46,7 @@ class UserModel {
       'email': email,
       'token': token,
       'fcmToken': fcmToken,
+      'profileImage': profileImage,
     };
   }
 
@@ -53,6 +58,7 @@ class UserModel {
       email: map['email'],
       token: map['token'],
       fcmToken: map['fcmToken'],
+      profileImage: map['profileImage'],
     );
   }
 
@@ -63,7 +69,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, phone: $phone, email: $email, token: $token, fcmToken: $fcmToken)';
+    return 'UserModel(id: $id, name: $name, phone: $phone, email: $email, token: $token, fcmToken: $fcmToken, profileImage: $profileImage)';
   }
 
   @override
@@ -76,7 +82,8 @@ class UserModel {
         other.phone == phone &&
         other.email == email &&
         other.token == token &&
-        other.fcmToken == fcmToken;
+        other.fcmToken == fcmToken &&
+        other.profileImage == profileImage;
   }
 
   @override
@@ -86,6 +93,7 @@ class UserModel {
         phone.hashCode ^
         email.hashCode ^
         token.hashCode ^
-        fcmToken.hashCode;
+        fcmToken.hashCode ^
+        profileImage.hashCode;
   }
 }

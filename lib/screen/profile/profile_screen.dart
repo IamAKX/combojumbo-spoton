@@ -1,10 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +19,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late UserModel user;
+
   @override
   Widget build(BuildContext context) {
+    if (null != prefs.getString(PrefernceKey.USER))
+      user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
     return ListView(
       children: [
         SizedBox(
@@ -34,7 +41,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage(
-                    'https://askbootstrap.com/preview/swiggi/template2/img/user1.jpg'),
+                    'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'),
               ),
               SizedBox(
                 width: defaultPadding,
@@ -43,10 +50,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Nellie H. Riggs',
+                    '${user.name}',
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  Text('nellie.h@gmail.com'),
+                  Text('${user.email} ${user.phone}'),
                 ],
               )
             ],
