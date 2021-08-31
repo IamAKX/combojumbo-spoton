@@ -3,6 +3,7 @@ import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
+import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
@@ -241,6 +242,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           minVerticalPadding: defaultPadding * 1.5,
           trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+        Divider(
+          color: borderColor,
+          height: 1,
+        ),
+        ListTile(
+          onTap: () {
+            prefs.clear();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                LoginScreen.LOGIN_ROUTE, (route) => false);
+          },
+          leading: CircleAvatar(
+            backgroundColor: Colors.blueGrey,
+            child: Icon(
+              Icons.logout_outlined,
+              color: bgColor,
+            ),
+          ),
+          tileColor: bgColor,
+          title: Text(
+            'Logout',
+            style:
+                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+          ),
+          minVerticalPadding: defaultPadding * 1.5,
         ),
       ],
     );

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
@@ -343,9 +344,11 @@ class AuthenticationService extends ChangeNotifier {
         'otp': otp,
         'cust_id': user.id,
       });
-
+      String api = currentScreen == 'ForgotPasswordScreen'
+          ? API.ForgotPasswordVerifyOTP
+          : API.VerifyOTP;
       Response response = await _dio.post(
-        API.VerifyOTP,
+        api,
         data: reqBody,
       );
       print('Request : ${reqBody.fields}');
@@ -387,7 +390,7 @@ class AuthenticationService extends ChangeNotifier {
     }
   }
 
-  Future<void> resendOTP(BuildContext context) async {
+  Future<void> resendOTP(String currentScreen, BuildContext context) async {
     status = AuthStatus.Authenticating;
     notifyListeners();
 
@@ -396,9 +399,11 @@ class AuthenticationService extends ChangeNotifier {
       var reqBody = FormData.fromMap({
         'cust_id': user.id,
       });
-
+      String api = currentScreen == 'ForgotPasswordScreen'
+          ? API.ForgotPasswordResendOTP
+          : API.ResendOTP;
       Response response = await _dio.post(
-        API.ResendOTP,
+        api,
         data: reqBody,
       );
       print('Request : ${reqBody.fields}');

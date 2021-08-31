@@ -9,5 +9,10 @@ class API {
   static const String VerifyOTP = '${BASE_URL}otpverify.php';
   static const String ResendOTP = '${BASE_URL}resend-otp.php';
 
+  static const String ForgotPasswordVerifyOTP =
+      '${BASE_URL}forgototpverify.php';
+  static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
+  static const String ForgotPassword = '${BASE_URL}forgotpassword.php';
+
   static const String Profile = '${BASE_URL}myprofile.php';
 }

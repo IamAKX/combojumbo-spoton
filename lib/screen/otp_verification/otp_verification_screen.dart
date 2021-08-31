@@ -163,7 +163,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         InkWell(
           onTap: () {
             if (_start == 0) {
-              _auth.resendOTP(context);
+              _auth.resendOTP(widget.previousScreen, context);
               startTimer();
             }
           },
