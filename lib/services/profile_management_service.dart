@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
@@ -69,5 +70,47 @@ class ProfileManagementService extends ChangeNotifier {
       notifyListeners();
       SnackBarService.instance.showSnackBarError(e.toString());
     }
+  }
+
+  Future<List<OutletModel>> fetchAllOutlets(BuildContext context) async {
+    status = ProfileStatus.Ideal;
+    notifyListeners();
+    List<OutletModel> list = [];
+    try {
+      Response response = await _dio.post(
+        API.Outlets,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 1) {
+          for (var outlet in body) {
+            OutletModel outletModel = OutletModel(
+                outletId: outlet['OutletId'], outletName: outlet['OutletName']);
+            list.add(outletModel);
+          }
+          status = ProfileStatus.Success;
+          notifyListeners();
+        } else {
+          status = ProfileStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = ProfileStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = ProfileStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+    return list;
   }
 }

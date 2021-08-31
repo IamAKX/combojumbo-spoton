@@ -15,4 +15,6 @@ class API {
   static const String ForgotPassword = '${BASE_URL}forgotpassword.php';
 
   static const String Profile = '${BASE_URL}myprofile.php';
+
+  static const String Outlets = '${BASE_URL}outlet.php';
 }

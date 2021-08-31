@@ -1,9 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/services/profile_management_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ChooseOutletScreen extends StatefulWidget {
   const ChooseOutletScreen({Key? key}) : super(key: key);
@@ -14,8 +20,31 @@ class ChooseOutletScreen extends StatefulWidget {
 }
 
 class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
+  late ProfileManagementService _profileManagementService;
+  List<OutletModel> outletList = [];
+  late OutletModel _selectedOutlet;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _profileManagementService.fetchAllOutlets(context).then(
+        (value) {
+          setState(() {
+            outletList = value;
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _profileManagementService = Provider.of<ProfileManagementService>(context);
+    SnackBarService.instance.buildContext = context;
+    if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
+      _selectedOutlet =
+          OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -75,34 +104,43 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
           ),
           Card(
             elevation: 15,
-            child: ListTile(
-                minVerticalPadding: 1.0,
-                contentPadding: EdgeInsets.only(
-                  left: 10,
-                  bottom: 1,
-                  top: 1,
-                  right: 10,
-                ),
-                leading: CachedNetworkImage(
-                  imageUrl:
-                      "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Center(
-                    child: CircularProgressIndicator(
-                        value: downloadProgress.progress),
+            child: (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
+                ? ListTile(
+                    minVerticalPadding: 1.0,
+                    contentPadding: EdgeInsets.only(
+                      left: 10,
+                      bottom: 1,
+                      top: 1,
+                      right: 10,
+                    ),
+                    leading: CachedNetworkImage(
+                      imageUrl:
+                          "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                    ),
+                    dense: true,
+                    title: Text('${_selectedOutlet.outletName}'),
+                    subtitle: Text('${_selectedOutlet.outletId}'),
+                    trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                    onTap: () {
+                      _modalBottomSheetMenu();
+                    },
+                  )
+                : ListTile(
+                    title: Text('Tap to select an outlet'),
+                    trailing: Icon(Icons.keyboard_arrow_right_outlined),
+                    onTap: () {
+                      _modalBottomSheetMenu();
+                    },
                   ),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
-                dense: true,
-                title: Text('Combo Jumbo, Vashi'),
-                subtitle: Text('Vashi, Navi Mumbai'),
-                trailing: Icon(Icons.keyboard_arrow_right_outlined),
-                onTap: () {
-                  _modalBottomSheetMenu();
-                }),
           )
         ],
       ),
@@ -137,8 +175,9 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
               ListView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.symmetric(horizontal: 10),
-                itemCount: 4,
+                itemCount: outletList.length,
                 itemBuilder: (context, index) {
+                  OutletModel model = outletList.elementAt(index);
                   return ListTile(
                     minVerticalPadding: 1.0,
                     contentPadding: EdgeInsets.only(
@@ -161,11 +200,15 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       fit: BoxFit.cover,
                     ),
                     dense: true,
-                    title: Text('Combo Jumbo, Store $index'),
-                    subtitle: Text('Location $index, Navi Mumbai'),
+                    title: Text('${model.outletName}'),
+                    subtitle: Text('${model.outletId}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
                       Navigator.of(context).pop();
+                      setState(() {
+                        prefs.setString(
+                            PrefernceKey.SELECTED_OUTLET, model.toJson());
+                      });
                     },
                   );
                 },
