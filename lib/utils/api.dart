@@ -13,6 +13,7 @@ class API {
       '${BASE_URL}forgototpverify.php';
   static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
   static const String ForgotPassword = '${BASE_URL}forgotpassword.php';
+  static const String ResetPassword = '${BASE_URL}reset-password.php';
 
   static const String Profile = '${BASE_URL}myprofile.php';
 

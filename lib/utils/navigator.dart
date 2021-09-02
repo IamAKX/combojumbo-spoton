@@ -12,6 +12,7 @@ import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
+import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -50,6 +51,8 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => CheckoutScreen());
       case MenuScreen.MENU_SCREEN_ROUTE:
         return MaterialPageRoute(builder: (_) => MenuScreen());
+      case ResetPasswordScreen.RESET_PASSWORD_ROUTE:
+        return MaterialPageRoute(builder: (_) => ResetPasswordScreen());
 
       case FeedbackScreen.FEEDBACK_ROUTE:
         return MaterialPageRoute(builder: (_) => FeedbackScreen());
