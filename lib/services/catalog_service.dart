@@ -29,7 +29,7 @@ class CatalogService extends ChangeNotifier {
   }
 
   Future<List<CategoryModel>> fetchAllCategories(BuildContext context) async {
-    status = CatalogStatus.Ideal;
+    status = CatalogStatus.Loading;
     notifyListeners();
     List<CategoryModel> list = [];
     try {
@@ -82,7 +82,7 @@ class CatalogService extends ChangeNotifier {
   }
 
   Future<List<CategoryModel>> fetchAllFoodItem(BuildContext context) async {
-    status = CatalogStatus.Ideal;
+    status = CatalogStatus.Loading;
     notifyListeners();
     List<CategoryModel> list = [];
     // try {

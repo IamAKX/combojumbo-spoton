@@ -47,10 +47,10 @@ class ProfileManagementService extends ChangeNotifier {
         var body = resBody['body'];
 
         if (resBody['status'] == 1) {
-          user.name = body['name'];
-          user.email = body['email'];
-          user.phone = body['contact'];
-          user.profileImage = body['image'];
+          user.name = body['name'] ?? '';
+          user.email = body['email'] ?? '';
+          user.phone = body['contact'] ?? '';
+          user.profileImage = body['image'] ?? '';
           prefs.setString(PrefernceKey.USER, user.toJson());
           status = ProfileStatus.Success;
           notifyListeners();

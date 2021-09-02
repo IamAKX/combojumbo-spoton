@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({Key? key}) : super(key: key);
@@ -13,154 +16,200 @@ class FavouriteScreen extends StatefulWidget {
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
   late Size screenSize;
+  late List<FoodModel> favList;
   @override
   Widget build(BuildContext context) {
+    favList = Utilities().getAllFavouriteFood();
     screenSize = MediaQuery.of(context).size;
-    return StaggeredGridView.count(
-      crossAxisCount: 2,
-
-      // shrinkWrap: true,
-      // childAspectRatio:
-      //     (screenSize.width - (2 * defaultPadding)) / (screenSize.height / 1.7),
-      mainAxisSpacing: defaultPadding,
-      staggeredTiles: [
-        for (int i = 0; i < 20; i++) ...{StaggeredTile.fit(1)}
-      ],
-      children: [
-        for (int i = 0; i < 20; i++) ...{
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
+    return favList.isEmpty
+        ? Center(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
+                SvgPicture.asset(
+                  'assets/svg/empty_favourite.svg',
+                  width: 300,
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: Text(
+                    'Add someting to your favourite list',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline4
+                        ?.copyWith(fontSize: 20),
+                  ),
+                )
+              ],
+            ),
+          )
+        : StaggeredGridView.count(
+            crossAxisCount: 2,
+            padding: EdgeInsets.symmetric(vertical: defaultPadding),
+            crossAxisSpacing: defaultPadding / 2,
+            mainAxisSpacing: defaultPadding,
+            staggeredTiles: [
+              for (int i = 0; i < favList.length; i++) ...{StaggeredTile.fit(1)}
+            ],
+            children: [
+              for (int i = 0; i < favList.length; i++) ...{
                 Container(
-                  // width: screenSize.width * 0.7,
-                  decoration: BoxDecoration(),
-                  child: Stack(
+                  margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                  decoration: BoxDecoration(
+                    color: bgColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                        child: CachedNetworkImage(
-                          height: screenSize.width * 0.4,
-                          width: screenSize.width * 0.7,
-                          fit: BoxFit.cover,
-                          imageUrl:
-                              'https://www.combojumbo.in/master/food/images/107image16632021-06-29-18-57-17paneer-tikka.jpg',
-                          progressIndicatorBuilder:
-                              (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                                value: downloadProgress.progress),
-                          ),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
-                      ),
-                      Positioned(
-                        right: 10,
-                        top: 10,
-                        child: CircleAvatar(
-                          backgroundColor: bgColor,
-                          radius: 15,
-                          child: Icon(
-                            Icons.favorite,
-                            size: 20,
-                            color: textColor,
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        right: 10,
-                        bottom: 10,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.star_outline,
-                                color: Colors.white,
-                                size: 18,
+                      Container(
+                        // width: screenSize.width * 0.7,
+                        decoration: BoxDecoration(),
+                        child: Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
                               ),
-                              Text(
-                                '4.1',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
+                              child: CachedNetworkImage(
+                                height: screenSize.width * 0.4,
+                                width: screenSize.width * 0.7,
+                                fit: BoxFit.cover,
+                                imageUrl: favList.elementAt(i).foodImage,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Center(
+                                  child: CircularProgressIndicator(
+                                      value: downloadProgress.progress),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
+                            ),
+                            Positioned(
+                              right: 10,
+                              top: 10,
+                              child: InkWell(
+                                onTap: () {
+                                  if (Utilities().isFoodMarkedFavourite(
+                                      favList, favList.elementAt(i).id))
+                                    favList.removeWhere((element) =>
+                                        element.id == favList.elementAt(i).id);
+                                  else
+                                    favList.add(favList.elementAt(i));
+                                  Utilities().setFavouriteFood(favList);
+                                  setState(() {});
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor: bgColor,
+                                  radius: 15,
+                                  child: Icon(
+                                    Utilities().isFoodMarkedFavourite(
+                                            favList, favList.elementAt(i).id)
+                                        ? Icons.favorite
+                                        : Icons.favorite_outline,
+                                    size: 20,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              right: 10,
+                              bottom: 10,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(5)),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.star_outline,
                                       color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                      size: 18,
                                     ),
+                                    Text(
+                                      '4.1',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          ?.copyWith(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
-                          ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(defaultPadding / 2),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              favList.elementAt(i).foodname,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6
+                                  ?.copyWith(
+                                    color: textColor,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            ),
+                            Text(
+                              '${favList.elementAt(i).fooddescription}',
+                              style: Theme.of(context).textTheme.caption,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Row(
+                              children: [
+                                Text('₹ ${favList.elementAt(i).foodamount}'),
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {},
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 5),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      'ADD',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .button
+                                          ?.copyWith(
+                                            color: primaryColor,
+                                          ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       )
                     ],
                   ),
                 ),
-                Container(
-                  padding: EdgeInsets.all(defaultPadding / 2),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Paneer Tikka',
-                        style: Theme.of(context).textTheme.headline6?.copyWith(
-                              color: textColor,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      Text(
-                        'Paneer marinated in curd and Indian spice cooked in tandoor',
-                        style: Theme.of(context).textTheme.caption,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Row(
-                        children: [
-                          Text('₹ 90'),
-                          Spacer(),
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              margin: EdgeInsets.only(top: 5),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: primaryColor),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
-                                'ADD',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .button
-                                    ?.copyWith(
-                                      color: primaryColor,
-                                    ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        }
-      ],
-    );
+              }
+            ],
+          );
   }
 }
