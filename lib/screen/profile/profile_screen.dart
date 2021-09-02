@@ -6,9 +6,11 @@ import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
+import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
+import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -61,8 +63,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(
-                    'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'),
+                backgroundImage: NetworkImage(user.profileImage.isEmpty
+                    ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
+                    : user.profileImage),
               ),
               SizedBox(
                 width: defaultPadding,
@@ -84,37 +87,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
           color: borderColor,
           height: 1,
         ),
-        Container(
-          color: bgColor,
-          padding: EdgeInsets.symmetric(
-            horizontal: defaultPadding,
-            vertical: defaultPadding / 2,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Account Credits'),
-              Text(
-                '${Constants.RUPEE} 52.25',
-                style: TextStyle(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   color: bgColor,
+        //   padding: EdgeInsets.symmetric(
+        //     horizontal: defaultPadding,
+        //     vertical: defaultPadding / 2,
+        //   ),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       Text('Account Credits'),
+        //       Text(
+        //         '${Constants.RUPEE} 52.25',
+        //         style: TextStyle(
+        //           color: primaryColor,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         SizedBox(
           height: defaultPadding,
         ),
         ListTile(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE);
+          },
           tileColor: bgColor,
           title: Text(
-            'Payment Cards',
+            'Edit Profile',
             style:
                 Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
-          subtitle: Text('Add a credit or debit card'),
+          subtitle: Text('Update your profile details'),
           trailing: Icon(Icons.keyboard_arrow_right),
         ),
         Divider(
@@ -138,25 +145,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 1,
         ),
         ListTile(
+          onTap: () => Navigator.of(context)
+              .pushNamed(ResetPasswordScreen.RESET_PASSWORD_ROUTE),
           tileColor: bgColor,
           title: Text(
-            'Refer Friends',
+            'Change Password',
             style:
-                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 20),
+                Theme.of(context).textTheme.headline6?.copyWith(fontSize: 18),
           ),
-          subtitle: Text(
-            'Get ${Constants.RUPEE}10.00 FREE',
-            style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                  color: primaryColor,
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
+          subtitle: Text('Reset current password'),
           trailing: Icon(Icons.keyboard_arrow_right),
         ),
         Divider(
           color: borderColor,
           height: 1,
         ),
+        // ListTile(
+        //   tileColor: bgColor,
+        //   title: Text(
+        //     'Refer Friends',
+        //     style:
+        //         Theme.of(context).textTheme.headline6?.copyWith(fontSize: 20),
+        //   ),
+        //   subtitle: Text(
+        //     'Get ${Constants.RUPEE}10.00 FREE',
+        //     style: Theme.of(context).textTheme.subtitle2?.copyWith(
+        //           color: primaryColor,
+        //           fontWeight: FontWeight.bold,
+        //         ),
+        //   ),
+        //   trailing: Icon(Icons.keyboard_arrow_right),
+        // ),
+        // Divider(
+        //   color: borderColor,
+        //   height: 1,
+        // ),
         ListTile(
           onTap: () =>
               Navigator.of(context).pushNamed(FeedbackScreen.FEEDBACK_ROUTE),

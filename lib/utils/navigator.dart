@@ -14,6 +14,7 @@ import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
+import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class NavRoute {
@@ -53,9 +54,10 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => MenuScreen());
       case ResetPasswordScreen.RESET_PASSWORD_ROUTE:
         return MaterialPageRoute(builder: (_) => ResetPasswordScreen());
-
       case FeedbackScreen.FEEDBACK_ROUTE:
         return MaterialPageRoute(builder: (_) => FeedbackScreen());
+      case UpdateProfileScreen.UPDATE_PROFILE_ROUTE:
+        return MaterialPageRoute(builder: (_) => UpdateProfileScreen());
 
       default:
         return _errorRoute();
