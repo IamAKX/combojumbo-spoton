@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
+import 'package:cjspoton/services/catalog_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
@@ -8,6 +11,7 @@ import 'package:cjspoton/widgets/subheading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -18,8 +22,27 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late Size screenSize;
+  late CatalogService _catalogService;
+  List<CategoryModel> list = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _catalogService.fetchAllCategories(context).then(
+        (value) {
+          setState(() {
+            list = value;
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _catalogService = Provider.of<CatalogService>(context);
+    SnackBarService.instance.buildContext = context;
     screenSize = MediaQuery.of(context).size;
     return ListView(
       children: [
@@ -90,12 +113,19 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Container(
           height: (screenSize.width * 0.65),
-          child: ListView.builder(
-            itemCount: 5,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) =>
-                CategoryCard(screenSize: screenSize),
-          ),
+          width: screenSize.width * 0.7,
+          child: _catalogService.status == CatalogStatus.Loading
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView.builder(
+                  itemCount: list.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => CategoryCard(
+                    screenSize: screenSize,
+                    categoryModel: list.elementAt(index),
+                  ),
+                ),
         ),
         SizedBox(
           height: defaultPadding,
@@ -523,9 +553,11 @@ class CategoryCard extends StatelessWidget {
   const CategoryCard({
     Key? key,
     required this.screenSize,
+    required this.categoryModel,
   }) : super(key: key);
 
   final Size screenSize;
+  final CategoryModel categoryModel;
 
   @override
   Widget build(BuildContext context) {
@@ -553,8 +585,7 @@ class CategoryCard extends StatelessWidget {
                     height: screenSize.width * 0.5,
                     width: screenSize.width * 0.7,
                     fit: BoxFit.cover,
-                    imageUrl:
-                        'https://www.combojumbo.in/master/category/images/image17612021-05-06-00-08-29charcoal-night.jpg',
+                    imageUrl: '${categoryModel.image}',
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                       child: CircularProgressIndicator(
@@ -569,7 +600,7 @@ class CategoryCard extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: bgColor,
                     radius: 15,
-                    child: Text('5'),
+                    child: Text('${categoryModel.foodcount}'),
                   ),
                 ),
                 Positioned(
@@ -609,14 +640,14 @@ class CategoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Charcol Nights',
+                  '${categoryModel.categoryName}',
                   style: Theme.of(context).textTheme.headline6?.copyWith(
                         color: textColor,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                 ),
-                Text('Starts from ₹ 187'),
+                Text('Starts from ₹ ${categoryModel.startsfrom}'),
               ],
             ),
           )

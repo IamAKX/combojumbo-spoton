@@ -25,7 +25,13 @@ class MenuItem extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
-          title: Text('$title'),
+          title: Text(
+            '${title.toCamelCase()}',
+            style: Theme.of(context)
+                .textTheme
+                .subtitle1
+                ?.copyWith(color: textColor),
+          ),
           isThreeLine: true,
           trailing: Column(
             children: [
@@ -79,23 +85,32 @@ class MenuItem extends StatelessWidget {
             ],
           ),
           subtitle: Text(
-            '$subTitle',
+            '${subTitle.toCamelCase()}',
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
+            style: Theme.of(context)
+                .textTheme
+                .subtitle2
+                ?.copyWith(color: borderColor),
           ),
-          contentPadding: EdgeInsets.only(right: defaultPadding),
+          contentPadding:
+              EdgeInsets.only(right: defaultPadding, left: defaultPadding),
           minVerticalPadding: 0,
-          leading: Container(
-            width: 80,
-            height: 80,
-            child: CachedNetworkImage(
-              imageUrl: '$imageUrl',
-              progressIndicatorBuilder: (context, url, downloadProgress) =>
-                  Center(
-                child:
-                    CircularProgressIndicator(value: downloadProgress.progress),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(4),
+            child: Container(
+              width: 80,
+              height: 80,
+              child: CachedNetworkImage(
+                imageUrl: '$imageUrl',
+                fit: BoxFit.cover,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                  child: CircularProgressIndicator(
+                      value: downloadProgress.progress),
+                ),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-              errorWidget: (context, url, error) => Icon(Icons.error),
             ),
           ),
         ),

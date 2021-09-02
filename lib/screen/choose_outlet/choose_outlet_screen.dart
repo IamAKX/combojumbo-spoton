@@ -47,10 +47,16 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
           OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: primaryColor),
         actions: [
           InkWell(
-            onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
-                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false),
+            onTap: () {
+              if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
+              else
+                SnackBarService.instance.showSnackBarError('Choose an outlet');
+            },
             child: Container(
               padding: EdgeInsets.all(15),
               child: Text(

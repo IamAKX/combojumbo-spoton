@@ -1,11 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/category_model.dart';
+import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/services/catalog_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/menu_item.dart';
 import 'package:cjspoton/widgets/menu_subheading.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class MenuScreen extends StatefulWidget {
   const MenuScreen({Key? key}) : super(key: key);
@@ -18,14 +26,36 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   final GlobalKey _menuKey = new GlobalKey();
   ScrollController _scrollController = ScrollController();
+  late OutletModel _outletModel;
+  late CatalogService _catalogService;
+  List<CategoryModel> list = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _catalogService.fetchAllFoodItem(context).then(
+        (value) {
+          setState(() {
+            list = value;
+          });
+        },
+      ),
+    );
+  }
 
   void _scrollToIndex(index) {
-    _scrollController.animateTo(100.0 * index,
-        duration: Duration(seconds: 1), curve: Curves.easeIn);
+    // _scrollController.animateTo(100.0 * index,
+    //     duration: Duration(seconds: 1), curve: Curves.easeIn);
+    _scrollController.jumpTo(index * 100.0);
   }
 
   @override
   Widget build(BuildContext context) {
+    _catalogService = Provider.of<CatalogService>(context);
+    SnackBarService.instance.buildContext = context;
     final button = new PopupMenuButton(
       key: _menuKey,
       icon: Icon(
@@ -33,57 +63,76 @@ class _MenuScreenState extends State<MenuScreen> {
         color: bgColor,
       ),
       itemBuilder: (_) => <PopupMenuItem<String>>[
-        PopupMenuItem<String>(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Soup Kitchen'),
-                CircleAvatar(
-                  radius: 12,
-                  child: Text(
-                    '4',
-                    style: TextStyle(
-                      fontSize: 12,
+        for (CategoryModel _cat in list) ...{
+          PopupMenuItem<String>(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('${_cat.categoryName.toCamelCase()}'),
+                  CircleAvatar(
+                    radius: 12,
+                    child: Text(
+                      '${_cat.foodcount}',
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            value: 'Soup Kitchen'),
-        PopupMenuItem<String>(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Charcol Night'),
-                CircleAvatar(
-                  radius: 12,
-                  child: Text(
-                    '6',
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            value: 'Charcol Night'),
-        PopupMenuItem<String>(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Kebabs'),
-                CircleAvatar(
-                  radius: 12,
-                  child: Text(
-                    '5',
-                    style: TextStyle(
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            value: 'Kebabs'),
+                ],
+              ),
+              value: '${_cat.id}'),
+        },
+        // PopupMenuItem<String>(
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         Text('Soup Kitchen'),
+        //         CircleAvatar(
+        //           radius: 12,
+        //           child: Text(
+        //             '4',
+        //             style: TextStyle(
+        //               fontSize: 12,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //     value: 'Soup Kitchen'),
+        // PopupMenuItem<String>(
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         const Text('Charcol Night'),
+        //         CircleAvatar(
+        //           radius: 12,
+        //           child: Text(
+        //             '6',
+        //             style: TextStyle(
+        //               fontSize: 12,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //     value: 'Charcol Night'),
+        // PopupMenuItem<String>(
+        //     child: Row(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       children: [
+        //         const Text('Kebabs'),
+        //         CircleAvatar(
+        //           radius: 12,
+        //           child: Text(
+        //             '5',
+        //             style: TextStyle(
+        //               fontSize: 12,
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //     value: 'Kebabs'),
         PopupMenuItem<String>(
             child: Row(
               children: [
@@ -94,17 +143,20 @@ class _MenuScreenState extends State<MenuScreen> {
       ],
       onSelected: (value) {
         switch (value.toString()) {
-          case 'Soup Kitchen':
-            _scrollToIndex(2);
-            break;
-          case 'Charcol Night':
-            _scrollToIndex(7);
-            break;
-          case 'Kebabs':
-            _scrollToIndex(14);
-            break;
           case 'Review':
-            _scrollToIndex(21);
+            int height = 1;
+            for (CategoryModel cat in list) {
+              height += cat.foodList.length + 1;
+            }
+            _scrollToIndex(height);
+            break;
+          default:
+            int height = 1;
+            for (CategoryModel cat in list) {
+              if (value == cat.id) break;
+              height += cat.foodList.length + 1;
+            }
+            _scrollToIndex(height);
             break;
         }
       },
@@ -148,7 +200,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'CJ Vashi - Home Delivery',
+                    '${_outletModel.outletName} - Home Delivery',
                     style: Theme.of(context).textTheme.headline4?.copyWith(
                           color: bgColor,
                           fontWeight: FontWeight.bold,
@@ -177,56 +229,32 @@ class _MenuScreenState extends State<MenuScreen> {
             SizedBox(
               height: defaultPadding * 2,
             ),
-            MenuSubheading(
-              itemCount: '4',
-              title: 'Soup Kitchen',
-            ),
-            for (var i = 0; i < 4; i++) ...{
-              MenuItem(
-                title: 'Veg Nesista Soup',
-                subTitle:
-                    'Indian vegetables cooked with fresh corriander and garnished with chopped veggies',
-                amount: '120.50',
-                imageUrl:
-                    'https://www.combojumbo.in/master/food/images/95image19122021-07-24-10-50-35nesista.jpg',
-                parentContext: context,
-              ),
-            },
-            SizedBox(
-              height: defaultPadding * 2,
-            ),
-            MenuSubheading(
-              itemCount: '6',
-              title: 'Charcol Nights',
-            ),
-            for (var i = 0; i < 6; i++) ...{
-              MenuItem(
-                title: 'Paneer Tikka',
-                subTitle:
-                    'Paneer marinated in curd and indian spices cooked in tandoor',
-                amount: '230.50',
-                imageUrl:
-                    'https://www.combojumbo.in/master/food/images/107image16632021-06-29-18-57-17paneer-tikka.jpg',
-                parentContext: context,
-              ),
-            },
-            SizedBox(
-              height: defaultPadding * 2,
-            ),
-            MenuSubheading(
-              itemCount: '5',
-              title: 'Kebabs',
-            ),
-            for (var i = 0; i < 6; i++) ...{
-              MenuItem(
-                title: 'Cj special platter (Jumbo-12pcs)',
-                subTitle: 'A combination of our chef\'s specials',
-                amount: '180.50',
-                imageUrl:
-                    'https://www.combojumbo.in/master/food/images/293image18192021-07-24-10-58-35paneer-seekh-kebab--1.jpg',
-                parentContext: context,
-              ),
-            },
+            if (_catalogService.status != CatalogStatus.Success)
+              Container(
+                height: 500,
+                width: double.infinity,
+                alignment: Alignment.center,
+                child: CircularProgressIndicator(),
+              )
+            else
+              for (CategoryModel category in list) ...{
+                MenuSubheading(
+                  itemCount: '${category.foodcount.trim()}',
+                  title: '${category.categoryName.trim()}',
+                ),
+                for (FoodModel food in category.foodList) ...{
+                  MenuItem(
+                    title: '${food.foodname.trim()}',
+                    subTitle: '${food.fooddescription.trim()}',
+                    amount: '${food.foodamount.trim()}',
+                    imageUrl: '${food.foodImage.trim()}',
+                    parentContext: context,
+                  ),
+                },
+                SizedBox(
+                  height: defaultPadding * 2,
+                ),
+              },
             SizedBox(
               height: defaultPadding,
             ),

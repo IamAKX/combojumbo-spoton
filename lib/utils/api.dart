@@ -17,4 +17,6 @@ class API {
   static const String Profile = '${BASE_URL}myprofile.php';
 
   static const String Outlets = '${BASE_URL}outlet.php';
+  static const String Categories = '${BASE_URL}category';
+  static const String FoodItems = '${BASE_URL}food.php';
 }
