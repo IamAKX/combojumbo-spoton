@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
@@ -318,7 +319,7 @@ class AuthenticationService extends ChangeNotifier {
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
           Navigator.of(context).pushNamedAndRemoveUntil(
-              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
+              ChooseOutletScreen.CHOOSE_OUTLET_ROUTE, (route) => false);
         } else {
           status = AuthStatus.Error;
           notifyListeners();

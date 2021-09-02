@@ -6,7 +6,7 @@ import 'colors.dart';
 const double defaultPadding = 16;
 
 ThemeData globalTheme(BuildContext context) {
-  return ThemeData(primarySwatch: Colors.amber).copyWith(
+  return ThemeData(primarySwatch: primaryColor).copyWith(
     scaffoldBackgroundColor: bgColor,
     backgroundColor: bgColor,
     primaryColor: primaryColor,
