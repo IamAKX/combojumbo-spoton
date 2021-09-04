@@ -1,21 +1,37 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/cart_item.dart';
+import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class CartScreen extends StatefulWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  const CartScreen(
+      {Key? key, required Function() this.refreshMainContainerState})
+      : super(key: key);
   static const String CART_ROUTE = '/cart';
+  final Function() refreshMainContainerState;
+
   @override
   _CartScreenState createState() => _CartScreenState();
 }
 
 class _CartScreenState extends State<CartScreen> {
-  int counter = 1;
   TextEditingController promoCodeCtrl = TextEditingController();
   TextEditingController sugestionCtrl = TextEditingController();
+  OutletModel outletModel =
+      OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+
+  refreshState() {
+    widget.refreshMainContainerState();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +72,13 @@ class _CartScreenState extends State<CartScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '6 ITEMS',
+                      '${CartHelper.getCartCount()} ITEMS',
                       style: Theme.of(context).textTheme.caption?.copyWith(
                             color: bgColor.withOpacity(0.7),
                           ),
                     ),
                     Text(
-                      '${Constants.RUPEE} ${counter * 6 * 25 - 20 + 62.8 + 10}',
+                      '${Constants.RUPEE} ${6 * 6 * 25 - 20 + 62.8 + 10}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,
@@ -121,15 +137,16 @@ class _CartScreenState extends State<CartScreen> {
               fit: BoxFit.cover,
             ),
             dense: true,
-            title: Text('Combo Jumbo, Vashi'),
-            subtitle: Text('Vashi, Navi Mumbai'),
+            title: Text('${outletModel.outletName}'),
+            subtitle: Text('${outletModel.outletId}'),
           ),
           SizedBox(
             height: defaultPadding,
           ),
           Column(
             children: [
-              for (int i = 0; i < 6; i++) ...{
+              for (GroupedCartItemModel groupedItem
+                  in CartHelper.getGroupedCartItem()) ...{
                 Container(
                   color: bgColor,
                   padding: EdgeInsets.symmetric(
@@ -144,11 +161,14 @@ class _CartScreenState extends State<CartScreen> {
                       SizedBox(
                         width: 5,
                       ),
-                      Text(
-                        'Rumali Roti',
-                        style: Theme.of(context).textTheme.subtitle1,
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        child: Text(
+                          '${groupedItem.cartItem.foodname.toCamelCase()}',
+                          style: Theme.of(context).textTheme.subtitle1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                      Spacer(),
                       Container(
                         decoration: BoxDecoration(
                           color: primaryColor.withOpacity(0.2),
@@ -159,10 +179,9 @@ class _CartScreenState extends State<CartScreen> {
                           children: [
                             InkWell(
                               onTap: () {
-                                if (counter > 1)
-                                  setState(() {
-                                    counter--;
-                                  });
+                                CartHelper.removeItemToCart(
+                                    groupedItem.cartItem);
+                                refreshState();
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
@@ -175,11 +194,13 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               ),
                             ),
-                            Text('$counter'),
+                            Text('${groupedItem.quantity}'),
                             InkWell(
                               onTap: () {
                                 setState(() {
-                                  counter++;
+                                  CartHelper.addItemToCart(
+                                      groupedItem.cartItem);
+                                  refreshState();
                                 });
                               },
                               child: Container(
@@ -200,17 +221,16 @@ class _CartScreenState extends State<CartScreen> {
                         width: defaultPadding,
                       ),
                       Text(
-                        '${Constants.RUPEE} ${counter * 25}',
+                        '${Constants.RUPEE} ${groupedItem.quantity * int.parse(groupedItem.cartItem.foodamount)}',
                         style: Theme.of(context).textTheme.subtitle1,
                       ),
                     ],
                   ),
                 ),
-                if (i < 5)
-                  Divider(
-                    height: 1,
-                    color: hintColor,
-                  )
+                Divider(
+                  height: 1,
+                  color: hintColor,
+                )
               },
             ],
           ),
@@ -376,7 +396,8 @@ class _CartScreenState extends State<CartScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Item Total'),
-                    Text('${Constants.RUPEE} ${6 * counter * 25}.00')
+                    Text(
+                        '${CartHelper.getTotalPriceOfCart().toStringAsFixed(2)}')
                   ],
                 ),
                 Row(
@@ -427,7 +448,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                     ),
                     Text(
-                      '${Constants.RUPEE} ${counter * 6 * 25 - 20 + 62.8 + 10}',
+                      '${Constants.RUPEE} ${6 * 6 * 25 - 20 + 62.8 + 10}',
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(
                             fontSize: 18,
                             // fontWeight: FontWeight.bold,

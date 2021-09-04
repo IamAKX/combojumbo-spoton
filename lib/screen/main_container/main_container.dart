@@ -118,7 +118,9 @@ class _MainContainerState extends State<MainContainer> {
                         .pushNamed(ChooseOutletScreen.CHOOSE_OUTLET_ROUTE),
                     icon: Icon(Icons.business_outlined),
                   ),
-                  GetCartButton(),
+                  GetCartButton(
+                    refreshState: refreshState,
+                  ),
                 ],
               ),
               Container(
@@ -163,7 +165,9 @@ class _MainContainerState extends State<MainContainer> {
           backgroundColor: bgColor,
           centerTitle: false,
           actions: [
-            GetCartButton(),
+            GetCartButton(
+              refreshState: refreshState,
+            ),
           ],
         );
       case 2:
@@ -172,7 +176,9 @@ class _MainContainerState extends State<MainContainer> {
           backgroundColor: bgColor,
           centerTitle: false,
           actions: [
-            GetCartButton(),
+            GetCartButton(
+              refreshState: refreshState,
+            ),
           ],
         );
       case 3:
@@ -181,7 +187,9 @@ class _MainContainerState extends State<MainContainer> {
           backgroundColor: bgColor,
           centerTitle: false,
           actions: [
-            GetCartButton(),
+            GetCartButton(
+              refreshState: refreshState,
+            ),
           ],
         );
     }
@@ -205,13 +213,15 @@ void configureFCM() {
 class GetCartButton extends StatelessWidget {
   const GetCartButton({
     Key? key,
+    required this.refreshState,
   }) : super(key: key);
-
+  final Function() refreshState;
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        Navigator.of(context).pushNamed(CartScreen.CART_ROUTE);
+        Navigator.of(context)
+            .pushNamed(CartScreen.CART_ROUTE, arguments: refreshState);
       },
       icon: CartHelper.getCartCount() == 0
           ? Icon(

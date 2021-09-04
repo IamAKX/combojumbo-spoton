@@ -47,7 +47,10 @@ class NavRoute {
       case PrivacyPolicyScreen.PRIVACY_ROUTE:
         return MaterialPageRoute(builder: (_) => PrivacyPolicyScreen());
       case CartScreen.CART_ROUTE:
-        return MaterialPageRoute(builder: (_) => CartScreen());
+        return MaterialPageRoute(
+            builder: (_) => CartScreen(
+                  refreshMainContainerState: settings.arguments as Function(),
+                ));
       case CheckoutScreen.CHECKOUT_ROUTE:
         return MaterialPageRoute(builder: (_) => CheckoutScreen());
       case MenuScreen.MENU_SCREEN_ROUTE:

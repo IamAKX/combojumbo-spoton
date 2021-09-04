@@ -24,6 +24,7 @@ class MenuScreen extends StatefulWidget {
       : super(key: key);
   static const String MENU_SCREEN_ROUTE = '/menuScreen';
   final Function() refreshMainContainerState;
+
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
@@ -93,57 +94,6 @@ class _MenuScreenState extends State<MenuScreen> {
               ),
               value: '${_cat.id}'),
         },
-        // PopupMenuItem<String>(
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       children: [
-        //         Text('Soup Kitchen'),
-        //         CircleAvatar(
-        //           radius: 12,
-        //           child: Text(
-        //             '4',
-        //             style: TextStyle(
-        //               fontSize: 12,
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //     value: 'Soup Kitchen'),
-        // PopupMenuItem<String>(
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       children: [
-        //         const Text('Charcol Night'),
-        //         CircleAvatar(
-        //           radius: 12,
-        //           child: Text(
-        //             '6',
-        //             style: TextStyle(
-        //               fontSize: 12,
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //     value: 'Charcol Night'),
-        // PopupMenuItem<String>(
-        //     child: Row(
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       children: [
-        //         const Text('Kebabs'),
-        //         CircleAvatar(
-        //           radius: 12,
-        //           child: Text(
-        //             '5',
-        //             style: TextStyle(
-        //               fontSize: 12,
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //     value: 'Kebabs'),
         PopupMenuItem<String>(
             child: Row(
               children: [
@@ -191,7 +141,8 @@ class _MenuScreenState extends State<MenuScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushNamed(CartScreen.CART_ROUTE);
+              Navigator.of(context).pushNamed(CartScreen.CART_ROUTE,
+                  arguments: widget.refreshMainContainerState);
             },
             icon: CartHelper.getCartCount() == 0
                 ? Icon(

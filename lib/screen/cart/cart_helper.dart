@@ -2,6 +2,7 @@ import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/add_on_model_item.dart';
 import 'package:cjspoton/model/cart_item.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 
 class CartHelper {
@@ -90,5 +91,26 @@ class CartHelper {
         foodImage: food.foodImage,
         addOns: []);
     return cartItem;
+  }
+
+  static List<GroupedCartItemModel> getGroupedCartItem() {
+    List<CartItem> cart = getAllItemsFromCart();
+    List<GroupedCartItemModel> groupedCart = [];
+    for (CartItem item in cart) {
+      if (groupedCart.any((element) => element.cartItem.id == item.id))
+        groupedCart
+            .firstWhere((element) => element.cartItem.id == item.id)
+            .quantity++;
+      else
+        groupedCart.add(GroupedCartItemModel(cartItem: item, quantity: 1));
+    }
+    return groupedCart;
+  }
+
+  static double getTotalPriceOfCart() {
+    double amt = 0.0;
+    List<CartItem> cart = getAllItemsFromCart();
+    for (CartItem item in cart) amt += double.parse(item.foodamount);
+    return amt;
   }
 }
