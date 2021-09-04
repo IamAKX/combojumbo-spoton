@@ -1,7 +1,10 @@
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/add_on_model_item.dart';
+import 'package:cjspoton/model/all_charges_model.dart';
 import 'package:cjspoton/model/cart_item.dart';
+import 'package:cjspoton/model/coupon_discount_detail_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 
@@ -111,6 +114,32 @@ class CartHelper {
     double amt = 0.0;
     List<CartItem> cart = getAllItemsFromCart();
     for (CartItem item in cart) amt += double.parse(item.foodamount);
+    return amt;
+  }
+
+  static double getDiscountPrice(
+      CouponDiscountDetailModel? couponDiscountDetailModel) {
+    double amt = getTotalPriceOfCart();
+    switch (couponDiscountDetailModel!.coupon_type) {
+      case 'Percentage':
+        amt = amt * double.parse(couponDiscountDetailModel.coupon_value) / 100;
+        return amt;
+      default:
+        return double.parse(couponDiscountDetailModel.coupon_value);
+    }
+  }
+
+  static double getNetAmount(
+      AllChargesModel? allChargesModel,
+      PincodeModel selectedPincode,
+      CouponDiscountDetailModel? couponDiscountDetailModel) {
+    double amt = getTotalPriceOfCart();
+    amt += double.parse(selectedPincode.charge);
+    if (allChargesModel != null)
+      amt += double.parse(allChargesModel.Packing_Charge) +
+          double.parse(allChargesModel.Service_Charge);
+    if (couponDiscountDetailModel != null)
+      amt -= getDiscountPrice(couponDiscountDetailModel);
     return amt;
   }
 }

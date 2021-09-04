@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/all_charges_model.dart';
 import 'package:cjspoton/model/cart_item.dart';
+import 'package:cjspoton/model/coupon_discount_detail_model.dart';
+import 'package:cjspoton/model/coupon_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
@@ -34,6 +37,10 @@ class _CartScreenState extends State<CartScreen> {
       OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
   late CartServices _cartServices;
   PincodeModel selectedPincode = Constants.getDefaultPincode();
+  List<CouponModel> couponList = [];
+  AllChargesModel? allChargesModel = null;
+  String? selectedCoupon;
+  CouponDiscountDetailModel? couponDiscountDetailModel = null;
 
   refreshState() {
     widget.refreshMainContainerState();
@@ -44,15 +51,20 @@ class _CartScreenState extends State<CartScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // WidgetsBinding.instance!.addPostFrameCallback(
-    //   (_) => _cartServices.fetchAllPincodes(context).then(
-    //     (value) {
-    //       setState(() {
-    //         pincodeList = value;
-    //       });
-    //     },
-    //   ),
-    // );
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _cartServices.fetchAllPincodes(context).then(
+        (value) {
+          setState(() {
+            _cartServices
+                .getAllCoupon(context)
+                .then((value) => couponList = value);
+            _cartServices
+                .getAllCharges(context)
+                .then((value) => allChargesModel = value);
+          });
+        },
+      ),
+    );
   }
 
   Widget _customDropDownForPincode(
@@ -145,7 +157,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                     ),
                     Text(
-                      '${Constants.RUPEE} ${6 * 6 * 25 - 20 + 62.8 + 10}',
+                      '${Constants.RUPEE} ${CartHelper.getNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,
@@ -308,76 +320,121 @@ class _CartScreenState extends State<CartScreen> {
             color: bgColor,
             padding: EdgeInsets.symmetric(
                 horizontal: defaultPadding, vertical: defaultPadding / 2),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    autocorrect: true,
-                    controller: promoCodeCtrl,
-                    decoration: InputDecoration(
-                      hintText: 'Enter promo code',
-                      focusColor: primaryColor,
-                      alignLabelWithHint: false,
-                      filled: true,
-                      fillColor: Colors.white,
+            // child: Row(
+            //   children: [
+            //     Expanded(
+            //       child: TextField(
+            //         autocorrect: true,
+            //         controller: promoCodeCtrl,
+            //         decoration: InputDecoration(
+            //           hintText: 'Enter promo code',
+            //           focusColor: primaryColor,
+            //           alignLabelWithHint: false,
+            //           filled: true,
+            //           fillColor: Colors.white,
+            //           contentPadding:
+            //               EdgeInsets.symmetric(horizontal: defaultPadding),
+            //           hoverColor: primaryColor,
+            //           hintStyle: TextStyle(color: hintColor),
+            //           enabledBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.only(
+            //               topLeft: Radius.circular(4),
+            //               bottomLeft: Radius.circular(4),
+            //             ),
+            //             borderSide:
+            //                 BorderSide(color: hintColor.withOpacity(0.5)),
+            //           ),
+            //           focusedBorder: OutlineInputBorder(
+            //             borderRadius: BorderRadius.only(
+            //               topLeft: Radius.circular(4),
+            //               bottomLeft: Radius.circular(4),
+            //             ),
+            //             borderSide:
+            //                 BorderSide(color: hintColor.withOpacity(0.5)),
+            //           ),
+            //           border: OutlineInputBorder(
+            //             borderRadius: BorderRadius.only(
+            //               topLeft: Radius.circular(4),
+            //               bottomLeft: Radius.circular(4),
+            //             ),
+            //             borderSide:
+            //                 BorderSide(color: hintColor.withOpacity(0.5)),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     InkWell(
+            //       onTap: () {},
+            //       child: Container(
+            //         alignment: Alignment.center,
+            //         padding: EdgeInsets.symmetric(
+            //           horizontal: 5,
+            //           vertical: 14,
+            //         ),
+            //         decoration: BoxDecoration(
+            //           color: primaryColor,
+            //           borderRadius: BorderRadius.only(
+            //             topRight: Radius.circular(4),
+            //             bottomRight: Radius.circular(4),
+            //           ),
+            //         ),
+            //         width: 80,
+            //         child: Text(
+            //           'APPLY',
+            //           style: Theme.of(context)
+            //               .textTheme
+            //               .button
+            //               ?.copyWith(color: bgColor),
+            //         ),
+            //       ),
+            //     ),
+            //   ],
+            // ),
+            child: couponList.isEmpty
+                ? Container()
+                : DropdownSearch<String>(
+                    mode: Mode.MENU,
+                    showSelectedItem: true,
+                    items: couponList.map((e) => e.code).toList(),
+                    dropdownSearchDecoration: InputDecoration(
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: defaultPadding),
-                      hoverColor: primaryColor,
-                      hintStyle: TextStyle(color: hintColor),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4),
-                          bottomLeft: Radius.circular(4),
-                        ),
+                        borderRadius: BorderRadius.circular(4),
                         borderSide:
                             BorderSide(color: hintColor.withOpacity(0.5)),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4),
-                          bottomLeft: Radius.circular(4),
-                        ),
+                        borderRadius: BorderRadius.circular(4),
                         borderSide:
                             BorderSide(color: hintColor.withOpacity(0.5)),
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(4),
-                          bottomLeft: Radius.circular(4),
-                        ),
+                        borderRadius: BorderRadius.circular(4),
                         borderSide:
                             BorderSide(color: hintColor.withOpacity(0.5)),
                       ),
                     ),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: primaryColor,
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(4),
-                        bottomRight: Radius.circular(4),
-                      ),
-                    ),
-                    width: 80,
-                    child: Text(
-                      'APPLY',
-                      style: Theme.of(context)
-                          .textTheme
-                          .button
-                          ?.copyWith(color: bgColor),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                    label: "Select coupons",
+                    hint: "Select coupon to get discount",
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCoupon = value;
+                        if (selectedCoupon == null) {
+                          SnackBarService.instance.showSnackBarInfo(
+                              'Select a coupon code to apply offer');
+                        }
+                        _cartServices
+                            .verifyCoupon(
+                                selectedCoupon!,
+                                CartHelper.getTotalPriceOfCart().toString(),
+                                context)
+                            .then((value) {
+                          couponDiscountDetailModel = value;
+                        });
+                      });
+                    },
+                    selectedItem: selectedCoupon),
           ),
           Container(
             color: bgColor,
@@ -464,36 +521,49 @@ class _CartScreenState extends State<CartScreen> {
                   children: [
                     Text('Item Total'),
                     Text(
-                        '${CartHelper.getTotalPriceOfCart().toStringAsFixed(2)}')
+                        '${Constants.RUPEE} ${CartHelper.getTotalPriceOfCart().toStringAsFixed(2)}')
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Restaurant Charges'),
-                    Text('${Constants.RUPEE} 62.80')
-                  ],
-                ),
+                if (allChargesModel != null) ...{
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Service Tax'),
+                      Text(
+                          '${Constants.RUPEE} ${double.parse(allChargesModel!.Service_Charge).toStringAsFixed(2)}')
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Packing charge'),
+                      Text(
+                          '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
+                    ],
+                  ),
+                },
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Delivery Fees'),
-                    Text('${Constants.RUPEE} 10.00')
+                    Text(
+                        '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
                   ],
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Total Discount',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                    Text(
-                      '${Constants.RUPEE} 20',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ],
-                ),
+                if (couponDiscountDetailModel != null)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Total Discount',
+                        style: TextStyle(color: Colors.green),
+                      ),
+                      Text(
+                        '${Constants.RUPEE} ${CartHelper.getDiscountPrice(couponDiscountDetailModel).toStringAsFixed(2)}',
+                        style: TextStyle(color: Colors.green),
+                      ),
+                    ],
+                  ),
                 SizedBox(
                   height: defaultPadding / 2,
                 ),
@@ -515,7 +585,7 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                     ),
                     Text(
-                      '${Constants.RUPEE} ${6 * 6 * 25 - 20 + 62.8 + 10}',
+                      '${Constants.RUPEE} ${CartHelper.getNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}',
                       style: Theme.of(context).textTheme.subtitle2?.copyWith(
                             fontSize: 18,
                             // fontWeight: FontWeight.bold,

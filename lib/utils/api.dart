@@ -22,4 +22,7 @@ class API {
   static const String Categories = '${BASE_URL}category';
   static const String FoodItems = '${BASE_URL}food.php';
   static const String PincodeCharge = '${BASE_URL}pincode.php';
+  static const String AllCharges = '${BASE_URL}charges';
+  static const String CouponCode = '${BASE_URL}couponlist';
+  static const String VerifyCouponCode = '${BASE_URL}coupon';
 }
