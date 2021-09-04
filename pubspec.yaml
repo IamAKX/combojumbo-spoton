@@ -38,10 +38,12 @@ dependencies:
   flutter_facebook_auth: ^3.0.0-nullsafety.1
   flutter_html: ^2.1.1
   flutter_local_notifications: ^8.1.1+1
+  flutter_payu_unofficial: ^1.0.3
   flutter_staggered_grid_view: ^0.4.0
   flutter_svg: ^0.22.0
   fluttertoast: ^8.0.7
   font_awesome_flutter: ^9.1.0
+  future_progress_dialog: ^0.2.0
   google_fonts: ^2.1.0
   google_sign_in: ^5.0.7
   image_picker: ^0.8.4

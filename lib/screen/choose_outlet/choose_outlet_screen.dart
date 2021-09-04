@@ -53,7 +53,8 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
             onTap: () {
               if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                    MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
+                    MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+                    arguments: 0);
               else
                 SnackBarService.instance.showSnackBarError('Choose an outlet');
             },

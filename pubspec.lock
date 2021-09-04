@@ -349,6 +349,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.1"
+  flutter_payu_unofficial:
+    dependency: "direct main"
+    description:
+      name: flutter_payu_unofficial
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.3"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -394,6 +401,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "9.1.0"
+  future_progress_dialog:
+    dependency: "direct main"
+    description:
+      name: future_progress_dialog
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   google_fonts:
     dependency: "direct main"
     description:

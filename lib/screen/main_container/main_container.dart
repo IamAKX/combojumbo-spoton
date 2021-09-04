@@ -19,16 +19,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MainContainer extends StatefulWidget {
-  const MainContainer({Key? key}) : super(key: key);
+  const MainContainer({Key? key, required this.initialIndex}) : super(key: key);
   static const String MAIN_CONTAINER_ROUTE = '/mainContainer';
   static late ProfileManagementService profileManagementService;
+  final int initialIndex;
 
   @override
   _MainContainerState createState() => _MainContainerState();
 }
 
 class _MainContainerState extends State<MainContainer> {
-  int _selectedIndex = 0;
+  late int _selectedIndex;
   TextEditingController _searchCtrl = TextEditingController();
   late PincodeModel _pincodeModel;
 
@@ -36,6 +37,7 @@ class _MainContainerState extends State<MainContainer> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _selectedIndex = widget.initialIndex;
     NotificationApi.init();
     listenNotification();
 

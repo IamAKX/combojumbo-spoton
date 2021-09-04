@@ -381,7 +381,8 @@ class AuthenticationService extends ChangeNotifier {
                 .pushNamed(ResetPasswordScreen.RESET_PASSWORD_ROUTE);
           else
             Navigator.of(context).pushNamedAndRemoveUntil(
-                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false);
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+                arguments: 0);
         } else {
           status = AuthStatus.Error;
           notifyListeners();

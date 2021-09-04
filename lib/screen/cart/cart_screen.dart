@@ -6,11 +6,14 @@ import 'package:cjspoton/model/coupon_discount_detail_model.dart';
 import 'package:cjspoton/model/coupon_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
+import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
+import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -35,6 +38,7 @@ class _CartScreenState extends State<CartScreen> {
   TextEditingController sugestionCtrl = TextEditingController();
   OutletModel outletModel =
       OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+  late UserModel user;
   late CartServices _cartServices;
   PincodeModel selectedPincode = Constants.getDefaultPincode();
   List<CouponModel> couponList = [];
@@ -113,12 +117,31 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
-
+    user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: InkWell(
-        onTap: () =>
-            Navigator.of(context).pushNamed(CheckoutScreen.CHECKOUT_ROUTE),
+        onTap: () {
+          if (user.email.isEmpty || user.name.isEmpty || user.phone.isEmpty) {
+            SnackBarService.instance
+                .showSnackBarError('Complete your profile to place order');
+            Navigator.of(context)
+                .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+                .then((value) {
+              setState(() {});
+            });
+          } else
+            Navigator.of(context).pushNamed(
+              CheckoutScreen.CHECKOUT_ROUTE,
+              arguments: CartVriablesModel(
+                allChargesModel: allChargesModel,
+                selectedPincode: selectedPincode,
+                couponDiscountDetailModel: couponDiscountDetailModel,
+                netAmount: CartHelper.getNetAmount(allChargesModel,
+                    selectedPincode, couponDiscountDetailModel),
+              ),
+            );
+        },
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),

@@ -5,6 +5,9 @@ import 'package:cjspoton/utils/prefs_key.dart';
 
 class Constants {
   static const String RUPEE = '₹';
+  static const String PAYU_MONEY_MERCHANT_KEY = 'psIxnCGd';
+  static const String PAYU_MONEY_MERCHANT_ID = '6713332';
+  static const String PAYU_MONEY_SALT = '1cEIP21zvx';
 
   static PincodeModel getDefaultPincode() {
     if (prefs.getString(PrefernceKey.SELECTED_PINCODE) != null)

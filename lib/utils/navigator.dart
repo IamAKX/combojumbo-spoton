@@ -1,5 +1,6 @@
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
+import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
@@ -40,7 +41,10 @@ class NavRoute {
       case ChooseOutletScreen.CHOOSE_OUTLET_ROUTE:
         return MaterialPageRoute(builder: (_) => ChooseOutletScreen());
       case MainContainer.MAIN_CONTAINER_ROUTE:
-        return MaterialPageRoute(builder: (_) => MainContainer());
+        return MaterialPageRoute(
+            builder: (_) => MainContainer(
+                  initialIndex: settings.arguments as int,
+                ));
       case AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE:
         return MaterialPageRoute(builder: (_) => AddDeliveryAddress());
       case TermOfUseSceen.TERMS_ROUTE:
@@ -53,7 +57,10 @@ class NavRoute {
                   refreshMainContainerState: settings.arguments as Function(),
                 ));
       case CheckoutScreen.CHECKOUT_ROUTE:
-        return MaterialPageRoute(builder: (_) => CheckoutScreen());
+        return MaterialPageRoute(
+            builder: (_) => CheckoutScreen(
+                  cartVriablesModel: settings.arguments as CartVriablesModel,
+                ));
       case MenuScreen.MENU_SCREEN_ROUTE:
         return MaterialPageRoute(
             builder: (_) => MenuScreen(

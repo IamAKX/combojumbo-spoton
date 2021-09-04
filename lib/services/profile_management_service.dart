@@ -162,6 +162,7 @@ class ProfileManagementService extends ChangeNotifier {
           user.email = email;
           user.phone = phone;
           user.name = name;
+          user.profileImage = body['image'];
 
           prefs.setString(PrefernceKey.USER, user.toJson());
 
