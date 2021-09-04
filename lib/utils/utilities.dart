@@ -28,4 +28,20 @@ class Utilities {
     }
     return isPresent;
   }
+
+  bool isValidEmail(String email) {
+    return RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+  }
+
+  bool isValidPhone(String phone) {
+    try {
+      if (phone.length != 10) return false;
+      int.parse(phone);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
 }
