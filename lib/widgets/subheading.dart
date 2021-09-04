@@ -3,15 +3,17 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class SubHeading extends StatelessWidget {
-  const SubHeading({
-    Key? key,
-    required this.title,
-    required this.routePath,
-    required this.context,
-  }) : super(key: key);
+  const SubHeading(
+      {Key? key,
+      required this.title,
+      required this.routePath,
+      required this.context,
+      this.refreshMainContainerState})
+      : super(key: key);
   final String title;
   final String routePath;
   final BuildContext context;
+  final Function()? refreshMainContainerState;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,7 +32,8 @@ class SubHeading extends StatelessWidget {
           ),
           Spacer(),
           InkWell(
-            onTap: () => Navigator.of(context).pushNamed(routePath),
+            onTap: () => Navigator.of(context)
+                .pushNamed(routePath, arguments: refreshMainContainerState),
             child: Text(
               'View all',
               style: Theme.of(context).textTheme.subtitle1?.copyWith(

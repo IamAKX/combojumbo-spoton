@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
+import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -14,12 +16,14 @@ class RecomendedItems extends StatelessWidget {
     required this.list,
     required this.favList,
     required this.reloadFavList,
+    required this.refreshState,
   }) : super(key: key);
 
   final Size screenSize;
   final List<CategoryModel> list;
   final List<FoodModel> favList;
   final Function() reloadFavList;
+  final Function() refreshState;
 
   @override
   Widget build(BuildContext context) {
@@ -154,26 +158,21 @@ class RecomendedItems extends StatelessWidget {
                           Text(
                               '₹ ${list.first.foodList.elementAt(i).foodamount}'),
                           Spacer(),
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              margin: EdgeInsets.only(top: 5),
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              decoration: BoxDecoration(
-                                border: Border.all(color: primaryColor),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Text(
-                                'ADD',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .button
-                                    ?.copyWith(
-                                      color: primaryColor,
-                                    ),
-                              ),
+                          if (CartHelper.getItemCountInCart(
+                                  CartHelper.transformFoodModel(
+                                      list.first.foodList.elementAt(i))) ==
+                              0)
+                            CartButton().getCartButtonSimple(
+                              context,
+                              list.first.foodList.elementAt(i),
+                              refreshState,
+                            )
+                          else
+                            CartButton().getCartButtonComplex(
+                              context,
+                              list.first.foodList.elementAt(i),
+                              refreshState,
                             ),
-                          )
                         ],
                       ),
                     ],

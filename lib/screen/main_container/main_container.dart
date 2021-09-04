@@ -1,3 +1,5 @@
+import 'package:badges/badges.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
@@ -41,6 +43,10 @@ class _MainContainerState extends State<MainContainer> {
         print(payload);
       });
 
+  refreshState() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     MainContainer.profileManagementService =
@@ -73,7 +79,7 @@ class _MainContainerState extends State<MainContainer> {
   getBody() {
     switch (_selectedIndex) {
       case 0:
-        return HomeScreen();
+        return HomeScreen(refreshState);
       case 1:
         return OrderScreen();
       case 2:
@@ -207,9 +213,20 @@ class GetCartButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context).pushNamed(CartScreen.CART_ROUTE);
       },
-      icon: Icon(
-        Icons.shopping_bag_outlined,
-      ),
+      icon: CartHelper.getCartCount() == 0
+          ? Icon(
+              Icons.shopping_bag_outlined,
+            )
+          : Badge(
+              badgeColor: primaryColor,
+              badgeContent: Text(
+                '${CartHelper.getCartCount()}',
+              ),
+              animationType: BadgeAnimationType.scale,
+              child: Icon(
+                Icons.shopping_bag_outlined,
+              ),
+            ),
     );
   }
 }

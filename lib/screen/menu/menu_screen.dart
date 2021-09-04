@@ -1,8 +1,11 @@
+import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -16,9 +19,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+  const MenuScreen(
+      {Key? key, required Function() this.refreshMainContainerState})
+      : super(key: key);
   static const String MENU_SCREEN_ROUTE = '/menuScreen';
-
+  final Function() refreshMainContainerState;
   @override
   _MenuScreenState createState() => _MenuScreenState();
 }
@@ -29,6 +34,7 @@ class _MenuScreenState extends State<MenuScreen> {
   late OutletModel _outletModel;
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -44,6 +50,11 @@ class _MenuScreenState extends State<MenuScreen> {
         },
       ),
     );
+  }
+
+  refreshState() {
+    widget.refreshMainContainerState();
+    setState(() {});
   }
 
   void _scrollToIndex(index) {
@@ -179,6 +190,25 @@ class _MenuScreenState extends State<MenuScreen> {
         iconTheme: IconThemeData(color: bgColor),
         actions: [
           IconButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(CartScreen.CART_ROUTE);
+            },
+            icon: CartHelper.getCartCount() == 0
+                ? Icon(
+                    Icons.shopping_bag_outlined,
+                  )
+                : Badge(
+                    badgeColor: Colors.white,
+                    badgeContent: Text(
+                      '${CartHelper.getCartCount()}',
+                    ),
+                    animationType: BadgeAnimationType.scale,
+                    child: Icon(
+                      Icons.shopping_bag_outlined,
+                    ),
+                  ),
+          ),
+          IconButton(
             onPressed: () {},
             icon: Icon(Icons.call),
           ),
@@ -249,6 +279,8 @@ class _MenuScreenState extends State<MenuScreen> {
                     amount: '${food.foodamount.trim()}',
                     imageUrl: '${food.foodImage.trim()}',
                     parentContext: context,
+                    foodModel: food,
+                    refreshState: refreshState,
                   ),
                 },
                 SizedBox(

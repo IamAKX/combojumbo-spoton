@@ -51,7 +51,10 @@ class NavRoute {
       case CheckoutScreen.CHECKOUT_ROUTE:
         return MaterialPageRoute(builder: (_) => CheckoutScreen());
       case MenuScreen.MENU_SCREEN_ROUTE:
-        return MaterialPageRoute(builder: (_) => MenuScreen());
+        return MaterialPageRoute(
+            builder: (_) => MenuScreen(
+                  refreshMainContainerState: settings.arguments as Function(),
+                ));
       case ResetPasswordScreen.RESET_PASSWORD_ROUTE:
         return MaterialPageRoute(builder: (_) => ResetPasswordScreen());
       case FeedbackScreen.FEEDBACK_ROUTE:

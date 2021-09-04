@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   awesome_dialog: ^2.1.1
+  badges: ^2.0.1
   cached_network_image: ^3.1.0
   carousel_slider: ^4.0.0
   cupertino_icons: ^1.0.2

@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/home/home_widgets.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
@@ -12,15 +13,15 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
+import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:cjspoton/widgets/subheading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  const HomeScreen(this.refreshMainContainerState) : super();
+  final Function() refreshMainContainerState;
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -30,11 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
   List<FoodModel> favList = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     loadFavouriteFood();
+
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) => _catalogService.fetchAllFoodItem(context).then(
         (value) {
@@ -50,6 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       favList = Utilities().getAllFavouriteFood();
     });
+  }
+
+  refreshState() {
+    widget.refreshMainContainerState();
+    setState(() {});
   }
 
   @override
@@ -129,6 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 context: context,
                 routePath: MenuScreen.MENU_SCREEN_ROUTE,
                 title: 'Category',
+                refreshMainContainerState: widget.refreshMainContainerState,
               ),
               Container(
                 height: (screenSize.width * 0.65),
@@ -264,11 +273,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SubHeading(title: 'Recommended', routePath: '', context: context),
               RecomendedItems(
-                screenSize: screenSize,
-                list: list,
-                favList: favList,
-                reloadFavList: loadFavouriteFood,
-              ),
+                  screenSize: screenSize,
+                  list: list,
+                  favList: favList,
+                  reloadFavList: loadFavouriteFood,
+                  refreshState: refreshState),
               Container(
                 margin: EdgeInsets.symmetric(
                     vertical: defaultPadding, horizontal: defaultPadding / 2),
@@ -376,41 +385,45 @@ class _HomeScreenState extends State<HomeScreen> {
                                   maxLines: 5,
                                   overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                  ' ₹ ${list.elementAt(2).foodList.elementAt(i).foodamount} ',
-                                ),
                                 Row(
                                   children: [
-                                    Text(
-                                      ' ₹ ${int.parse(list.elementAt(2).foodList.elementAt(i).foodamount) + 100}',
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          ' ₹ ${list.elementAt(2).foodList.elementAt(i).foodamount} ',
+                                        ),
+                                        Text(
+                                          ' ₹ ${int.parse(list.elementAt(2).foodList.elementAt(i).foodamount) + 100}',
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough),
+                                        ),
+                                      ],
                                     ),
                                     Spacer(),
-                                    InkWell(
-                                      onTap: () {},
-                                      child: Container(
-                                        margin: EdgeInsets.only(top: 5),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10),
-                                        decoration: BoxDecoration(
-                                          border:
-                                              Border.all(color: primaryColor),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: Text(
-                                          'ADD',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .button
-                                              ?.copyWith(
-                                                color: primaryColor,
-                                              ),
-                                        ),
-                                      ),
-                                    )
+                                    (CartHelper.getItemCountInCart(
+                                                CartHelper.transformFoodModel(
+                                                    list
+                                                        .elementAt(2)
+                                                        .foodList
+                                                        .elementAt(i))) ==
+                                            0)
+                                        ? CartButton().getCartButtonSimple(
+                                            context,
+                                            list
+                                                .elementAt(2)
+                                                .foodList
+                                                .elementAt(i),
+                                            refreshState)
+                                        : CartButton().getCartButtonComplex(
+                                            context,
+                                            list
+                                                .elementAt(2)
+                                                .foodList
+                                                .elementAt(i),
+                                            refreshState)
                                   ],
                                 ),
                               ],

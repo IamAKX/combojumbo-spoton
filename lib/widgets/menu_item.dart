@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 
 class MenuItem extends StatelessWidget {
@@ -12,12 +15,16 @@ class MenuItem extends StatelessWidget {
     required this.amount,
     required this.imageUrl,
     required this.parentContext,
+    required this.foodModel,
+    required this.refreshState,
   }) : super(key: key);
   final String title;
   final String subTitle;
   final String amount;
   final String imageUrl;
   final BuildContext parentContext;
+  final FoodModel foodModel;
+  final Function() refreshState;
 
   @override
   Widget build(BuildContext context) {
@@ -39,49 +46,20 @@ class MenuItem extends StatelessWidget {
               SizedBox(
                 height: 1,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.2),
-                  border: Border.all(color: primaryColor),
-                  borderRadius: BorderRadius.circular(4),
+              if (CartHelper.getItemCountInCart(
+                      CartHelper.transformFoodModel(foodModel)) ==
+                  0)
+                CartButton().getCartButtonSimple(
+                  context,
+                  foodModel,
+                  refreshState,
+                )
+              else
+                CartButton().getCartButtonComplex(
+                  context,
+                  foodModel,
+                  refreshState,
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        addNewItemToCart(parentContext);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: defaultPadding,
-                            vertical: defaultPadding / 2),
-                        child: Icon(
-                          Icons.remove,
-                          color: primaryColor,
-                          size: 15,
-                        ),
-                      ),
-                    ),
-                    Text('1'),
-                    InkWell(
-                      onTap: () {
-                        addNewItemToCart(parentContext);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: defaultPadding,
-                            vertical: defaultPadding / 2),
-                        child: Icon(
-                          Icons.add,
-                          color: primaryColor,
-                          size: 15,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
             ],
           ),
           subtitle: Text(
