@@ -4,8 +4,10 @@ import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
+import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -35,6 +37,7 @@ class _MenuScreenState extends State<MenuScreen> {
   late OutletModel _outletModel;
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
+  late PincodeModel _pincodeModel;
 
   @override
   void initState() {
@@ -66,6 +69,7 @@ class _MenuScreenState extends State<MenuScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _pincodeModel = Constants.getDefaultPincode();
     _catalogService = Provider.of<CatalogService>(context);
     SnackBarService.instance.buildContext = context;
     final button = new PopupMenuButton(
@@ -188,14 +192,21 @@ class _MenuScreenState extends State<MenuScreen> {
                         ),
                   ),
                   Text(
-                    'Delivering to 400705 - Sanpada',
+                    'Delivering to ${_pincodeModel.pincode} - ${_pincodeModel.location}',
                     style: Theme.of(context).textTheme.subtitle1?.copyWith(
                           color: bgColor,
                           fontWeight: FontWeight.bold,
                         ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(
+                              DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
+                          .then((value) {
+                        setState(() {});
+                      });
+                    },
                     child: Text(
                       'Change PIN code',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(

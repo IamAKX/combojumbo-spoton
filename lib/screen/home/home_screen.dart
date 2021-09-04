@@ -138,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 routePath: MenuScreen.MENU_SCREEN_ROUTE,
                 title: 'Category',
                 refreshMainContainerState: widget.refreshMainContainerState,
+                refreshState: refreshState,
               ),
               Container(
                 height: (screenSize.width * 0.65),

@@ -21,4 +21,5 @@ class API {
   static const String Outlets = '${BASE_URL}outlet.php';
   static const String Categories = '${BASE_URL}category';
   static const String FoodItems = '${BASE_URL}food.php';
+  static const String PincodeCharge = '${BASE_URL}pincode.php';
 }

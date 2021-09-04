@@ -2,14 +2,19 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/cart_item.dart';
 import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
+import 'package:cjspoton/services/cart_services.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen(
@@ -27,6 +32,8 @@ class _CartScreenState extends State<CartScreen> {
   TextEditingController sugestionCtrl = TextEditingController();
   OutletModel outletModel =
       OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+  late CartServices _cartServices;
+  PincodeModel selectedPincode = Constants.getDefaultPincode();
 
   refreshState() {
     widget.refreshMainContainerState();
@@ -34,7 +41,67 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // WidgetsBinding.instance!.addPostFrameCallback(
+    //   (_) => _cartServices.fetchAllPincodes(context).then(
+    //     (value) {
+    //       setState(() {
+    //         pincodeList = value;
+    //       });
+    //     },
+    //   ),
+    // );
+  }
+
+  Widget _customDropDownForPincode(
+      BuildContext context, PincodeModel? item, String itemDesignation) {
+    if (item == null) {
+      return Container();
+    }
+
+    return Container(
+      child: (item.pincode == null)
+          ? ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8),
+              title: Text("No item selected"),
+            )
+          : ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 8),
+              title: Text(item.pincode),
+              subtitle: Text(
+                item.location.toString(),
+              ),
+            ),
+    );
+  }
+
+  Widget _customPopupItemBuilderForPincode(
+      BuildContext context, PincodeModel item, bool isSelected) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8),
+      decoration: !isSelected
+          ? null
+          : BoxDecoration(
+              border: Border.all(color: Theme.of(context).primaryColor),
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.white,
+            ),
+      child: ListTile(
+        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+        selected: isSelected,
+        title: Text(item.pincode),
+        subtitle: Text(item.location.toString()),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _cartServices = Provider.of<CartServices>(context);
+    SnackBarService.instance.buildContext = context;
+
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: InkWell(

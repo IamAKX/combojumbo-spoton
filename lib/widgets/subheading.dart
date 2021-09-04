@@ -8,12 +8,14 @@ class SubHeading extends StatelessWidget {
       required this.title,
       required this.routePath,
       required this.context,
-      this.refreshMainContainerState})
+      this.refreshMainContainerState,
+      this.refreshState})
       : super(key: key);
   final String title;
   final String routePath;
   final BuildContext context;
   final Function()? refreshMainContainerState;
+  final Function()? refreshState;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,7 +35,10 @@ class SubHeading extends StatelessWidget {
           Spacer(),
           InkWell(
             onTap: () => Navigator.of(context)
-                .pushNamed(routePath, arguments: refreshMainContainerState),
+                .pushNamed(routePath, arguments: refreshMainContainerState)
+                .then((value) {
+              if (refreshState != null) refreshState!();
+            }),
             child: Text(
               'View all',
               style: Theme.of(context).textTheme.subtitle1?.copyWith(

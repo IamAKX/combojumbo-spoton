@@ -1,7 +1,9 @@
 import 'package:badges/badges.dart';
+import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
+import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
@@ -9,6 +11,7 @@ import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
@@ -27,6 +30,7 @@ class MainContainer extends StatefulWidget {
 class _MainContainerState extends State<MainContainer> {
   int _selectedIndex = 0;
   TextEditingController _searchCtrl = TextEditingController();
+  late PincodeModel _pincodeModel;
 
   @override
   void initState() {
@@ -49,6 +53,7 @@ class _MainContainerState extends State<MainContainer> {
 
   @override
   Widget build(BuildContext context) {
+    _pincodeModel = Constants.getDefaultPincode();
     MainContainer.profileManagementService =
         Provider.of<ProfileManagementService>(context);
     return Scaffold(
@@ -103,13 +108,23 @@ class _MainContainerState extends State<MainContainer> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                    'Pune, Maharastra',
-                    style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.dashed,
-                      decorationColor: hintColor,
-                      decorationThickness: 1,
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed(
+                              DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
+                          .then((value) {
+                        setState(() {});
+                      });
+                    },
+                    child: Text(
+                      '${_pincodeModel.location}, ${_pincodeModel.pincode}',
+                      style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        decorationStyle: TextDecorationStyle.dashed,
+                        decorationColor: hintColor,
+                        decorationThickness: 1,
+                      ),
                     ),
                   ),
                   Spacer(),
