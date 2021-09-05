@@ -5,19 +5,24 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
+import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_payu_unofficial/flutter_payu_unofficial.dart';
 import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
 import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
 import 'package:crypto/crypto.dart';
+import 'package:future_progress_dialog/future_progress_dialog.dart';
+import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({Key? key, required this.cartVriablesModel})
@@ -30,10 +35,14 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
-  int selectedAddress = 1;
+  String selectedAddress = '';
+  late CartServices _cartServices;
+
   @override
   Widget build(BuildContext context) {
+    _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
+
     return Scaffold(
       backgroundColor: greyedBgColor,
       appBar: AppBar(
@@ -45,87 +54,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         children: [
           SizedBox(
             height: defaultPadding,
-          ),
-          Container(
-            padding: EdgeInsets.all(defaultPadding),
-            color: bgColor,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'DELIVERY ADDRESS',
-                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(
-                  height: defaultPadding / 2,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: hintColor),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.home_outlined),
-                    title: Text('Home'),
-                    subtitle: Text('Kalyani Nagar, Pune'),
-                    trailing: Radio(
-                      value: 1,
-                      groupValue: selectedAddress,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedAddress = 1;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: defaultPadding / 2,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: hintColor),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: ListTile(
-                    leading: Icon(Icons.work_outline),
-                    title: Text('Work'),
-                    subtitle: Text('Bidhan Nagar, Pune'),
-                    trailing: Radio(
-                      value: 2,
-                      groupValue: selectedAddress,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedAddress = 2;
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                InkWell(
-                  onTap: () => Navigator.of(context)
-                      .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE),
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    padding: EdgeInsets.all(defaultPadding),
-                    child: Text('ADD NEW ADDRESS'),
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(4)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: defaultPadding * 2,
           ),
           Container(
             padding: EdgeInsets.all(defaultPadding),
@@ -157,6 +85,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 ListTile(
                   onTap: () {
+                    if (selectedAddress.isEmpty) {
+                      SnackBarService.instance
+                          .showSnackBarError('Select delivery address');
+                      return;
+                    }
                     startPayUMoneyPayment();
                   },
                   leading: Icon(Icons.credit_card_outlined),
@@ -177,13 +110,79 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ],
             ),
           ),
+          SizedBox(
+            height: defaultPadding * 2,
+          ),
+          Container(
+            padding: EdgeInsets.all(defaultPadding),
+            color: bgColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'DELIVERY ADDRESS',
+                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                        color: textColor,
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                for (AddressModel address in Utilities.loadAllAddress()) ...{
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: hintColor),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: ListTile(
+                      leading: getAddressIcon(address.addressType),
+                      title: Text('${address.addressType}'),
+                      subtitle: Text('${address.completeAddress}'),
+                      trailing: Radio(
+                        value: address.completeAddress,
+                        groupValue: selectedAddress,
+                        onChanged: (value) {
+                          setState(() {
+                            selectedAddress = value.toString();
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: defaultPadding,
+                  ),
+                },
+                InkWell(
+                  onTap: () => Navigator.of(context)
+                      .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE)
+                      .then((value) {
+                    setState(() {});
+                  }),
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: double.infinity,
+                    padding: EdgeInsets.all(defaultPadding),
+                    child: Text('ADD NEW ADDRESS'),
+                    decoration: BoxDecoration(
+                        color: primaryColor,
+                        borderRadius: BorderRadius.circular(4)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: defaultPadding * 2,
+          ),
         ],
       ),
     );
   }
 
-  showSuccessAlert(
-      BuildContext context, Map? response, PaymentParams paymentParam) {
+  showSuccessAlert(BuildContext context, Map? response,
+      PaymentParams paymentParam, CartVriablesModel cartVriablesModel) {
     String payUMoneyTxnId = response!['result']['payuMoneyId'];
     log('payUMoneyTxnId : $payUMoneyTxnId');
     log('response : ${response.toString()}');
@@ -200,9 +199,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       desc: 'Your order has been received.',
       showCloseIcon: false,
       btnOkOnPress: () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-            arguments: 1);
+        SnackBarService.instance.showSnackBarInfo('Please wait...');
+        AddressModel address = Utilities.loadAllAddress().firstWhere(
+            (element) => element.completeAddress == selectedAddress);
+        _cartServices
+            .placeOrder(cartVriablesModel, address, response, paymentParam,
+                payUMoneyTxnId, context)
+            .then((value) {
+          if (value)
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+                arguments: 1);
+        });
       },
     )..show();
   }
@@ -271,7 +279,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
         if (_paymentResult.status == PayuPaymentStatus.success) {
           print("Success: ${_paymentResult.response}");
-          showSuccessAlert(context, _paymentResult.response, _paymentParam);
+          showSuccessAlert(context, _paymentResult.response, _paymentParam,
+              widget.cartVriablesModel);
         } else if (_paymentResult.status == PayuPaymentStatus.failed) {
           print("Failed: ${_paymentResult.response}");
           showFailedAlert(context, _paymentResult.response!['Error_Message']);
@@ -289,6 +298,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  getAddressIcon(String addressType) {
+    switch (addressType) {
+      case 'HOME':
+        return Icon(Icons.home_outlined);
+      case 'WORK':
+        return Icon(Icons.work_outline);
+      case 'OTHER':
+        return Icon(Icons.my_location_sharp);
     }
   }
 }

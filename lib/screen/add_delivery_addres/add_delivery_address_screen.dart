@@ -1,5 +1,11 @@
+import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/pincode_model.dart';
+import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/custom_heading_textfield_with_actionbutton.dart';
 import 'package:flutter/material.dart';
@@ -17,9 +23,13 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   TextEditingController deliveryCtrl = TextEditingController();
   TextEditingController completeAddressCtrl = TextEditingController();
   TextEditingController deliveryInstructionCtrl = TextEditingController();
+  String addressType = 'HOME';
   late Size screenSize;
+  PincodeModel pincodeModel =
+      PincodeModel.fromJson(prefs.getString(PrefernceKey.SELECTED_PINCODE)!);
   @override
   Widget build(BuildContext context) {
+    deliveryCtrl.text = pincodeModel.pincode;
     screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -39,6 +49,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                     CustomTextFieldWithHeadingActionButton(
                       teCtrl: deliveryCtrl,
                       hint: 'Delivery Area',
+                      enabled: false,
                       inputType: TextInputType.streetAddress,
                       icondata: Icons.location_pin,
                       onTap: () {},
@@ -78,10 +89,15 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       ],
                       borderWidth: 1,
                       dividerColor: hintColor.withOpacity(0.5),
-                      initialLabelIndex: 2,
+                      initialLabelIndex: 0,
                       totalSwitches: 3,
                       labels: ['HOME', 'WORK', 'OTHER'],
-                      onToggle: (index) {},
+                      onToggle: (index) {
+                        // setState(() {
+                        addressType =
+                            ['HOME', 'WORK', 'OTHER'].elementAt(index);
+                        // });
+                      },
                     ),
                   ],
                 ),
@@ -120,7 +136,24 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                   ),
                   Expanded(
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (deliveryCtrl.text.isEmpty ||
+                            completeAddressCtrl.text.isEmpty) {
+                          SnackBarService.instance.showSnackBarError(
+                              'Please enter complete address');
+                          return;
+                        } else {
+                          AddressModel addressModel = AddressModel(
+                              pincode: deliveryCtrl.text,
+                              completeAddress: completeAddressCtrl.text,
+                              deliveryInstruction: deliveryCtrl.text,
+                              addressType: addressType);
+                          Utilities.addAddress(addressModel);
+                          SnackBarService.instance
+                              .showSnackBarSuccess('Address saved');
+                          Navigator.of(context).pop();
+                        }
+                      },
                       child: Text(
                         'SAVE CHANGES',
                         style: TextStyle(

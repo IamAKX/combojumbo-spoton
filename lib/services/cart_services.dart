@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/all_charges_model.dart';
@@ -7,11 +8,15 @@ import 'package:cjspoton/model/coupon_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
 
 enum CartStatus {
   Ideal,
@@ -233,5 +238,104 @@ class CartServices extends ChangeNotifier {
       SnackBarService.instance.showSnackBarError(e.toString());
     }
     return couponDiscountDetailModel;
+  }
+
+  Future<bool> placeOrder(
+      CartVriablesModel cartVriablesModel,
+      AddressModel addressModel,
+      Map? payUMoneyResponse,
+      PaymentParams paymentParam,
+      String payUMoneyTxnId,
+      BuildContext context) async {
+    status = CartStatus.Loading;
+    notifyListeners();
+
+    // try {
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+    UserModel userModel =
+        UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'cust_id': '${userModel.id}',
+      'outletid': '${outletModel.outletId}',
+      'response': json.encode(payUMoneyResponse),
+      'oid': '${userModel.id}${DateTime.now().millisecond}',
+      'subtotal': '${CartHelper.getTotalPriceOfCart()}',
+      'couponcode':
+          '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
+      'actualdiscountvalue':
+          '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
+      'discountvalue':
+          '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
+      'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
+      'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
+      'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
+      'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
+      'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
+      'totalpaidamount': '${cartVriablesModel.netAmount}',
+      'pay': 'payumoney',
+      'transcation_id': '$payUMoneyTxnId',
+      'ordertype': 'Delivery',
+      'cart': json.encode(prefs.getStringList(PrefernceKey.LOCAL_CART))
+    });
+    log('''
+      {
+        'cust_id': ${userModel.id},
+        'outletid': '${outletModel.outletId}',
+        'response': ${json.encode(payUMoneyResponse).toString()},
+        'oid': '${userModel.id}${DateTime.now().millisecond}',
+        'subtotal': '${CartHelper.getTotalPriceOfCart()}',
+        'couponcode':
+            '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
+        'actualdiscountvalue':
+            '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
+        'discountvalue':
+            '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
+        'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
+        'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
+        'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
+        'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
+        'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
+        'totalpaidamount': '${cartVriablesModel.netAmount}',
+        'pay': 'payumoney',
+        'transcation_id': '${payUMoneyTxnId}',
+        'ordertype': 'Delivery',
+        'cart': ${json.encode(prefs.getStringList(PrefernceKey.LOCAL_CART)).toString()}
+      }
+      ''');
+    Response response = await _dio.post(API.VerifyCouponCode, data: reqBody);
+
+    var resBody = json.decode(response.data);
+    if (response.statusCode == 200) {
+      print('Response : ${response.data}');
+      var body = resBody['body'];
+      if (resBody['status'] == 1) {
+        status = CartStatus.Success;
+        SnackBarService.instance
+            .showSnackBarSuccess((resBody['msg']).toString().trim());
+
+        notifyListeners();
+        return true;
+      } else {
+        status = CartStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarError((body['msg']));
+        return false;
+      }
+    } else {
+      status = CartStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
+      return false;
+    }
+    // }
+    // catch (e) {
+    //   status = CartStatus.Failed;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    //   return false;
+    // }
+    return false;
   }
 }

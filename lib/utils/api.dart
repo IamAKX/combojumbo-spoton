@@ -25,4 +25,5 @@ class API {
   static const String AllCharges = '${BASE_URL}charges';
   static const String CouponCode = '${BASE_URL}couponlist';
   static const String VerifyCouponCode = '${BASE_URL}coupon';
+  static const String PlaceOrder = '${BASE_URL}payment-response';
 }

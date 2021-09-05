@@ -10,6 +10,7 @@ class CustomTextFieldWithHeadingActionButton extends StatelessWidget {
     required this.inputType,
     required this.icondata,
     required this.onTap,
+    this.enabled,
   })  : _teCtrl = teCtrl,
         super(key: key);
 
@@ -18,6 +19,7 @@ class CustomTextFieldWithHeadingActionButton extends StatelessWidget {
   final TextInputType inputType;
   final IconData icondata;
   final Function() onTap;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class CustomTextFieldWithHeadingActionButton extends StatelessWidget {
           ),
           TextField(
             keyboardType: inputType,
+            enabled: enabled ?? true,
             autocorrect: true,
             controller: _teCtrl,
             textCapitalization: inputType == TextInputType.name
