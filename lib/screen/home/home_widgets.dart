@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
@@ -192,104 +194,117 @@ class CategoryCard extends StatelessWidget {
     Key? key,
     required this.screenSize,
     required this.categoryModel,
+    required this.refreshMainContainerState,
   }) : super(key: key);
 
   final Size screenSize;
   final CategoryModel categoryModel;
+  final Function() refreshMainContainerState;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-      width: screenSize.width * 0.7,
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            // width: screenSize.width * 0.7,
-            decoration: BoxDecoration(),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10),
-                    topRight: Radius.circular(10),
-                  ),
-                  child: CachedNetworkImage(
-                    height: screenSize.width * 0.5,
-                    width: screenSize.width * 0.7,
-                    fit: BoxFit.cover,
-                    imageUrl: '${categoryModel.image}',
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                      child: CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  top: 10,
-                  child: CircleAvatar(
-                    backgroundColor: bgColor,
-                    radius: 15,
-                    child: Text('${categoryModel.foodcount}'),
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.star_outline,
-                          color: Colors.white,
-                          size: 18,
-                        ),
-                        Text(
-                          '4.1',
-                          style:
-                              Theme.of(context).textTheme.headline6?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              ],
-            ),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pushNamed(
+          MenuScreen.MENU_SCREEN_ROUTE,
+          arguments: MenuScreenNavigatorPayloadModel(
+            categoryId: categoryModel.id,
+            refreshMainContainerState: refreshMainContainerState,
           ),
-          Container(
-            padding: EdgeInsets.all(defaultPadding / 2),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  '${categoryModel.categoryName}',
-                  style: Theme.of(context).textTheme.headline6?.copyWith(
-                        color: textColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+        width: screenSize.width * 0.7,
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              // width: screenSize.width * 0.7,
+              decoration: BoxDecoration(),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ),
+                    child: CachedNetworkImage(
+                      height: screenSize.width * 0.5,
+                      width: screenSize.width * 0.7,
+                      fit: BoxFit.cover,
+                      imageUrl: '${categoryModel.image}',
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress),
                       ),
-                ),
-                Text('Starts from ₹ ${categoryModel.startsfrom}'),
-              ],
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  ),
+                  Positioned(
+                    right: 10,
+                    top: 10,
+                    child: CircleAvatar(
+                      backgroundColor: bgColor,
+                      radius: 15,
+                      child: Text('${categoryModel.foodcount}'),
+                    ),
+                  ),
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.star_outline,
+                            color: Colors.white,
+                            size: 18,
+                          ),
+                          Text(
+                            '4.1',
+                            style:
+                                Theme.of(context).textTheme.headline6?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-          )
-        ],
+            Container(
+              padding: EdgeInsets.all(defaultPadding / 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${categoryModel.categoryName}',
+                    style: Theme.of(context).textTheme.headline6?.copyWith(
+                          color: textColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Text('Starts from ₹ ${categoryModel.startsfrom}'),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

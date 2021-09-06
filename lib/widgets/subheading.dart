@@ -1,3 +1,4 @@
+import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +9,13 @@ class SubHeading extends StatelessWidget {
       required this.title,
       required this.routePath,
       required this.context,
-      this.refreshMainContainerState,
+      this.menuScreenNavigatorPayloadModel,
       this.refreshState})
       : super(key: key);
   final String title;
   final String routePath;
   final BuildContext context;
-  final Function()? refreshMainContainerState;
+  final MenuScreenNavigatorPayloadModel? menuScreenNavigatorPayloadModel;
   final Function()? refreshState;
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,8 @@ class SubHeading extends StatelessWidget {
           Spacer(),
           InkWell(
             onTap: () => Navigator.of(context)
-                .pushNamed(routePath, arguments: refreshMainContainerState)
+                .pushNamed(routePath,
+                    arguments: menuScreenNavigatorPayloadModel)
                 .then((value) {
               if (refreshState != null) refreshState!();
             }),

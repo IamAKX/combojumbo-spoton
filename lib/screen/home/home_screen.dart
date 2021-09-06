@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/home/home_widgets.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
-import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
@@ -137,7 +136,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 context: context,
                 routePath: MenuScreen.MENU_SCREEN_ROUTE,
                 title: 'Category',
-                refreshMainContainerState: widget.refreshMainContainerState,
+                menuScreenNavigatorPayloadModel:
+                    MenuScreenNavigatorPayloadModel(
+                  categoryId: "0",
+                  refreshMainContainerState: widget.refreshMainContainerState,
+                ),
                 refreshState: refreshState,
               ),
               Container(
@@ -153,6 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (context, index) => CategoryCard(
                           screenSize: screenSize,
                           categoryModel: list.elementAt(index),
+                          refreshMainContainerState:
+                              widget.refreshMainContainerState,
                         ),
                       ),
               ),

@@ -9,7 +9,7 @@ import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
-import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
+import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';

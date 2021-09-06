@@ -63,7 +63,7 @@ class GroupedCartModel {
       'foodid': foodid,
       'foodcode': foodcode,
       'foodImage': foodImage,
-      'addOns': addOns?.map((x) => x.toMap())?.toList(),
+      'addOns': addOns.map((x) => x.toMap()).toList(),
       'qty': qty,
     };
   }

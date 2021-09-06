@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
@@ -21,11 +22,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class MenuScreen extends StatefulWidget {
-  const MenuScreen(
-      {Key? key, required Function() this.refreshMainContainerState})
-      : super(key: key);
+  const MenuScreen({
+    Key? key,
+    required this.menuScreenNavigatorPayloadModel,
+  }) : super(key: key);
   static const String MENU_SCREEN_ROUTE = '/menuScreen';
-  final Function() refreshMainContainerState;
+  // final Function() refreshMainContainerState;
+  final MenuScreenNavigatorPayloadModel menuScreenNavigatorPayloadModel;
 
   @override
   _MenuScreenState createState() => _MenuScreenState();
@@ -50,6 +53,15 @@ class _MenuScreenState extends State<MenuScreen> {
         (value) {
           setState(() {
             list = value;
+            if (widget.menuScreenNavigatorPayloadModel.categoryId != '0') {
+              int height = 1;
+              for (CategoryModel cat in list) {
+                if (widget.menuScreenNavigatorPayloadModel.categoryId == cat.id)
+                  break;
+                height += cat.foodList.length + 1;
+              }
+              _scrollToIndex(height);
+            }
           });
         },
       ),
@@ -57,7 +69,7 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   refreshState() {
-    widget.refreshMainContainerState();
+    widget.menuScreenNavigatorPayloadModel.refreshMainContainerState();
     setState(() {});
   }
 
@@ -146,7 +158,8 @@ class _MenuScreenState extends State<MenuScreen> {
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(CartScreen.CART_ROUTE,
-                  arguments: widget.refreshMainContainerState);
+                  arguments: widget.menuScreenNavigatorPayloadModel
+                      .refreshMainContainerState);
             },
             icon: CartHelper.getCartCount() == 0
                 ? Icon(

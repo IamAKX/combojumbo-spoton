@@ -1,3 +1,4 @@
+import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
@@ -70,7 +71,8 @@ class NavRoute {
       case MenuScreen.MENU_SCREEN_ROUTE:
         return MaterialPageRoute(
             builder: (_) => MenuScreen(
-                  refreshMainContainerState: settings.arguments as Function(),
+                  menuScreenNavigatorPayloadModel:
+                      settings.arguments as MenuScreenNavigatorPayloadModel,
                 ));
       case ResetPasswordScreen.RESET_PASSWORD_ROUTE:
         return MaterialPageRoute(builder: (_) => ResetPasswordScreen());

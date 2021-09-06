@@ -5,7 +5,7 @@ import 'package:cjspoton/model/cart_item.dart';
 import 'package:cjspoton/model/coupon_discount_detail_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
-import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
+import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
 import 'package:cjspoton/screen/checkout/grouped_cart_model.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 
