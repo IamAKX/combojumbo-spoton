@@ -459,6 +459,7 @@ class CartServices extends ChangeNotifier {
           OrderDetailModel orderDetailModel = OrderDetailModel(
               order: orderModel,
               menuDetails: menuDetails,
+              address: history['address'],
               outletname: history['outletname']);
           list.add(orderDetailModel);
         }

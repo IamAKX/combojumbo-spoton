@@ -93,6 +93,10 @@ class _OrderScreenState extends State<OrderScreen> {
                           '${order.order.oid}',
                           style: Theme.of(context).textTheme.caption,
                         ),
+                        Text(
+                          '${order.address}',
+                          style: Theme.of(context).textTheme.subtitle2,
+                        ),
                         Row(
                           children: [
                             Text(

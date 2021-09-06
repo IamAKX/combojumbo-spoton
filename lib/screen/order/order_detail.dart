@@ -8,21 +8,25 @@ import 'package:cjspoton/screen/order/order_model.dart';
 class OrderDetailModel {
   OrderModel order;
   String outletname;
+  String address;
   List<OrderMenuDetails> menuDetails;
   OrderDetailModel({
     required this.order,
     required this.outletname,
+    required this.address,
     required this.menuDetails,
   });
 
   OrderDetailModel copyWith({
     OrderModel? order,
     String? outletname,
+    String? address,
     List<OrderMenuDetails>? menuDetails,
   }) {
     return OrderDetailModel(
       order: order ?? this.order,
       outletname: outletname ?? this.outletname,
+      address: address ?? this.address,
       menuDetails: menuDetails ?? this.menuDetails,
     );
   }
@@ -31,6 +35,7 @@ class OrderDetailModel {
     return {
       'order': order.toMap(),
       'outletname': outletname,
+      'address': address,
       'menuDetails': menuDetails.map((x) => x.toMap()).toList(),
     };
   }
@@ -39,6 +44,7 @@ class OrderDetailModel {
     return OrderDetailModel(
       order: OrderModel.fromMap(map['order']),
       outletname: map['outletname'],
+      address: map['address'],
       menuDetails: List<OrderMenuDetails>.from(
           map['menuDetails']?.map((x) => OrderMenuDetails.fromMap(x))),
     );
@@ -50,8 +56,9 @@ class OrderDetailModel {
       OrderDetailModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'OrderDetailModel(order: $order, outletname: $outletname, menuDetails: $menuDetails)';
+  String toString() {
+    return 'OrderDetailModel(order: $order, outletname: $outletname, address: $address, menuDetails: $menuDetails)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -60,10 +67,15 @@ class OrderDetailModel {
     return other is OrderDetailModel &&
         other.order == order &&
         other.outletname == outletname &&
+        other.address == address &&
         listEquals(other.menuDetails, menuDetails);
   }
 
   @override
-  int get hashCode =>
-      order.hashCode ^ outletname.hashCode ^ menuDetails.hashCode;
+  int get hashCode {
+    return order.hashCode ^
+        outletname.hashCode ^
+        address.hashCode ^
+        menuDetails.hashCode;
+  }
 }
