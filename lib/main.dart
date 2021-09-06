@@ -5,6 +5,7 @@ import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
+import 'package:cjspoton/services/address_service.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/catalog_service.dart';
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (BuildContext context) => CartServices(),
+        ),
+        ChangeNotifierProvider(
+          create: (BuildContext context) => AddressService(),
         ),
       ],
       child: MaterialApp(

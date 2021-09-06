@@ -27,4 +27,7 @@ class API {
   static const String VerifyCouponCode = '${BASE_URL}coupon';
   static const String PlaceOrder = '${BASE_URL}payment-response';
   static const String OrderHistory = '${BASE_URL}orderhistory.php';
+
+  static const String State = '${BASE_URL}state';
+  static const String City = '${BASE_URL}city';
 }

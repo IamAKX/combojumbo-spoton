@@ -179,27 +179,27 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               children: [
                                 Text('₹ ${favList.elementAt(i).foodamount}'),
                                 Spacer(),
-                                InkWell(
-                                  onTap: () {},
-                                  child: Container(
-                                    margin: EdgeInsets.only(top: 5),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(color: primaryColor),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Text(
-                                      'ADD',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .button
-                                          ?.copyWith(
-                                            color: primaryColor,
-                                          ),
-                                    ),
-                                  ),
-                                )
+                                // InkWell(
+                                //   onTap: () {},
+                                //   child: Container(
+                                //     margin: EdgeInsets.only(top: 5),
+                                //     padding:
+                                //         EdgeInsets.symmetric(horizontal: 10),
+                                //     decoration: BoxDecoration(
+                                //       border: Border.all(color: primaryColor),
+                                //       borderRadius: BorderRadius.circular(5),
+                                //     ),
+                                //     child: Text(
+                                //       'ADD',
+                                //       style: Theme.of(context)
+                                //           .textTheme
+                                //           .button
+                                //           ?.copyWith(
+                                //             color: primaryColor,
+                                //           ),
+                                //     ),
+                                //   ),
+                                // )
                               ],
                             ),
                           ],

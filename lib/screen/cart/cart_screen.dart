@@ -20,6 +20,7 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
@@ -121,89 +122,97 @@ class _CartScreenState extends State<CartScreen> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: InkWell(
-        onTap: () {
-          if (user.email.isEmpty || user.name.isEmpty || user.phone.isEmpty) {
-            SnackBarService.instance
-                .showSnackBarError('Complete your profile to place order');
-            Navigator.of(context)
-                .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
-                .then((value) {
-              setState(() {});
-            });
-          } else
-            Navigator.of(context).pushNamed(
-              CheckoutScreen.CHECKOUT_ROUTE,
-              arguments: CartVriablesModel(
-                allChargesModel: allChargesModel,
-                selectedPincode: selectedPincode,
-                couponDiscountDetailModel: couponDiscountDetailModel,
-                netAmount: CartHelper.getNetAmount(allChargesModel,
-                    selectedPincode, couponDiscountDetailModel),
-              ),
-            );
-        },
-        child: Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          color: Colors.green,
-          elevation: 10,
-          margin: EdgeInsets.all(defaultPadding),
-          child: Container(
-            padding: EdgeInsets.all(defaultPadding),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.shopping_bag_outlined,
-                  color: bgColor,
-                  size: 37,
-                ),
-                SizedBox(
-                  width: defaultPadding / 2,
-                ),
-                Container(
-                  color: bgColor.withOpacity(0.7),
-                  width: 1,
-                  height: 40,
-                ),
-                SizedBox(
-                  width: defaultPadding,
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${CartHelper.getCartCount()} ITEMS',
-                      style: Theme.of(context).textTheme.caption?.copyWith(
-                            color: bgColor.withOpacity(0.7),
-                          ),
+        onTap: CartHelper.getCartCount() == 0
+            ? null
+            : () {
+                if (user.email.isEmpty ||
+                    user.name.isEmpty ||
+                    user.phone.isEmpty) {
+                  SnackBarService.instance.showSnackBarError(
+                      'Complete your profile to place order');
+                  Navigator.of(context)
+                      .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+                      .then((value) {
+                    setState(() {});
+                  });
+                } else
+                  Navigator.of(context).pushNamed(
+                    CheckoutScreen.CHECKOUT_ROUTE,
+                    arguments: CartVriablesModel(
+                      allChargesModel: allChargesModel,
+                      selectedPincode: selectedPincode,
+                      deliverySuggestion: sugestionCtrl.text,
+                      couponDiscountDetailModel: couponDiscountDetailModel,
+                      netAmount: CartHelper.getNetAmount(allChargesModel,
+                          selectedPincode, couponDiscountDetailModel),
                     ),
-                    Text(
-                      '${Constants.RUPEE} ${CartHelper.getNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: bgColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                    )
-                  ],
-                ),
-                Spacer(),
-                Text(
-                  'PAY',
-                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: bgColor,
-                        fontWeight: FontWeight.bold,
+                  );
+              },
+        child: Visibility(
+          visible: CartHelper.getCartCount() > 0,
+          child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            color: Colors.green,
+            elevation: 10,
+            margin: EdgeInsets.all(defaultPadding),
+            child: Container(
+              padding: EdgeInsets.all(defaultPadding),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.shopping_bag_outlined,
+                    color: bgColor,
+                    size: 37,
+                  ),
+                  SizedBox(
+                    width: defaultPadding / 2,
+                  ),
+                  Container(
+                    color: bgColor.withOpacity(0.7),
+                    width: 1,
+                    height: 40,
+                  ),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${CartHelper.getCartCount()} ITEMS',
+                        style: Theme.of(context).textTheme.caption?.copyWith(
+                              color: bgColor.withOpacity(0.7),
+                            ),
                       ),
-                ),
-                SizedBox(
-                  width: defaultPadding,
-                ),
-                Icon(
-                  Icons.keyboard_arrow_right_outlined,
-                  color: bgColor,
-                ),
-              ],
+                      Text(
+                        '${Constants.RUPEE} ${CartHelper.getNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                              color: bgColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      )
+                    ],
+                  ),
+                  Spacer(),
+                  Text(
+                    'PAY',
+                    style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                          color: bgColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  SizedBox(
+                    width: defaultPadding,
+                  ),
+                  Icon(
+                    Icons.keyboard_arrow_right_outlined,
+                    color: bgColor,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -245,383 +254,414 @@ class _CartScreenState extends State<CartScreen> {
           SizedBox(
             height: defaultPadding,
           ),
-          Column(
-            children: [
-              for (GroupedCartItemModel groupedItem
-                  in CartHelper.getGroupedCartItem()) ...{
-                Container(
-                  color: bgColor,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: defaultPadding, vertical: defaultPadding / 2),
-                  child: Row(
+          CartHelper.getCartCount() == 0
+              ? Center(
+                  child: Column(
                     children: [
-                      Icon(
-                        Icons.adjust_outlined,
-                        color: Colors.green,
-                        size: 18,
+                      SizedBox(
+                        height: defaultPadding * 2,
+                      ),
+                      SvgPicture.asset(
+                        'assets/svg/empty_cart.svg',
+                        width: 300,
                       ),
                       SizedBox(
-                        width: 5,
+                        height: defaultPadding,
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width * 0.45,
+                      Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
                         child: Text(
-                          '${groupedItem.cartItem.foodname.toCamelCase()}',
-                          style: Theme.of(context).textTheme.subtitle1,
-                          overflow: TextOverflow.ellipsis,
+                          'Your cart is empty',
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4
+                              ?.copyWith(fontSize: 20),
                         ),
-                      ),
+                      )
+                    ],
+                  ),
+                )
+              : Column(
+                  children: [
+                    for (GroupedCartItemModel groupedItem
+                        in CartHelper.getGroupedCartItem()) ...{
                       Container(
-                        decoration: BoxDecoration(
-                          color: primaryColor.withOpacity(0.2),
-                          border: Border.all(color: primaryColor),
-                          borderRadius: BorderRadius.circular(4),
-                        ),
+                        color: bgColor,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: defaultPadding,
+                            vertical: defaultPadding / 2),
                         child: Row(
                           children: [
-                            InkWell(
-                              onTap: () {
-                                CartHelper.removeItemToCart(
-                                    groupedItem.cartItem);
-                                refreshState();
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding,
-                                    vertical: defaultPadding / 2),
-                                child: Icon(
-                                  Icons.remove,
-                                  color: primaryColor,
-                                  size: 15,
-                                ),
+                            Icon(
+                              Icons.adjust_outlined,
+                              color: Colors.green,
+                              size: 18,
+                            ),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.45,
+                              child: Text(
+                                '${groupedItem.cartItem.foodname.toCamelCase()}',
+                                style: Theme.of(context).textTheme.subtitle1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            Text('${groupedItem.quantity}'),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  CartHelper.addItemToCart(
-                                      groupedItem.cartItem);
-                                  refreshState();
-                                });
-                              },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: defaultPadding,
-                                    vertical: defaultPadding / 2),
-                                child: Icon(
-                                  Icons.add,
-                                  color: primaryColor,
-                                  size: 15,
-                                ),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: primaryColor.withOpacity(0.2),
+                                border: Border.all(color: primaryColor),
+                                borderRadius: BorderRadius.circular(4),
                               ),
-                            )
+                              child: Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      CartHelper.removeItemToCart(
+                                          groupedItem.cartItem);
+                                      refreshState();
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: defaultPadding,
+                                          vertical: defaultPadding / 2),
+                                      child: Icon(
+                                        Icons.remove,
+                                        color: primaryColor,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  ),
+                                  Text('${groupedItem.quantity}'),
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        CartHelper.addItemToCart(
+                                            groupedItem.cartItem);
+                                        refreshState();
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: defaultPadding,
+                                          vertical: defaultPadding / 2),
+                                      child: Icon(
+                                        Icons.add,
+                                        color: primaryColor,
+                                        size: 15,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              width: defaultPadding,
+                            ),
+                            Text(
+                              '${Constants.RUPEE} ${groupedItem.quantity * int.parse(groupedItem.cartItem.foodamount)}',
+                              style: Theme.of(context).textTheme.subtitle1,
+                            ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        width: defaultPadding,
-                      ),
-                      Text(
-                        '${Constants.RUPEE} ${groupedItem.quantity * int.parse(groupedItem.cartItem.foodamount)}',
-                        style: Theme.of(context).textTheme.subtitle1,
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 1,
-                  color: hintColor,
-                )
-              },
-            ],
-          ),
-          SizedBox(
-            height: defaultPadding,
-          ),
-          Container(
-            color: bgColor,
-            padding: EdgeInsets.symmetric(
-                horizontal: defaultPadding, vertical: defaultPadding / 2),
-            // child: Row(
-            //   children: [
-            //     Expanded(
-            //       child: TextField(
-            //         autocorrect: true,
-            //         controller: promoCodeCtrl,
-            //         decoration: InputDecoration(
-            //           hintText: 'Enter promo code',
-            //           focusColor: primaryColor,
-            //           alignLabelWithHint: false,
-            //           filled: true,
-            //           fillColor: Colors.white,
-            //           contentPadding:
-            //               EdgeInsets.symmetric(horizontal: defaultPadding),
-            //           hoverColor: primaryColor,
-            //           hintStyle: TextStyle(color: hintColor),
-            //           enabledBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.only(
-            //               topLeft: Radius.circular(4),
-            //               bottomLeft: Radius.circular(4),
-            //             ),
-            //             borderSide:
-            //                 BorderSide(color: hintColor.withOpacity(0.5)),
-            //           ),
-            //           focusedBorder: OutlineInputBorder(
-            //             borderRadius: BorderRadius.only(
-            //               topLeft: Radius.circular(4),
-            //               bottomLeft: Radius.circular(4),
-            //             ),
-            //             borderSide:
-            //                 BorderSide(color: hintColor.withOpacity(0.5)),
-            //           ),
-            //           border: OutlineInputBorder(
-            //             borderRadius: BorderRadius.only(
-            //               topLeft: Radius.circular(4),
-            //               bottomLeft: Radius.circular(4),
-            //             ),
-            //             borderSide:
-            //                 BorderSide(color: hintColor.withOpacity(0.5)),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //     InkWell(
-            //       onTap: () {},
-            //       child: Container(
-            //         alignment: Alignment.center,
-            //         padding: EdgeInsets.symmetric(
-            //           horizontal: 5,
-            //           vertical: 14,
-            //         ),
-            //         decoration: BoxDecoration(
-            //           color: primaryColor,
-            //           borderRadius: BorderRadius.only(
-            //             topRight: Radius.circular(4),
-            //             bottomRight: Radius.circular(4),
-            //           ),
-            //         ),
-            //         width: 80,
-            //         child: Text(
-            //           'APPLY',
-            //           style: Theme.of(context)
-            //               .textTheme
-            //               .button
-            //               ?.copyWith(color: bgColor),
-            //         ),
-            //       ),
-            //     ),
-            //   ],
-            // ),
-            child: couponList.isEmpty
-                ? Container()
-                : DropdownSearch<String>(
-                    mode: Mode.MENU,
-                    showSelectedItem: true,
-                    items: couponList.map((e) => e.code).toList(),
-                    dropdownSearchDecoration: InputDecoration(
-                      contentPadding:
-                          EdgeInsets.symmetric(horizontal: defaultPadding),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        borderSide:
-                            BorderSide(color: hintColor.withOpacity(0.5)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        borderSide:
-                            BorderSide(color: hintColor.withOpacity(0.5)),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        borderSide:
-                            BorderSide(color: hintColor.withOpacity(0.5)),
-                      ),
-                    ),
-                    label: "Select coupons",
-                    hint: "Select coupon to get discount",
-                    onChanged: (value) {
-                      setState(() {
-                        selectedCoupon = value;
-                        if (selectedCoupon == null) {
-                          SnackBarService.instance.showSnackBarInfo(
-                              'Select a coupon code to apply offer');
-                        }
-                        _cartServices
-                            .verifyCoupon(
-                                selectedCoupon!,
-                                CartHelper.getTotalPriceOfCart().toString(),
-                                context)
-                            .then((value) {
-                          couponDiscountDetailModel = value;
-                        });
-                      });
+                      Divider(
+                        height: 1,
+                        color: hintColor,
+                      )
                     },
-                    selectedItem: selectedCoupon),
-          ),
-          Container(
-            color: bgColor,
-            padding: EdgeInsets.symmetric(
-                horizontal: defaultPadding, vertical: defaultPadding / 2),
-            child: Row(
-              children: [
-                Container(
-                  height: 88,
-                  width: 60,
-                  padding: EdgeInsets.all(defaultPadding / 2),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFFBFDFF),
-                    border: Border(
-                      left: BorderSide(
-                          color: hintColor.withOpacity(
-                        0.5,
-                      )),
-                      top: BorderSide(color: hintColor.withOpacity(0.5)),
-                      bottom: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                  ),
-                  child: Icon(
-                    Icons.chat_bubble_outline,
-                    color: hintColor,
-                  ),
+                  ],
                 ),
-                Expanded(
-                  child: TextField(
-                    autocorrect: true,
-                    controller: sugestionCtrl,
-                    maxLines: 3,
-                    decoration: InputDecoration(
-                      hintText: 'Any suggestions? Will pass it on',
-                      focusColor: primaryColor,
-                      alignLabelWithHint: false,
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(
-                          horizontal: defaultPadding,
-                          vertical: defaultPadding / 2),
-                      hoverColor: primaryColor,
-                      hintStyle: TextStyle(color: hintColor),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(4),
-                          bottomRight: Radius.circular(4),
-                        ),
-                        borderSide:
-                            BorderSide(color: hintColor.withOpacity(0.5)),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(4),
-                          bottomRight: Radius.circular(4),
-                        ),
-                        borderSide:
-                            BorderSide(color: hintColor.withOpacity(0.5)),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(4),
-                          bottomRight: Radius.circular(4),
-                        ),
-                        borderSide:
-                            BorderSide(color: hintColor.withOpacity(0.5)),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
           SizedBox(
             height: defaultPadding,
           ),
-          Container(
-            padding: EdgeInsets.all(defaultPadding),
-            color: bgColor,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Item Total'),
-                    Text(
-                        '${Constants.RUPEE} ${CartHelper.getTotalPriceOfCart().toStringAsFixed(2)}')
-                  ],
-                ),
-                if (allChargesModel != null) ...{
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Service Tax'),
-                      Text(
-                          '${Constants.RUPEE} ${double.parse(allChargesModel!.Service_Charge).toStringAsFixed(2)}')
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Packing charge'),
-                      Text(
-                          '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
-                    ],
-                  ),
-                },
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Delivery Fees'),
-                    Text(
-                        '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
-                  ],
-                ),
-                if (couponDiscountDetailModel != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Total Discount',
-                        style: TextStyle(color: Colors.green),
+          if (CartHelper.getCartCount() > 0) ...{
+            Container(
+              color: bgColor,
+              padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding, vertical: defaultPadding / 2),
+              // child: Row(
+              //   children: [
+              //     Expanded(
+              //       child: TextField(
+              //         autocorrect: true,
+              //         controller: promoCodeCtrl,
+              //         decoration: InputDecoration(
+              //           hintText: 'Enter promo code',
+              //           focusColor: primaryColor,
+              //           alignLabelWithHint: false,
+              //           filled: true,
+              //           fillColor: Colors.white,
+              //           contentPadding:
+              //               EdgeInsets.symmetric(horizontal: defaultPadding),
+              //           hoverColor: primaryColor,
+              //           hintStyle: TextStyle(color: hintColor),
+              //           enabledBorder: OutlineInputBorder(
+              //             borderRadius: BorderRadius.only(
+              //               topLeft: Radius.circular(4),
+              //               bottomLeft: Radius.circular(4),
+              //             ),
+              //             borderSide:
+              //                 BorderSide(color: hintColor.withOpacity(0.5)),
+              //           ),
+              //           focusedBorder: OutlineInputBorder(
+              //             borderRadius: BorderRadius.only(
+              //               topLeft: Radius.circular(4),
+              //               bottomLeft: Radius.circular(4),
+              //             ),
+              //             borderSide:
+              //                 BorderSide(color: hintColor.withOpacity(0.5)),
+              //           ),
+              //           border: OutlineInputBorder(
+              //             borderRadius: BorderRadius.only(
+              //               topLeft: Radius.circular(4),
+              //               bottomLeft: Radius.circular(4),
+              //             ),
+              //             borderSide:
+              //                 BorderSide(color: hintColor.withOpacity(0.5)),
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //     InkWell(
+              //       onTap: () {},
+              //       child: Container(
+              //         alignment: Alignment.center,
+              //         padding: EdgeInsets.symmetric(
+              //           horizontal: 5,
+              //           vertical: 14,
+              //         ),
+              //         decoration: BoxDecoration(
+              //           color: primaryColor,
+              //           borderRadius: BorderRadius.only(
+              //             topRight: Radius.circular(4),
+              //             bottomRight: Radius.circular(4),
+              //           ),
+              //         ),
+              //         width: 80,
+              //         child: Text(
+              //           'APPLY',
+              //           style: Theme.of(context)
+              //               .textTheme
+              //               .button
+              //               ?.copyWith(color: bgColor),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              child: couponList.isEmpty
+                  ? Container()
+                  : DropdownSearch<String>(
+                      mode: Mode.MENU,
+                      showSelectedItem: true,
+                      items: couponList.map((e) => e.code).toList(),
+                      dropdownSearchDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
                       ),
-                      Text(
-                        '${Constants.RUPEE} ${CartHelper.getDiscountPrice(couponDiscountDetailModel).toStringAsFixed(2)}',
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ],
-                  ),
-                SizedBox(
-                  height: defaultPadding / 2,
-                ),
-                Divider(
-                  color: borderColor,
-                  height: 1,
-                ),
-                SizedBox(
-                  height: defaultPadding / 2,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'TO PAY',
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            fontSize: 18,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                    Text(
-                      '${Constants.RUPEE} ${CartHelper.getNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}',
-                      style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                            fontSize: 18,
-                            // fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ],
-                ),
-              ],
+                      label: "Select coupons",
+                      hint: "Select coupon to get discount",
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCoupon = value;
+                          if (selectedCoupon == null) {
+                            SnackBarService.instance.showSnackBarInfo(
+                                'Select a coupon code to apply offer');
+                          }
+                          _cartServices
+                              .verifyCoupon(
+                                  selectedCoupon!,
+                                  CartHelper.getTotalPriceOfCart().toString(),
+                                  context)
+                              .then((value) {
+                            couponDiscountDetailModel = value;
+                          });
+                        });
+                      },
+                      selectedItem: selectedCoupon),
             ),
-          ),
-          SizedBox(
-            height: defaultPadding * 8,
-          )
+            Container(
+              color: bgColor,
+              padding: EdgeInsets.symmetric(
+                  horizontal: defaultPadding, vertical: defaultPadding / 2),
+              child: Row(
+                children: [
+                  Container(
+                    height: 88,
+                    width: 60,
+                    padding: EdgeInsets.all(defaultPadding / 2),
+                    decoration: BoxDecoration(
+                      color: Color(0xFFFBFDFF),
+                      border: Border(
+                        left: BorderSide(
+                            color: hintColor.withOpacity(
+                          0.5,
+                        )),
+                        top: BorderSide(color: hintColor.withOpacity(0.5)),
+                        bottom: BorderSide(color: hintColor.withOpacity(0.5)),
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.chat_bubble_outline,
+                      color: hintColor,
+                    ),
+                  ),
+                  Expanded(
+                    child: TextField(
+                      autocorrect: true,
+                      controller: sugestionCtrl,
+                      maxLines: 3,
+                      decoration: InputDecoration(
+                        hintText: 'Any suggestions? Will pass it on',
+                        focusColor: primaryColor,
+                        alignLabelWithHint: false,
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: defaultPadding,
+                            vertical: defaultPadding / 2),
+                        hoverColor: primaryColor,
+                        hintStyle: TextStyle(color: hintColor),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(4),
+                            bottomRight: Radius.circular(4),
+                          ),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(4),
+                            bottomRight: Radius.circular(4),
+                          ),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(4),
+                            bottomRight: Radius.circular(4),
+                          ),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: defaultPadding,
+            ),
+            Container(
+              padding: EdgeInsets.all(defaultPadding),
+              color: bgColor,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Item Total'),
+                      Text(
+                          '${Constants.RUPEE} ${CartHelper.getTotalPriceOfCart().toStringAsFixed(2)}')
+                    ],
+                  ),
+                  if (allChargesModel != null) ...{
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Service Tax'),
+                        Text(
+                            '${Constants.RUPEE} ${double.parse(allChargesModel!.Service_Charge).toStringAsFixed(2)}')
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Packing charge'),
+                        Text(
+                            '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
+                      ],
+                    ),
+                  },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Delivery Fees'),
+                      Text(
+                          '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
+                    ],
+                  ),
+                  if (couponDiscountDetailModel != null)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Total Discount',
+                          style: TextStyle(color: Colors.green),
+                        ),
+                        Text(
+                          '${Constants.RUPEE} ${CartHelper.getDiscountPrice(couponDiscountDetailModel).toStringAsFixed(2)}',
+                          style: TextStyle(color: Colors.green),
+                        ),
+                      ],
+                    ),
+                  SizedBox(
+                    height: defaultPadding / 2,
+                  ),
+                  Divider(
+                    color: borderColor,
+                    height: 1,
+                  ),
+                  SizedBox(
+                    height: defaultPadding / 2,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'TO PAY',
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      Text(
+                        '${Constants.RUPEE} ${CartHelper.getNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}',
+                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                              fontSize: 18,
+                              // fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: defaultPadding * 8,
+            ),
+          },
         ],
       ),
     );

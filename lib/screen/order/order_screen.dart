@@ -8,6 +8,7 @@ import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -42,101 +43,127 @@ class _OrderScreenState extends State<OrderScreen> {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
     log('orders.length = ${orders.length}');
-    return orders.isEmpty
+    return _cartServices.status == CartStatus.Loading
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : ListView(
-            children: [
-              for (OrderDetailModel order in orders) ...{
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(
-                        OrderDetailScreen.ORDER_DETAIL_ROUTE,
-                        arguments: order);
-                  },
-                  child: Container(
-                    color: bgColor,
-                    margin: EdgeInsets.only(bottom: defaultPadding / 2),
-                    padding: EdgeInsets.all(defaultPadding),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'CJ ${order.outletname}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle1
-                                  ?.copyWith(
-                                    color: textColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            Spacer(),
-                            Text(
-                              '${order.order.status}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.check_circle,
-                              size: 15,
-                              color: Colors.green,
-                            )
-                          ],
-                        ),
-                        Text(
-                          '${order.order.oid}',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                        Text(
-                          '${order.address}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              '${Constants.RUPEE} ${order.order.total_amount}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Icon(
-                              Icons.keyboard_arrow_right,
-                              size: 15,
-                            )
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Divider(
-                          height: 1,
-                          color: hintColor,
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          '${order.menuDetails.map((e) => e.food.productname.toCamelCase()).toList().join(',')}',
-                          style: Theme.of(context).textTheme.subtitle2,
-                        ),
-                        Text(
-                          '${formatOrderTime(order.order.date_creation)}',
-                          style: Theme.of(context).textTheme.caption,
-                        ),
-                      ],
+        : _cartServices.status == CartStatus.Failed
+            ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/svg/order_history.svg',
+                      width: 300,
                     ),
-                  ),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: Text(
+                        'You have no order history',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline4
+                            ?.copyWith(fontSize: 20),
+                      ),
+                    )
+                  ],
                 ),
-              }
-            ],
-          );
+              )
+            : ListView(
+                children: [
+                  for (OrderDetailModel order in orders) ...{
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context).pushNamed(
+                            OrderDetailScreen.ORDER_DETAIL_ROUTE,
+                            arguments: order);
+                      },
+                      child: Container(
+                        color: bgColor,
+                        margin: EdgeInsets.only(bottom: defaultPadding / 2),
+                        padding: EdgeInsets.all(defaultPadding),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'CJ ${order.outletname}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle1
+                                      ?.copyWith(
+                                        color: textColor,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                                Spacer(),
+                                Text(
+                                  '${order.order.status}',
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 15,
+                                  color: Colors.green,
+                                )
+                              ],
+                            ),
+                            Text(
+                              '${order.order.oid}',
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                            Text(
+                              '${order.address}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '${Constants.RUPEE} ${order.order.total_amount}',
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right,
+                                  size: 15,
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Divider(
+                              height: 1,
+                              color: hintColor,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              '${order.menuDetails.map((e) => e.food.productname.toCamelCase()).toList().join(',')}',
+                              style: Theme.of(context).textTheme.subtitle2,
+                            ),
+                            Text(
+                              '${formatOrderTime(order.order.date_creation)}',
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  }
+                ],
+              );
   }
 
   String formatOrderTime(String? date_creation) {

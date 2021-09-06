@@ -9,11 +9,13 @@ class CartVriablesModel {
   PincodeModel selectedPincode;
   CouponDiscountDetailModel? couponDiscountDetailModel;
   double netAmount;
+  String deliverySuggestion;
   CartVriablesModel({
     this.allChargesModel,
     required this.selectedPincode,
     this.couponDiscountDetailModel,
     required this.netAmount,
+    required this.deliverySuggestion,
   });
 
   CartVriablesModel copyWith({
@@ -21,6 +23,7 @@ class CartVriablesModel {
     PincodeModel? selectedPincode,
     CouponDiscountDetailModel? couponDiscountDetailModel,
     double? netAmount,
+    String? deliverySuggestion,
   }) {
     return CartVriablesModel(
       allChargesModel: allChargesModel ?? this.allChargesModel,
@@ -28,6 +31,7 @@ class CartVriablesModel {
       couponDiscountDetailModel:
           couponDiscountDetailModel ?? this.couponDiscountDetailModel,
       netAmount: netAmount ?? this.netAmount,
+      deliverySuggestion: deliverySuggestion ?? this.deliverySuggestion,
     );
   }
 
@@ -37,6 +41,7 @@ class CartVriablesModel {
       'selectedPincode': selectedPincode.toMap(),
       'couponDiscountDetailModel': couponDiscountDetailModel?.toMap(),
       'netAmount': netAmount,
+      'deliverySuggestion': deliverySuggestion,
     };
   }
 
@@ -47,6 +52,7 @@ class CartVriablesModel {
       couponDiscountDetailModel:
           CouponDiscountDetailModel.fromMap(map['couponDiscountDetailModel']),
       netAmount: map['netAmount'],
+      deliverySuggestion: map['deliverySuggestion'],
     );
   }
 
@@ -57,7 +63,7 @@ class CartVriablesModel {
 
   @override
   String toString() {
-    return 'CartVriablesModel(allChargesModel: $allChargesModel, selectedPincode: $selectedPincode, couponDiscountDetailModel: $couponDiscountDetailModel, netAmount: $netAmount)';
+    return 'CartVriablesModel(allChargesModel: $allChargesModel, selectedPincode: $selectedPincode, couponDiscountDetailModel: $couponDiscountDetailModel, netAmount: $netAmount, deliverySuggestion: $deliverySuggestion)';
   }
 
   @override
@@ -68,7 +74,8 @@ class CartVriablesModel {
         other.allChargesModel == allChargesModel &&
         other.selectedPincode == selectedPincode &&
         other.couponDiscountDetailModel == couponDiscountDetailModel &&
-        other.netAmount == netAmount;
+        other.netAmount == netAmount &&
+        other.deliverySuggestion == deliverySuggestion;
   }
 
   @override
@@ -76,6 +83,7 @@ class CartVriablesModel {
     return allChargesModel.hashCode ^
         selectedPincode.hashCode ^
         couponDiscountDetailModel.hashCode ^
-        netAmount.hashCode;
+        netAmount.hashCode ^
+        deliverySuggestion.hashCode;
   }
 }

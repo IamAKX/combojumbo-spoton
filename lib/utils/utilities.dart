@@ -67,8 +67,7 @@ class Utilities {
 
   static deleteAddress(AddressModel model) {
     List<AddressModel> list = loadAllAddress();
-    list.removeWhere(
-        (element) => element.completeAddress == model.completeAddress);
+    list.removeWhere((element) => element.id == model.id);
     List<String> stringList = [];
     for (AddressModel m in list) {
       stringList.add(m.toJson());

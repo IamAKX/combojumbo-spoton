@@ -1,16 +1,19 @@
-import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/city_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
+import 'package:cjspoton/model/state_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
+import 'package:cjspoton/services/address_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
-import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/custom_heading_textfield_with_actionbutton.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class AddDeliveryAddress extends StatefulWidget {
@@ -23,13 +26,38 @@ class AddDeliveryAddress extends StatefulWidget {
 
 class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   TextEditingController deliveryCtrl = TextEditingController();
-  TextEditingController completeAddressCtrl = TextEditingController();
+  TextEditingController completeAddressCtrl1 = TextEditingController();
+  TextEditingController completeAddressCtrl2 = TextEditingController();
+  TextEditingController landmarkCtrl = TextEditingController();
   TextEditingController deliveryInstructionCtrl = TextEditingController();
+  List<StateModel> stateList = [];
+  List<CityModel> cityList = [];
+  StateModel? selectedState = null;
+  CityModel? selectedCity = null;
   String addressType = 'HOME';
   late Size screenSize;
   late PincodeModel pincodeModel;
+  late AddressService _addressService;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _addressService.getStateList(context).then(
+        (value) {
+          setState(() {
+            stateList = value;
+          });
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    _addressService = Provider.of<AddressService>(context);
+    SnackBarService.instance.buildContext = context;
     pincodeModel = Constants.getDefaultPincode();
     deliveryCtrl.text = pincodeModel.pincode;
     screenSize = MediaQuery.of(context).size;
@@ -68,9 +96,127 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       ),
                     ),
                     CustomTextFieldWithHeading(
-                      teCtrl: completeAddressCtrl,
-                      hint: 'Complete Address',
+                      teCtrl: completeAddressCtrl1,
+                      hint: 'Address 1',
                       inputType: TextInputType.streetAddress,
+                    ),
+                    CustomTextFieldWithHeading(
+                      teCtrl: completeAddressCtrl2,
+                      hint: 'Address 2',
+                      inputType: TextInputType.streetAddress,
+                    ),
+                    CustomTextFieldWithHeading(
+                      teCtrl: landmarkCtrl,
+                      hint: 'Landmark',
+                      inputType: TextInputType.streetAddress,
+                    ),
+                    Text(
+                      'State',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    DropdownSearch<StateModel>(
+                      mode: Mode.MENU,
+                      showSelectedItem: true,
+                      items: stateList,
+                      compareFn: (item, selectedItem) =>
+                          item.id == selectedItem?.id,
+                      itemAsString: (item) => item.name,
+                      dropdownSearchDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                      label: "Select state",
+                      hint: "Select State",
+                      onChanged: (value) {
+                        setState(() {
+                          selectedState = value;
+                          if (selectedState == null) {
+                            SnackBarService.instance
+                                .showSnackBarInfo('Select your state');
+                            return;
+                          }
+
+                          _addressService
+                              .getCityList(selectedState!, context)
+                              .then((value) => cityList = value);
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+                    Text(
+                      'City',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    DropdownSearch<CityModel>(
+                      mode: Mode.MENU,
+                      showSelectedItem: true,
+                      items: cityList,
+                      itemAsString: (item) => item.name,
+                      dropdownSearchDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                      label: "Select city",
+                      hint: "Select City",
+                      compareFn: (item, selectedItem) =>
+                          item.id == selectedItem?.id,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCity = value;
+                          if (selectedCity == null) {
+                            SnackBarService.instance
+                                .showSnackBarInfo('Select your city');
+                            return;
+                          }
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: defaultPadding,
                     ),
                     CustomTextFieldWithHeading(
                       teCtrl: deliveryInstructionCtrl,
@@ -151,15 +297,24 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                     child: TextButton(
                       onPressed: () {
                         if (deliveryCtrl.text.isEmpty ||
-                            completeAddressCtrl.text.isEmpty) {
-                          SnackBarService.instance.showSnackBarError(
-                              'Please enter complete address');
+                            completeAddressCtrl1.text.isEmpty ||
+                            completeAddressCtrl2.text.isEmpty ||
+                            landmarkCtrl.text.isEmpty ||
+                            selectedCity == null ||
+                            selectedState == null) {
+                          SnackBarService.instance
+                              .showSnackBarError('All fields are mandatory');
                           return;
                         } else {
                           AddressModel addressModel = AddressModel(
                               pincode: deliveryCtrl.text,
-                              completeAddress: completeAddressCtrl.text,
-                              deliveryInstruction: deliveryCtrl.text,
+                              address1: completeAddressCtrl1.text,
+                              address2: completeAddressCtrl2.text,
+                              landmark: landmarkCtrl.text,
+                              city: selectedCity!,
+                              stateModel: selectedState!,
+                              id: DateTime.now().millisecond.toString(),
+                              deliveryInstruction: deliveryInstructionCtrl.text,
                               addressType: addressType);
                           Utilities.addAddress(addressModel);
                           SnackBarService.instance

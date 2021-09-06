@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
@@ -21,7 +19,6 @@ import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
 import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
 import 'package:crypto/crypto.dart';
-import 'package:future_progress_dialog/future_progress_dialog.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -138,9 +135,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: ListTile(
                       leading: getAddressIcon(address.addressType),
                       title: Text('${address.addressType}'),
-                      subtitle: Text('${address.completeAddress}'),
+                      isThreeLine: true,
+                      subtitle:
+                          Text('${address.address1}\n${address.address2}'),
                       trailing: Radio(
-                        value: address.completeAddress,
+                        value: address.id,
                         groupValue: selectedAddress,
                         onChanged: (value) {
                           setState(() {
@@ -198,8 +197,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       showCloseIcon: false,
       btnOkOnPress: () {
         SnackBarService.instance.showSnackBarInfo('Please wait...');
-        AddressModel address = Utilities.loadAllAddress().firstWhere(
-            (element) => element.completeAddress == selectedAddress);
+        AddressModel address = Utilities.loadAllAddress()
+            .firstWhere((element) => element.id == selectedAddress);
         _cartServices
             .placeOrder(cartVriablesModel, address, response, paymentParam,
                 payUMoneyTxnId, 'success', context)
@@ -229,8 +228,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         showCloseIcon: false,
         btnOkOnPress: () {
           SnackBarService.instance.showSnackBarInfo('Please wait...');
-          AddressModel address = Utilities.loadAllAddress().firstWhere(
-              (element) => element.completeAddress == selectedAddress);
+          AddressModel address = Utilities.loadAllAddress()
+              .firstWhere((element) => element.id == selectedAddress);
           _cartServices
               .placeOrder(cartVriablesModel, address, response, paymentParam,
                   payUMoneyTxnId, 'failure', context)

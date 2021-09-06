@@ -281,33 +281,41 @@ class CartServices extends ChangeNotifier {
       'pay': 'payumoney',
       'transcation_id': '$payUMoneyTxnId',
       'ordertype': 'Delivery',
+      'address1': '${addressModel.address1}',
+      'address2': '${addressModel.address1}',
+      'landmark': '${addressModel.landmark}',
+      'state': '${addressModel.stateModel.id}',
+      'city': '${addressModel.city.id}',
+      'pincode': '${cartVriablesModel.selectedPincode.pincode}',
+      'delivery_suggestion': '${cartVriablesModel.deliverySuggestion}',
+      'delivery_instruction': '${addressModel.deliveryInstruction}',
       'cart': CartHelper.getGroupedCartJson()
     });
 
-    log('''{
-      'cust_id': '${userModel.id}',
-      'outletid': '${outletModel.outletId}',
-      'response': '$paymentState',
-      'responseDetials': '${json.encode(payUMoneyResponse)}',
-      'oid': '${userModel.id}${DateTime.now().millisecond}',
-      'subtotal': '${CartHelper.getTotalPriceOfCart()}',
-      'couponcode':
-          '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
-      'actualdiscountvalue':
-          '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
-      'discountvalue':
-          '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
-      'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
-      'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
-      'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
-      'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
-      'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
-      'totalpaidamount': '${cartVriablesModel.netAmount}',
-      'pay': 'payumoney',
-      'transcation_id': '$payUMoneyTxnId',
-      'ordertype': 'Delivery',
-      'cart': ${CartHelper.getGroupedCartJson()}}
-    }''');
+    // log('''{
+    //   'cust_id': '${userModel.id}',
+    //   'outletid': '${outletModel.outletId}',
+    //   'response': '$paymentState',
+    //   'responseDetials': '${json.encode(payUMoneyResponse)}',
+    //   'oid': '${userModel.id}${DateTime.now().millisecond}',
+    //   'subtotal': '${CartHelper.getTotalPriceOfCart()}',
+    //   'couponcode':
+    //       '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
+    //   'actualdiscountvalue':
+    //       '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
+    //   'discountvalue':
+    //       '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
+    //   'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
+    //   'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
+    //   'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
+    //   'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
+    //   'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
+    //   'totalpaidamount': '${cartVriablesModel.netAmount}',
+    //   'pay': 'payumoney',
+    //   'transcation_id': '$payUMoneyTxnId',
+    //   'ordertype': 'Delivery',
+    //   'cart': ${CartHelper.getGroupedCartJson()}}
+    // }''');
     log(reqBody.fields.toString());
 
     Response response = await _dio.post(API.PlaceOrder, data: reqBody);
