@@ -43,4 +43,16 @@ extension StringExtension on String {
     else
       return "${this[0].toUpperCase()}${this.substring(1)}";
   }
+
+  double toDouble() {
+    if (this.length == 0)
+      return 0;
+    else {
+      try {
+        return double.parse(this);
+      } catch (e) {
+        return 0;
+      }
+    }
+  }
 }

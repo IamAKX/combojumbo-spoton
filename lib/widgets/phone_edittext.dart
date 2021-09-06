@@ -18,7 +18,7 @@ class PhoneTextField extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: 64,
+            height: 66,
             width: 60,
             alignment: Alignment.center,
             child: Text(
@@ -40,7 +40,7 @@ class PhoneTextField extends StatelessWidget {
               controller: _phoneCtrl,
               maxLength: 10,
               decoration: InputDecoration(
-                hintText: 'Phone Number',
+                hintText: 'Mobile',
                 counterText: "",
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.only(

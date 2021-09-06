@@ -11,6 +11,10 @@ import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
+import 'package:cjspoton/screen/order/order_detail.dart';
+import 'package:cjspoton/screen/order/order_food_model.dart';
+import 'package:cjspoton/screen/order/order_menu_details.dart';
+import 'package:cjspoton/screen/order/order_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -246,6 +250,7 @@ class CartServices extends ChangeNotifier {
       Map? payUMoneyResponse,
       PaymentParams paymentParam,
       String payUMoneyTxnId,
+      String paymentState,
       BuildContext context) async {
     status = CartStatus.Loading;
     notifyListeners();
@@ -258,7 +263,8 @@ class CartServices extends ChangeNotifier {
     var reqBody = FormData.fromMap({
       'cust_id': '${userModel.id}',
       'outletid': '${outletModel.outletId}',
-      'response': json.encode(payUMoneyResponse),
+      'response': '$paymentState',
+      'responseDetials': payUMoneyResponse,
       'oid': '${userModel.id}${DateTime.now().millisecond}',
       'subtotal': '${CartHelper.getTotalPriceOfCart()}',
       'couponcode':
@@ -276,34 +282,35 @@ class CartServices extends ChangeNotifier {
       'pay': 'payumoney',
       'transcation_id': '$payUMoneyTxnId',
       'ordertype': 'Delivery',
-      'cart': json.encode(prefs.getStringList(PrefernceKey.LOCAL_CART))
+      'cart': prefs.getStringList(PrefernceKey.LOCAL_CART)
     });
-    log('''
-      {
-        'cust_id': ${userModel.id},
-        'outletid': '${outletModel.outletId}',
-        'response': ${json.encode(payUMoneyResponse).toString()},
-        'oid': '${userModel.id}${DateTime.now().millisecond}',
-        'subtotal': '${CartHelper.getTotalPriceOfCart()}',
-        'couponcode':
-            '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
-        'actualdiscountvalue':
-            '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
-        'discountvalue':
-            '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
-        'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
-        'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
-        'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
-        'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
-        'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
-        'totalpaidamount': '${cartVriablesModel.netAmount}',
-        'pay': 'payumoney',
-        'transcation_id': '${payUMoneyTxnId}',
-        'ordertype': 'Delivery',
-        'cart': ${json.encode(prefs.getStringList(PrefernceKey.LOCAL_CART)).toString()}
-      }
-      ''');
-    Response response = await _dio.post(API.VerifyCouponCode, data: reqBody);
+
+    log('''{
+      'cust_id': '${userModel.id}',
+      'outletid': '${outletModel.outletId}',
+      'response': '$paymentState',
+      'responseDetials': '$payUMoneyResponse',
+      'oid': '${userModel.id}${DateTime.now().millisecond}',
+      'subtotal': '${CartHelper.getTotalPriceOfCart()}',
+      'couponcode':
+          '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
+      'actualdiscountvalue':
+          '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
+      'discountvalue':
+          '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
+      'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
+      'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
+      'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
+      'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
+      'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
+      'totalpaidamount': '${cartVriablesModel.netAmount}',
+      'pay': 'payumoney',
+      'transcation_id': '$payUMoneyTxnId',
+      'ordertype': 'Delivery',
+      'cart': ${prefs.getStringList(PrefernceKey.LOCAL_CART)}
+    }''');
+
+    Response response = await _dio.post(API.PlaceOrder, data: reqBody);
 
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
@@ -313,7 +320,7 @@ class CartServices extends ChangeNotifier {
         status = CartStatus.Success;
         SnackBarService.instance
             .showSnackBarSuccess((resBody['msg']).toString().trim());
-
+        CartHelper.clearCart();
         notifyListeners();
         return true;
       } else {
@@ -337,5 +344,142 @@ class CartServices extends ChangeNotifier {
     //   return false;
     // }
     return false;
+  }
+
+  Future<List<OrderDetailModel>> getOrderHistory(BuildContext context) async {
+    status = CartStatus.Loading;
+    notifyListeners();
+    List<OrderDetailModel> list = [];
+    // try {
+    UserModel userModel =
+        UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'cust_id': userModel.id,
+    });
+    Response response = await _dio.post(API.OrderHistory, data: reqBody);
+
+    var resBody = json.decode(response.data);
+    if (response.statusCode == 200) {
+      log('Response : ${response.data}');
+
+      var body = resBody['body'] ?? [];
+
+      if (resBody['status'] == "1" || resBody['status'] == 1) {
+        status = CartStatus.Success;
+        for (var history in body) {
+          var orderJson = history['order'];
+          OrderModel orderModel = OrderModel(
+            id: orderJson['id'],
+            trans_id: orderJson['trans_id'],
+            cust_id: orderJson['cust_id'],
+            oid: orderJson['oid'],
+            coupon_code: orderJson['coupon_code'],
+            coupon_type: orderJson['coupon_type'],
+            coupon_minimum: orderJson['coupon_minimum'],
+            coupon_maximum: orderJson['coupon_maximum'],
+            coupon_orignal_discount: orderJson['coupon_orignal_discount'],
+            wheelcoupon: orderJson['wheelcoupon'],
+            coupon_value: orderJson['coupon_value'],
+            subtotal: orderJson['subtotal'],
+            coupon_discountamount: orderJson['coupon_discountamount'],
+            delivery_charge: orderJson['delivery_charge'],
+            gst: orderJson['gst'],
+            gst_amount: orderJson['gst_amount'],
+            service_charge: orderJson['service_charge'],
+            packging_charge: orderJson['packging_charge'],
+            total_amount: orderJson['total_amount'],
+            date_creation: orderJson['date_creation'],
+            genrated_by: orderJson['genrated_by'],
+            payment_type: orderJson['payment_type'],
+            status: orderJson['status'],
+            order_status: orderJson['order_status'],
+            ordertype: orderJson['ordertype'],
+            whosorderadd_id: orderJson['whosorderadd_id'],
+            order_addrole: orderJson['order_addrole'],
+            delivery_boy_id: orderJson['delivery_boy_id'],
+            delivery_otp: orderJson['delivery_otp'],
+            link_uid: orderJson['link_uid'],
+            noofpeopletable: orderJson['noofpeopletable'],
+            tablebook: orderJson['tablebook'],
+            randpaymeny: orderJson['randpaymeny'],
+            outletid: orderJson['outletid'],
+            addrecordid: orderJson['addrecordid'],
+            waiter_tip: orderJson['waiter_tip'],
+            txnid: orderJson['txnid'],
+            cart_id: orderJson['cart_id'],
+            address_id: orderJson['address_id'],
+            delivey_who: orderJson['delivey_who'],
+            uricko_token: orderJson['uricko_token'],
+            uricko_status: orderJson['uricko_status'],
+            table_booking_id: orderJson['table_booking_id'],
+            adjust_amount_table: orderJson['adjust_amount_table'],
+            refund_amount: orderJson['refund_amount'],
+            paid_amount: orderJson['paid_amount'],
+            app: orderJson['app'],
+          );
+
+          List<OrderMenuDetails>? menuDetails = [];
+          var menuDetailsJson = history['menu-deails'] ?? [];
+          for (var element in menuDetailsJson) {
+            var foodJson = element['food'];
+            OrderFoodModel orderFoodModel = OrderFoodModel(
+              id: foodJson['id'],
+              relid: foodJson['relid'],
+              oid: foodJson['oid'],
+              pro_id: foodJson['pro_id'],
+              qty: foodJson['qty'],
+              price: foodJson['price'],
+              discountprice: foodJson['discountprice'],
+              calculateprice: foodJson['calculateprice'],
+              productname: foodJson['productname'],
+              status: foodJson['status'],
+              cust_id: foodJson['cust_id'],
+              combooffer: foodJson['combooffer'],
+              remark: foodJson['remark'],
+              outletid: foodJson['outletid'],
+              addrecordid: foodJson['addrecordid'],
+              date: foodJson['date'],
+              addons: foodJson['addons'],
+              addonsfoodrelated: foodJson['addonsfoodrelated'],
+              sequenceid: foodJson['sequenceid'],
+              foodidrelatedaddons: foodJson['foodidrelatedaddons'],
+              kotid: foodJson['kotid'],
+              addonsrelation: foodJson['addonsrelation'],
+              payment_id: foodJson['payment_id'],
+              type: foodJson['type'],
+              addonslebel: foodJson['addonslebel'],
+              addonslebelid: foodJson['addonslebelid'],
+              partypacks: foodJson['partypacks'],
+              app: foodJson['app'],
+            );
+            OrderMenuDetails orderMenuDetails =
+                OrderMenuDetails(food: orderFoodModel, addons: '');
+            menuDetails.add(orderMenuDetails);
+          }
+          OrderDetailModel orderDetailModel = OrderDetailModel(
+              order: orderModel,
+              menuDetails: menuDetails,
+              outletname: history['outletname']);
+          list.add(orderDetailModel);
+        }
+
+        notifyListeners();
+      } else {
+        status = CartStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarError('Something went wrong');
+      }
+    } else {
+      status = CartStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
+    }
+    // } catch (e) {
+    //   status = CartStatus.Failed;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
+    return list;
   }
 }

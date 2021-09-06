@@ -11,6 +11,8 @@ import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
+import 'package:cjspoton/screen/order/order_detail.dart';
+import 'package:cjspoton/screen/order/order_details_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
@@ -40,6 +42,10 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => Introduction());
       case ChooseOutletScreen.CHOOSE_OUTLET_ROUTE:
         return MaterialPageRoute(builder: (_) => ChooseOutletScreen());
+      case OrderDetailScreen.ORDER_DETAIL_ROUTE:
+        return MaterialPageRoute(
+            builder: (_) => OrderDetailScreen(
+                orderDetailModel: settings.arguments as OrderDetailModel));
       case MainContainer.MAIN_CONTAINER_ROUTE:
         return MaterialPageRoute(
             builder: (_) => MainContainer(

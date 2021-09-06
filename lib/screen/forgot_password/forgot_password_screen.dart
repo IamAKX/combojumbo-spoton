@@ -4,6 +4,7 @@ import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/widgets/agreement_footer.dart';
 import 'package:cjspoton/widgets/custom_edittext.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
 import 'package:cjspoton/widgets/password_edittext.dart';
@@ -134,43 +135,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   ),
                 ),
                 Spacer(),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'By continuing, you agree our',
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Terms of Service',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        'Privacy Policy',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
+                AgreementFooter(context: context)
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
@@ -71,9 +72,11 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: NavRoute.generatedRoute,
         home: (CURRENT_USER == null)
             ? LoginScreen()
-            : MainContainer(
-                initialIndex: 0,
-              ),
+            : prefs.getString(PrefernceKey.SELECTED_OUTLET) == null
+                ? ChooseOutletScreen()
+                : MainContainer(
+                    initialIndex: 0,
+                  ),
       ),
     );
   }

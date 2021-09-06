@@ -3,7 +3,7 @@
     package="com.combojumbo.cjspoton">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="cjspoton"
+        android:label="CJ SpotOn"
         tools:replace="android:label"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -8,6 +8,7 @@ import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/widgets/agreement_footer.dart';
 import 'package:cjspoton/widgets/icon_text_button.dart';
 import 'package:cjspoton/widgets/password_edittext.dart';
 import 'package:cjspoton/widgets/phone_edittext.dart';
@@ -137,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text(
                             _auth.status == AuthStatus.Authenticating
                                 ? 'Please wait...'
-                                : 'Login',
+                                : 'Login Now!',
                             style: Theme.of(context).textTheme.button?.copyWith(
                                   color: Colors.white,
                                 ),
@@ -153,12 +154,23 @@ class _LoginScreenState extends State<LoginScreen> {
                               .pushNamedAndRemoveUntil(
                                   RegisterScreen.REGISTER_ROUTE,
                                   (route) => false),
-                          child: Text(
-                            'New to Combo Jumbo, register',
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption
-                                ?.copyWith(color: Colors.white),
+                          child: RichText(
+                            text: TextSpan(
+                              text: 'Don\'t have an account? ',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .caption
+                                  ?.copyWith(color: Colors.white),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'Sign Up',
+                                  style: TextStyle(
+                                    color: primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -227,52 +239,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'By continuing, you agree our',
-                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(TermOfUseSceen.TERMS_ROUTE);
-                      },
-                      child: Text(
-                        'Terms of Service',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(PrivacyPolicyScreen.PRIVACY_ROUTE);
-                      },
-                      child: Text(
-                        'Privacy Policy',
-                        style: Theme.of(context)
-                            .textTheme
-                            .caption
-                            ?.copyWith(decoration: TextDecoration.underline),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
+                AgreementFooter(context: context),
               ],
             ),
           ),

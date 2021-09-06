@@ -32,6 +32,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
         (value) {
           setState(() {
             outletList = value;
+            _modalBottomSheetMenu();
           });
         },
       ),
@@ -134,7 +135,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       fit: BoxFit.cover,
                     ),
                     dense: true,
-                    title: Text('${_selectedOutlet.outletName}'),
+                    title: Text('CJ ${_selectedOutlet.outletName}'),
                     subtitle: Text('${_selectedOutlet.outletId}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
@@ -207,7 +208,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       fit: BoxFit.cover,
                     ),
                     dense: true,
-                    title: Text('${model.outletName}'),
+                    title: Text('CJ ${model.outletName}'),
                     subtitle: Text('${model.outletId}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {

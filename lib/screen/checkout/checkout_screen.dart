@@ -184,9 +184,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   showSuccessAlert(BuildContext context, Map? response,
       PaymentParams paymentParam, CartVriablesModel cartVriablesModel) {
     String payUMoneyTxnId = response!['result']['payuMoneyId'];
-    log('payUMoneyTxnId : $payUMoneyTxnId');
-    log('response : ${response.toString()}');
-    log('paymentParam : ${paymentParam.toString()}');
+
     AwesomeDialog(
       context: context,
       dialogType: DialogType.SUCCES,
@@ -204,7 +202,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             (element) => element.completeAddress == selectedAddress);
         _cartServices
             .placeOrder(cartVriablesModel, address, response, paymentParam,
-                payUMoneyTxnId, context)
+                payUMoneyTxnId, 'success', context)
             .then((value) {
           if (value)
             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -215,7 +213,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     )..show();
   }
 
-  showFailedAlert(BuildContext context, String errorMsg) {
+  showFailedAlert(BuildContext context, String errorMsg, Map? response,
+      PaymentParams paymentParam, CartVriablesModel cartVriablesModel) {
+    String payUMoneyTxnId = paymentParam.transactionID;
     AwesomeDialog(
         context: context,
         dialogType: DialogType.ERROR,
@@ -227,7 +227,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         title: 'Payment Failed',
         desc: errorMsg,
         showCloseIcon: false,
-        btnOkOnPress: () {},
+        btnOkOnPress: () {
+          SnackBarService.instance.showSnackBarInfo('Please wait...');
+          AddressModel address = Utilities.loadAllAddress().firstWhere(
+              (element) => element.completeAddress == selectedAddress);
+          _cartServices
+              .placeOrder(cartVriablesModel, address, response, paymentParam,
+                  payUMoneyTxnId, 'failure', context)
+              .then((value) {});
+        },
         btnOkColor: Colors.red)
       ..show();
   }
@@ -237,8 +245,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      // amount: "${widget.cartVriablesModel.netAmount}",
-      amount: '0.5',
+      amount: "${widget.cartVriablesModel.netAmount}",
+      // amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",
@@ -283,18 +291,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               widget.cartVriablesModel);
         } else if (_paymentResult.status == PayuPaymentStatus.failed) {
           print("Failed: ${_paymentResult.response}");
-          showFailedAlert(context, _paymentResult.response!['Error_Message']);
+          showFailedAlert(context, _paymentResult.response!['Error_Message'],
+              _paymentResult.response, _paymentParam, widget.cartVriablesModel);
         } else if (_paymentResult.status == PayuPaymentStatus.cancelled) {
           print("Cancelled by User: ${_paymentResult.response}");
-          showFailedAlert(context, 'Payment cancelled by user');
+          showFailedAlert(context, 'Payment cancelled by user',
+              _paymentResult.response, _paymentParam, widget.cartVriablesModel);
         } else {
           print("Response: ${_paymentResult.response}");
           print("Status: ${_paymentResult.status}");
-          showFailedAlert(context, 'Payment status : ${_paymentResult.status}');
+          showFailedAlert(context, 'Payment status : ${_paymentResult.status}',
+              _paymentResult.response, _paymentParam, widget.cartVriablesModel);
         }
       } else {
         print("Something's rotten here");
-        showFailedAlert(context, 'Something went wrong!');
+        showFailedAlert(context, 'Something went wrong!',
+            _paymentResult.response, _paymentParam, widget.cartVriablesModel);
       }
     } catch (e) {
       print(e);

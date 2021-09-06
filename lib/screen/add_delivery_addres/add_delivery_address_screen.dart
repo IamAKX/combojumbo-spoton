@@ -1,8 +1,10 @@
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
+import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
@@ -25,12 +27,13 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   TextEditingController deliveryInstructionCtrl = TextEditingController();
   String addressType = 'HOME';
   late Size screenSize;
-  PincodeModel pincodeModel =
-      PincodeModel.fromJson(prefs.getString(PrefernceKey.SELECTED_PINCODE)!);
+  late PincodeModel pincodeModel;
   @override
   Widget build(BuildContext context) {
+    pincodeModel = Constants.getDefaultPincode();
     deliveryCtrl.text = pincodeModel.pincode;
     screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -46,13 +49,23 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                 child: ListView(
                   padding: EdgeInsets.only(bottom: defaultPadding),
                   children: [
-                    CustomTextFieldWithHeadingActionButton(
-                      teCtrl: deliveryCtrl,
-                      hint: 'Delivery Area',
-                      enabled: false,
-                      inputType: TextInputType.streetAddress,
-                      icondata: Icons.location_pin,
-                      onTap: () {},
+                    InkWell(
+                      onTap: () {
+                        Navigator.of(context)
+                            .pushNamed(
+                                DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
+                            .then((value) {
+                          setState(() {});
+                        });
+                      },
+                      child: CustomTextFieldWithHeadingActionButton(
+                        teCtrl: deliveryCtrl,
+                        hint: 'Delivery Area',
+                        enabled: false,
+                        inputType: TextInputType.streetAddress,
+                        icondata: Icons.location_pin,
+                        onTap: () {},
+                      ),
                     ),
                     CustomTextFieldWithHeading(
                       teCtrl: completeAddressCtrl,

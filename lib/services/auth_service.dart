@@ -300,7 +300,7 @@ class AuthenticationService extends ChangeNotifier {
       print('Request : ${reqBody.fields}');
       var resBody = json.decode(response.data);
       if (response.statusCode == 200) {
-        print('Response : ${response.data}');
+        print('Response : ${response.data.toString().trim()}');
 
         var body = resBody['body'];
 
@@ -311,8 +311,8 @@ class AuthenticationService extends ChangeNotifier {
               phone: phone,
               token: body['token'] == null ? '' : body['token'],
               fcmToken: fcmToken!,
-              email: '',
-              profileImage: '');
+              email: body['email'],
+              profileImage: body['image']);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;

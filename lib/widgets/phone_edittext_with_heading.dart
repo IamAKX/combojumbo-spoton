@@ -33,7 +33,7 @@ class PhoneTextFieldWithHeading extends StatelessWidget {
           Row(
             children: [
               Container(
-                height: 48,
+                height: 50,
                 width: 60,
                 alignment: Alignment.center,
                 child: Text(
@@ -55,7 +55,7 @@ class PhoneTextFieldWithHeading extends StatelessWidget {
                   controller: _phoneCtrl,
                   maxLength: 10,
                   decoration: InputDecoration(
-                    hintText: 'Phone Number',
+                    hintText: 'Mobile',
                     counterText: "",
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: defaultPadding),
