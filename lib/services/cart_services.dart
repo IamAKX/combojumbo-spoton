@@ -210,7 +210,6 @@ class CartServices extends ChangeNotifier {
         var body = resBody['body'];
 
         if (resBody['status'] == 1) {
-          body = body[0];
           couponDiscountDetailModel = CouponDiscountDetailModel(
             coupon_code: body['coupon_code'],
             coupon_type: body['coupon_type'],
@@ -228,7 +227,7 @@ class CartServices extends ChangeNotifier {
         } else {
           status = CartStatus.Failed;
           notifyListeners();
-          SnackBarService.instance.showSnackBarError((resBody['msg']));
+          SnackBarService.instance.showSnackBarError((body['msg']));
         }
       } else {
         status = CartStatus.Failed;
@@ -264,7 +263,7 @@ class CartServices extends ChangeNotifier {
       'cust_id': '${userModel.id}',
       'outletid': '${outletModel.outletId}',
       'response': '$paymentState',
-      'responseDetials': payUMoneyResponse,
+      'responseDetials': json.encode(payUMoneyResponse),
       'oid': '${userModel.id}${DateTime.now().millisecond}',
       'subtotal': '${CartHelper.getTotalPriceOfCart()}',
       'couponcode':
@@ -282,14 +281,14 @@ class CartServices extends ChangeNotifier {
       'pay': 'payumoney',
       'transcation_id': '$payUMoneyTxnId',
       'ordertype': 'Delivery',
-      'cart': prefs.getStringList(PrefernceKey.LOCAL_CART)
+      'cart': CartHelper.getGroupedCartJson()
     });
 
     log('''{
       'cust_id': '${userModel.id}',
       'outletid': '${outletModel.outletId}',
       'response': '$paymentState',
-      'responseDetials': '$payUMoneyResponse',
+      'responseDetials': '${json.encode(payUMoneyResponse)}',
       'oid': '${userModel.id}${DateTime.now().millisecond}',
       'subtotal': '${CartHelper.getTotalPriceOfCart()}',
       'couponcode':
@@ -307,8 +306,9 @@ class CartServices extends ChangeNotifier {
       'pay': 'payumoney',
       'transcation_id': '$payUMoneyTxnId',
       'ordertype': 'Delivery',
-      'cart': ${prefs.getStringList(PrefernceKey.LOCAL_CART)}
+      'cart': ${CartHelper.getGroupedCartJson()}}
     }''');
+    log(reqBody.fields.toString());
 
     Response response = await _dio.post(API.PlaceOrder, data: reqBody);
 

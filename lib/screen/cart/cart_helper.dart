@@ -6,6 +6,7 @@ import 'package:cjspoton/model/coupon_discount_detail_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_model.dart';
+import 'package:cjspoton/screen/checkout/grouped_cart_model.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 
 class CartHelper {
@@ -142,5 +143,24 @@ class CartHelper {
     if (couponDiscountDetailModel != null)
       amt -= getDiscountPrice(couponDiscountDetailModel);
     return amt;
+  }
+
+  static List<String> getGroupedCartJson() {
+    List<String> list = [];
+    for (GroupedCartItemModel m in getGroupedCartItem()) {
+      GroupedCartModel model = GroupedCartModel(
+          id: m.cartItem.id,
+          foodname: m.cartItem.foodname,
+          fooddescription: m.cartItem.fooddescription,
+          foodamount: m.cartItem.foodamount,
+          fooddiscountamount: m.cartItem.fooddiscountamount,
+          foodid: m.cartItem.foodid,
+          foodcode: m.cartItem.foodcode,
+          foodImage: m.cartItem.foodImage,
+          addOns: [],
+          qty: m.quantity);
+      list.add(model.toJson());
+    }
+    return list;
   }
 }
