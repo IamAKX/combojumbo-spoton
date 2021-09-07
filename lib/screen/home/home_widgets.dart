@@ -5,10 +5,12 @@ import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class RecomendedItems extends StatelessWidget {
@@ -101,36 +103,36 @@ class RecomendedItems extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Positioned(
-                        right: 10,
-                        bottom: 10,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10),
-                          decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.star_outline,
-                                color: Colors.white,
-                                size: 18,
-                              ),
-                              Text(
-                                '4.8',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
+                      // Positioned(
+                      //   right: 10,
+                      //   bottom: 10,
+                      //   child: Container(
+                      //     padding: EdgeInsets.symmetric(horizontal: 10),
+                      //     decoration: BoxDecoration(
+                      //         color: Colors.green,
+                      //         borderRadius: BorderRadius.circular(5)),
+                      //     child: Row(
+                      //       children: [
+                      //         Icon(
+                      //           Icons.star_outline,
+                      //           color: Colors.white,
+                      //           size: 18,
+                      //         ),
+                      //         Text(
+                      //           '4.8',
+                      //           style: Theme.of(context)
+                      //               .textTheme
+                      //               .headline6
+                      //               ?.copyWith(
+                      //                 color: Colors.white,
+                      //                 fontSize: 16,
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // )
                     ],
                   ),
                 ),
@@ -140,7 +142,7 @@ class RecomendedItems extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${list.first.foodList.elementAt(i).foodname}',
+                        '${list.first.foodList.elementAt(i).foodname.toWordCase()}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
@@ -150,7 +152,7 @@ class RecomendedItems extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        '${list.first.foodList.elementAt(i).fooddescription}',
+                        '${list.first.foodList.elementAt(i).fooddescription.toCamelCase()}',
                         style: Theme.of(context).textTheme.caption,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -255,34 +257,34 @@ class CategoryCard extends StatelessWidget {
                       child: Text('${categoryModel.foodcount}'),
                     ),
                   ),
-                  Positioned(
-                    right: 10,
-                    bottom: 10,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(5)),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.star_outline,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                          Text(
-                            '4.1',
-                            style:
-                                Theme.of(context).textTheme.headline6?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
+                  // Positioned(
+                  //   right: 10,
+                  //   bottom: 10,
+                  //   child: Container(
+                  //     padding: EdgeInsets.symmetric(horizontal: 10),
+                  //     decoration: BoxDecoration(
+                  //         color: Colors.green,
+                  //         borderRadius: BorderRadius.circular(5)),
+                  //     child: Row(
+                  //       children: [
+                  //         Icon(
+                  //           Icons.star_outline,
+                  //           color: Colors.white,
+                  //           size: 18,
+                  //         ),
+                  //         Text(
+                  //           '4.1',
+                  //           style:
+                  //               Theme.of(context).textTheme.headline6?.copyWith(
+                  //                     color: Colors.white,
+                  //                     fontSize: 16,
+                  //                     fontWeight: FontWeight.bold,
+                  //                   ),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),

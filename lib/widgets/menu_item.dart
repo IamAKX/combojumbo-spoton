@@ -33,7 +33,7 @@ class MenuItem extends StatelessWidget {
       children: [
         ListTile(
           title: Text(
-            '${title.toCamelCase()}',
+            '${title.toWordCase()}',
             style: Theme.of(context)
                 .textTheme
                 .subtitle1

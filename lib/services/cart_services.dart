@@ -287,7 +287,7 @@ class CartServices extends ChangeNotifier {
       'landmark': '${addressModel.landmark}',
       'state': '${addressModel.stateModel.id}',
       'city': '${addressModel.city.id}',
-      'pincode': '${cartVriablesModel.selectedPincode.pincode}',
+      'pincode': '${cartVriablesModel.selectedPincode.id}',
       'delivery_suggestion': '${cartVriablesModel.deliverySuggestion}',
       'delivery_instruction': '${addressModel.deliveryInstruction}',
       'cart': CartHelper.getGroupedCartJson()

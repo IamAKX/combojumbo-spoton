@@ -66,7 +66,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       backgroundColor: greyedBgColor,
       appBar: AppBar(
         backgroundColor: bgColor,
-        title: Text('Check out'),
+        title: Text('Checkout'),
         centerTitle: false,
       ),
       body: ListView(
@@ -154,22 +154,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       border: Border.all(color: hintColor),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: ListTile(
-                      leading: getAddressIcon(address.addressType),
+                    child: RadioListTile(
+                      // leading: getAddressIcon(address.addressType),
+                      secondary: getAddressIcon(address.addressType),
                       title: Text('${address.addressType}'),
                       isThreeLine: true,
                       subtitle:
                           Text('${address.address1}\n${address.address2}'),
-                      trailing: Radio(
-                        value: address.id,
-                        groupValue: selectedAddress,
-                        onChanged: (value) {
-                          setState(() {
-                            selectedAddress = value.toString();
-                          });
-                        },
-                      ),
+                      value: address.id,
+                      groupValue: selectedAddress,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedAddress = value.toString();
+                        });
+                      },
                     ),
+                    // child: RadioListTile(
+                    //    value: address.id,
+                    //     groupValue: selectedAddress,
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         selectedAddress = value.toString();
+                    //       });
+                    //     },
+                    // ),
                   ),
                   SizedBox(
                     height: defaultPadding,
@@ -266,8 +274,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      // amount: "${widget.cartVriablesModel.netAmount}",
-      amount: '0.5',
+      amount: "${widget.cartVriablesModel.netAmount}",
+      // amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",

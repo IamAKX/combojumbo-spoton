@@ -1,13 +1,17 @@
 import 'package:badges/badges.dart';
+import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
+import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
+import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
+import 'package:cjspoton/screen/search_page/search_page_screen.dart';
 import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -66,17 +70,36 @@ class _MainContainerState extends State<MainContainer> {
         elevation: 80,
         margin: EdgeInsets.all(defaultPadding),
         backgroundColor: bgColor,
+        padding: EdgeInsets.zero,
+        fontSize: 10,
+        borderRadius: 0,
         selectedBackgroundColor: Colors.transparent,
         selectedItemColor: primaryColor,
         unselectedItemColor: textColor,
         onTap: (int val) => setState(() => _selectedIndex = val),
         currentIndex: _selectedIndex,
         items: [
-          FloatingNavbarItem(icon: Icons.home_outlined, title: 'Home'),
-          FloatingNavbarItem(icon: Icons.history, title: 'Orders'),
           FloatingNavbarItem(
-              icon: Icons.favorite_border_outlined, title: 'Favourite'),
-          FloatingNavbarItem(icon: Icons.person_outline, title: 'Profile'),
+            icon: Icons.home_outlined,
+            title: 'Home',
+          ),
+          FloatingNavbarItem(
+            icon: Icons.history,
+            title: 'Orders',
+          ),
+          FloatingNavbarItem(
+            customWidget: Image.asset(
+              'assets/images/cjspoton.png',
+            ),
+          ),
+          FloatingNavbarItem(
+            icon: Icons.favorite_border_outlined,
+            title: 'Favourite',
+          ),
+          FloatingNavbarItem(
+            icon: Icons.person_outline,
+            title: 'Profile',
+          ),
         ],
       ),
       body: getBody(),
@@ -90,8 +113,14 @@ class _MainContainerState extends State<MainContainer> {
       case 1:
         return OrderScreen();
       case 2:
-        return FavouriteScreen();
+        return CommingSoonScreen(
+            menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
+                refreshMainContainerState: refreshState, categoryId: "0"));
       case 3:
+        return FavouriteScreen(
+          refreshMainContainerState: refreshState,
+        );
+      case 4:
         return ProfileScreen();
     }
   }
@@ -122,7 +151,7 @@ class _MainContainerState extends State<MainContainer> {
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: Text(
-                        '${_pincodeModel.location}, ${_pincodeModel.pincode}',
+                        '${_pincodeModel.location}',
                         style: TextStyle(
                           decoration: TextDecoration.underline,
                           decorationStyle: TextDecorationStyle.dashed,
@@ -143,35 +172,43 @@ class _MainContainerState extends State<MainContainer> {
                   ),
                 ],
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5),
-                      child: Icon(
-                        Icons.search,
-                        color: primaryColor,
-                        size: 30,
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        keyboardType: TextInputType.text,
-                        autocorrect: true,
-                        controller: _searchCtrl,
-                        decoration: InputDecoration(
-                            hintText: 'Search for dishes',
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            contentPadding: EdgeInsets.zero),
-                      ),
-                    ),
-                  ],
+              InkWell(
+                onTap: () => Navigator.of(context).pushNamed(
+                  SearchPageScreen.SEARCH_SCREEN_ROUTE,
+                  arguments: MenuScreenNavigatorPayloadModel(
+                      refreshMainContainerState: refreshState, categoryId: "0"),
                 ),
-                decoration: BoxDecoration(
-                  border: Border.all(color: hintColor),
-                  borderRadius: BorderRadius.circular(10),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: Icon(
+                          Icons.search,
+                          color: primaryColor,
+                          size: 30,
+                        ),
+                      ),
+                      Expanded(
+                        child: TextField(
+                          keyboardType: TextInputType.text,
+                          autocorrect: true,
+                          controller: _searchCtrl,
+                          enabled: false,
+                          decoration: InputDecoration(
+                              hintText: 'Search for dishes',
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              contentPadding: EdgeInsets.zero),
+                        ),
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: hintColor),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
               )
             ],
@@ -191,6 +228,8 @@ class _MainContainerState extends State<MainContainer> {
           ],
         );
       case 2:
+        return null;
+      case 3:
         return AppBar(
           title: Text('Favourite'),
           backgroundColor: bgColor,
@@ -201,7 +240,7 @@ class _MainContainerState extends State<MainContainer> {
             ),
           ],
         );
-      case 3:
+      case 4:
         return AppBar(
           title: Text('Profile'),
           backgroundColor: bgColor,

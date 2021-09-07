@@ -17,6 +17,7 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -77,7 +78,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     '${user.name}',
                     style: Theme.of(context).textTheme.headline6,
                   ),
-                  Text('${user.email} ${user.phone}'),
+                  Text('${user.email}\n${user.phone}'),
                 ],
               )
             ],
@@ -113,7 +114,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ListTile(
           onTap: () {
             Navigator.of(context)
-                .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE);
+                .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+                .then((value) {
+              setState(() {
+                user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+              });
+            });
           },
           tileColor: bgColor,
           title: Text(
@@ -192,7 +198,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           tileColor: bgColor,
           title: Text(
-            'Support',
+            'Report a problem',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),
@@ -204,6 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 1,
         ),
         ListTile(
+          onTap: () {
+            launch('https://www.combojumbo.in/support');
+          },
           leading: CircleAvatar(
             backgroundColor: Colors.pink,
             child: Icon(
@@ -236,7 +245,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           tileColor: bgColor,
           title: Text(
-            'Term of Use',
+            'Terms of Service',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),

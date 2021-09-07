@@ -1,9 +1,79 @@
 // This class contains dummy data.
 // To be deleted before pushing the app to prod
 
+import 'package:cjspoton/model/add_slider_model.dart';
 import 'package:cjspoton/model/cj_route_option_model.dart';
+import 'package:cjspoton/model/review_model.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
+import 'package:flutter/material.dart';
+
+List<AddSliderCardModel> getAdSlider() {
+  return [
+    AddSliderCardModel(
+        text1: 'the best',
+        text2: 'offers',
+        text3: 'of the best restaurant',
+        imageLink: 'assets/images/coke.png',
+        redirection: '',
+        color: Colors.lightBlueAccent),
+    AddSliderCardModel(
+        text1: 'the best',
+        text2: 'offers',
+        text3: 'of the best restaurant',
+        imageLink: 'assets/images/pizzapockets.png',
+        redirection: '',
+        color: Colors.lightGreen),
+    AddSliderCardModel(
+        text1: 'the best',
+        text2: 'offers',
+        text3: 'of the best restaurant',
+        imageLink: 'assets/images/jumboqty.png',
+        redirection: '',
+        color: Colors.orangeAccent),
+    AddSliderCardModel(
+        text1: 'the best',
+        text2: 'offers',
+        text3: 'of the best restaurant',
+        imageLink: 'assets/images/jain.png',
+        redirection: '',
+        color: Colors.redAccent),
+    AddSliderCardModel(
+        text1: 'the best',
+        text2: 'offers',
+        text3: 'of the best restaurant',
+        imageLink: 'assets/images/hotcase.png',
+        redirection: '',
+        color: Colors.indigoAccent),
+    AddSliderCardModel(
+        text1: 'the best',
+        text2: 'offers',
+        text3: 'of the best restaurant',
+        imageLink: 'assets/images/exclusivecombos.png',
+        redirection: '',
+        color: Colors.tealAccent),
+  ];
+}
+
+List<ReviewModel> getReview() {
+  return [
+    ReviewModel(
+        review:
+            '''Amazing North Indian food served with Crisp Indian Breads They have a wide variety of Continental Food also. Will suggest my friends and is pocket friendly also''',
+        name: 'Dipak Kumar'),
+    ReviewModel(
+        review:
+            '''The service is good. The ambience is unmatched . The staff cares about your experience especially mr. sameer The food is amazing - everything we tasted melted in our mouth. Great experience especially in navi mumbai.....''',
+        name: 'Mohinderpal Singh'),
+    ReviewModel(
+        review:
+            '''Very Nice Food, Unique Ambience, excellent staff. The price points are less as compared to other establishments in the area. The staff was very accommodative and attentive to ensure good experience. A lot of different cuisines are available with good quality food. Oriental sizzlers, Manchow soup and Lazeez Dum Birayni were sumptuous. The place is also available as a Banquet too.''',
+        name: 'Yashraj Thakkar'),
+    ReviewModel(review: '''Amazing place and it has a wide option in their menu
+Loved the service and food
+Will definetely visit again''', name: 'Paresh Doshi'),
+  ];
+}
 
 List<CJRouteOptionModel> getCJRouteOptions() {
   return [

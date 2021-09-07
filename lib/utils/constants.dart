@@ -9,6 +9,8 @@ class Constants {
   static const String PAYU_MONEY_MERCHANT_ID = '6713332';
   static const String PAYU_MONEY_SALT = '1cEIP21zvx';
 
+  static const String OWNER_CONTACT_NUMBER = '8850458452';
+
   static PincodeModel getDefaultPincode() {
     if (prefs.getString(PrefernceKey.SELECTED_PINCODE) != null)
       return PincodeModel.fromJson(
@@ -42,6 +44,13 @@ extension StringExtension on String {
       return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
     else
       return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
+
+  String toWordCase() {
+    if (this.length == 0)
+      return this;
+    else
+      return "${this.split(" ").map((str) => str.toCamelCase()).join(" ")}";
   }
 
   double toDouble() {

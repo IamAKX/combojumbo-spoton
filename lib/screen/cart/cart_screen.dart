@@ -182,7 +182,7 @@ class _CartScreenState extends State<CartScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${CartHelper.getCartCount()} ITEMS',
+                        '${CartHelper.getCartCount()} ITEM${CartHelper.getCartCount() > 1 ? 'S' : ''}',
                         style: Theme.of(context).textTheme.caption?.copyWith(
                               color: bgColor.withOpacity(0.7),
                             ),
@@ -304,7 +304,7 @@ class _CartScreenState extends State<CartScreen> {
                             Container(
                               width: MediaQuery.of(context).size.width * 0.45,
                               child: Text(
-                                '${groupedItem.cartItem.foodname.toCamelCase()}',
+                                '${groupedItem.cartItem.foodname.toWordCase()}',
                                 style: Theme.of(context).textTheme.subtitle1,
                                 overflow: TextOverflow.ellipsis,
                               ),

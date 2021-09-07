@@ -8,14 +8,16 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 
 class FavouriteScreen extends StatefulWidget {
-  const FavouriteScreen({Key? key}) : super(key: key);
-
+  const FavouriteScreen({Key? key, required this.refreshMainContainerState})
+      : super(key: key);
+  final Function() refreshMainContainerState;
   @override
   _FavouriteScreenState createState() => _FavouriteScreenState();
 }
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
   late Size screenSize;
+
   late List<FoodModel> favList;
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,8 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SvgPicture.asset(
-                  'assets/svg/empty_favourite.svg',
+                Image.asset(
+                  'assets/images/empty_favourite.png',
                   width: 300,
                 ),
                 SizedBox(

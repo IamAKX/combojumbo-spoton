@@ -23,7 +23,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       appBar: AppBar(
         backgroundColor: bgColor,
         centerTitle: false,
-        title: Text('Feedback'),
+        title: Text('Report a Problem'),
       ),
       body: SafeArea(
           child: ListView(

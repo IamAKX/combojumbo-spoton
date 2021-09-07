@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cjspoton/model/add_slider_model.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
@@ -9,6 +10,7 @@ import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
@@ -189,87 +191,93 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: double.infinity,
                 child: CarouselSlider(
                   items: [
-                    Container(
-                      height: 250,
-                      width: 200,
-                      padding: EdgeInsets.only(
-                        left: defaultPadding,
-                        top: defaultPadding,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        gradient: LinearGradient(
-                          end: Alignment.topLeft,
-                          begin: Alignment.bottomRight,
-                          colors: <Color>[
-                            Color(0xff5748CF),
-                            Color(0xff696ECF),
-                            Color(0xff8399DA)
+                    for (AddSliderCardModel model in getAdSlider()) ...{
+                      Container(
+                        height: 250,
+                        width: 200,
+                        padding: EdgeInsets.only(
+                          left: defaultPadding,
+                          top: defaultPadding,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          gradient: LinearGradient(
+                            end: Alignment.topLeft,
+                            begin: Alignment.bottomRight,
+                            colors: <Color>[
+                              model.color,
+                              model.color.withOpacity(0.5),
+                              model.color.withOpacity(0.3),
+                            ],
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${model.text1}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                      fontSize: 35,
+                                      height: 0.8),
+                            ),
+                            Text(
+                              '${model.text2}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    height: 0.9,
+                                  ),
+                            ),
+                            Text(
+                              '${model.text3}',
+                              style:
+                                  Theme.of(context).textTheme.caption?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                            ),
+                            Spacer(),
+                            Container(
+                              height: 160,
+                              child: Stack(
+                                children: [
+                                  Positioned(
+                                    bottom: -20,
+                                    right: -30,
+                                    child: Image.asset(
+                                      model.imageLink,
+                                      height: 160,
+                                      width: 160,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 10,
+                                    left: 0,
+                                    child: CircleAvatar(
+                                      backgroundColor: bgColor,
+                                      radius: 20,
+                                      child: Icon(
+                                        Icons.keyboard_arrow_right,
+                                        size: 30,
+                                        color: textColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'the best',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1
-                                ?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 35,
-                                    height: 0.8),
-                          ),
-                          Text(
-                            'offers',
-                            style:
-                                Theme.of(context).textTheme.bodyText1?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      height: 0.9,
-                                    ),
-                          ),
-                          Text(
-                            'at the best restaurant',
-                            style:
-                                Theme.of(context).textTheme.caption?.copyWith(
-                                      color: Colors.white,
-                                    ),
-                          ),
-                          Spacer(),
-                          Container(
-                            height: 130,
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  bottom: -10,
-                                  right: -10,
-                                  child: SvgPicture.asset(
-                                    'assets/svg/landing2.svg',
-                                    height: 130,
-                                  ),
-                                ),
-                                Positioned(
-                                  top: 10,
-                                  left: 0,
-                                  child: CircleAvatar(
-                                    backgroundColor: bgColor,
-                                    radius: 20,
-                                    child: Icon(
-                                      Icons.keyboard_arrow_right,
-                                      size: 30,
-                                      color: textColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    )
+                    }
                   ],
                   options: CarouselOptions(
                     height: 250,
@@ -316,15 +324,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 200,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-                  child: CachedNetworkImage(
+                  // child: CachedNetworkImage(
+                  //   fit: BoxFit.cover,
+                  //   imageUrl:
+                  //       'https://askbootstrap.com/preview/swiggi/template2/img/banner.png',
+                  //   progressIndicatorBuilder:
+                  //       (context, url, downloadProgress) => Center(
+                  //           child: CircularProgressIndicator(
+                  //               value: downloadProgress.progress)),
+                  //   errorWidget: (context, url, error) => Icon(Icons.error),
+                  // ),
+                  child: Image.asset(
+                    'assets/images/banner.jpg',
                     fit: BoxFit.cover,
-                    imageUrl:
-                        'https://askbootstrap.com/preview/swiggi/template2/img/banner.png',
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                            child: CircularProgressIndicator(
-                                value: downloadProgress.progress)),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
                   ),
                 ),
               ),
@@ -334,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 routePath: MenuScreen.MENU_SCREEN_ROUTE,
                 menuScreenNavigatorPayloadModel:
                     MenuScreenNavigatorPayloadModel(
-                  categoryId: "0",
+                  categoryId: "38",
                   refreshMainContainerState: widget.refreshMainContainerState,
                 ),
                 refreshState: refreshState,
@@ -387,7 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 5,
                                       ),
                                       Text(
-                                        '8.02 off',
+                                        '8.02% off',
                                         style: Theme.of(context)
                                             .textTheme
                                             .headline6
@@ -411,7 +423,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${list.elementAt(2).foodList.elementAt(i).foodname}',
+                                  '${list.elementAt(2).foodList.elementAt(i).foodname.toWordCase()}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6
@@ -422,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                 ),
                                 Text(
-                                  '${list.elementAt(2).foodList.elementAt(i).fooddescription}',
+                                  '${list.elementAt(2).foodList.elementAt(i).fooddescription.toCamelCase()}',
                                   style: Theme.of(context).textTheme.caption,
                                   maxLines: 5,
                                   overflow: TextOverflow.ellipsis,

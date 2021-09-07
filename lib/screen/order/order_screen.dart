@@ -123,6 +123,8 @@ class _OrderScreenState extends State<OrderScreen> {
                             Text(
                               '${order.address}',
                               style: Theme.of(context).textTheme.subtitle2,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             Row(
                               children: [
@@ -150,7 +152,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               height: 10,
                             ),
                             Text(
-                              '${order.menuDetails.map((e) => e.food.productname.toCamelCase()).toList().join(',')}',
+                              '${order.menuDetails.map((e) => e.food.productname.toWordCase()).toList().join(',')}',
                               style: Theme.of(context).textTheme.subtitle2,
                             ),
                             Text(
