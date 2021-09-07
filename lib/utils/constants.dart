@@ -21,11 +21,11 @@ class Constants {
     if (outletModel.outletId == 'ECJ2')
       return PincodeModel(
           id: '1',
-          pincode: '400611',
+          pincode: '400705',
           charge: '0',
           status: '1',
           outletid: 'ECJ2',
-          location: 'tt');
+          location: 'Sanpada');
     else
       return PincodeModel(
           id: '4',
@@ -33,7 +33,7 @@ class Constants {
           charge: '0',
           status: '1',
           outletid: 'ECJ29',
-          location: 'b');
+          location: 'Nerul\/Seawoods');
   }
 }
 
