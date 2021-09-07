@@ -77,39 +77,55 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CarouselSlider(
                   items: getCJRouteOptions()
                       .map(
-                        (cjRouteModel) => Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(50.0)),
-                                border: Border.all(
-                                  color: primaryColor,
-                                  width: 1.0,
-                                ),
+                        (cjRouteModel) => InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushNamed(
+                              cjRouteModel.redirectionUrl,
+                              arguments: MenuScreenNavigatorPayloadModel(
+                                categoryId: "0",
+                                refreshMainContainerState:
+                                    widget.refreshMainContainerState,
                               ),
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: primaryColor.withOpacity(0.1),
-                                child: CachedNetworkImage(
-                                  imageUrl: cjRouteModel.image,
-                                  width: 30,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Center(
-                                    child: CircularProgressIndicator(
-                                        value: downloadProgress.progress),
+                            );
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(50.0)),
+                                  border: Border.all(
+                                    color: primaryColor,
+                                    width: 1.0,
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                ),
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor:
+                                      primaryColor.withOpacity(0.1),
+                                  child: CachedNetworkImage(
+                                    imageUrl: cjRouteModel.image,
+                                    width: 30,
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            Center(
+                                      child: CircularProgressIndicator(
+                                          value: downloadProgress.progress),
+                                    ),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
                                 ),
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Text(cjRouteModel.name),
-                          ],
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                cjRouteModel.name,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
                         ),
                       )
                       .toList(),
@@ -133,9 +149,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: hintColor,
               ),
               SubHeading(
+                title: 'Category',
                 context: context,
                 routePath: MenuScreen.MENU_SCREEN_ROUTE,
-                title: 'Category',
                 menuScreenNavigatorPayloadModel:
                     MenuScreenNavigatorPayloadModel(
                   categoryId: "0",
@@ -277,7 +293,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 1,
                 color: hintColor,
               ),
-              SubHeading(title: 'Recommended', routePath: '', context: context),
+              SubHeading(
+                title: 'Recommended',
+                context: context,
+                routePath: MenuScreen.MENU_SCREEN_ROUTE,
+                menuScreenNavigatorPayloadModel:
+                    MenuScreenNavigatorPayloadModel(
+                  categoryId: "0",
+                  refreshMainContainerState: widget.refreshMainContainerState,
+                ),
+                refreshState: refreshState,
+              ),
               RecomendedItems(
                   screenSize: screenSize,
                   list: list,
@@ -302,7 +328,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              SubHeading(title: 'Combos', routePath: '', context: context),
+              SubHeading(
+                title: 'Combos',
+                context: context,
+                routePath: MenuScreen.MENU_SCREEN_ROUTE,
+                menuScreenNavigatorPayloadModel:
+                    MenuScreenNavigatorPayloadModel(
+                  categoryId: "0",
+                  refreshMainContainerState: widget.refreshMainContainerState,
+                ),
+                refreshState: refreshState,
+              ),
               for (int i = 0; i < 4; i++) ...{
                 Container(
                   width: double.infinity,

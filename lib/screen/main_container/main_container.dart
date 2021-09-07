@@ -119,13 +119,16 @@ class _MainContainerState extends State<MainContainer> {
                         setState(() {});
                       });
                     },
-                    child: Text(
-                      '${_pincodeModel.location}, ${_pincodeModel.pincode}',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        decorationStyle: TextDecorationStyle.dashed,
-                        decorationColor: hintColor,
-                        decorationThickness: 1,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      child: Text(
+                        '${_pincodeModel.location}, ${_pincodeModel.pincode}',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.dashed,
+                          decorationColor: hintColor,
+                          decorationThickness: 1,
+                        ),
                       ),
                     ),
                   ),

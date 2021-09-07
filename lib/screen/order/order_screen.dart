@@ -169,7 +169,7 @@ class _OrderScreenState extends State<OrderScreen> {
   String formatOrderTime(String? date_creation) {
     String formatedTimestamp = '';
     DateTime dateTime = DateTime.parse(date_creation!);
-    formatedTimestamp = DateFormat('MMMM dd, HH:mm a').format(dateTime);
+    formatedTimestamp = DateFormat('MMMM dd, hh:mm a').format(dateTime);
     return formatedTimestamp;
   }
 }

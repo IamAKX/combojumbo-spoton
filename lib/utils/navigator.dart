@@ -4,6 +4,7 @@ import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
+import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
@@ -71,6 +72,12 @@ class NavRoute {
       case MenuScreen.MENU_SCREEN_ROUTE:
         return MaterialPageRoute(
             builder: (_) => MenuScreen(
+                  menuScreenNavigatorPayloadModel:
+                      settings.arguments as MenuScreenNavigatorPayloadModel,
+                ));
+      case CommingSoonScreen.COMMING_SOON_ROUTE:
+        return MaterialPageRoute(
+            builder: (_) => CommingSoonScreen(
                   menuScreenNavigatorPayloadModel:
                       settings.arguments as MenuScreenNavigatorPayloadModel,
                 ));

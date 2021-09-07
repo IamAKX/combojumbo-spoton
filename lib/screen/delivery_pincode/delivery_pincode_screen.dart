@@ -65,9 +65,16 @@ class _DeliverPincodeScreenState extends State<DeliverPincodeScreen> {
                         prefs.setString(PrefernceKey.SELECTED_PINCODE,
                             selectedPincode.toJson());
                       });
+                      closeScreen(context);
                     },
                   );
                 },
               ));
+  }
+
+  void closeScreen(BuildContext context) {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Navigator.of(context).pop();
+    });
   }
 }

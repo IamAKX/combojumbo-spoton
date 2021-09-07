@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/city_model.dart';
+import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/state_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
@@ -198,6 +200,57 @@ class AddressService extends ChangeNotifier {
               addressType: a['Nickname'],
             );
             list.add(addressModel);
+          }
+          status = AddressStatus.Success;
+          notifyListeners();
+        } else {
+          status = AddressStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((resBody['msg']));
+        }
+      } else {
+        status = AddressStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AddressStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+    return list;
+  }
+
+  Future<List<PincodeModel>> fetchAllPincodes(BuildContext context) async {
+    status = AddressStatus.Loading;
+    notifyListeners();
+    List<PincodeModel> list = [];
+    try {
+      OutletModel outletModel =
+          OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+
+      Response response = await _dio.post(
+        API.PincodeCharge,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['data'];
+
+        if (resBody['status'] == 1) {
+          for (var pincode in body) {
+            PincodeModel model = PincodeModel(
+                id: pincode['id'],
+                pincode: pincode['pincode'],
+                charge: pincode['charge'],
+                status: pincode['status'],
+                outletid: pincode['outletid'],
+                location: pincode['location']);
+
+            list.add(model);
           }
           status = AddressStatus.Success;
           notifyListeners();

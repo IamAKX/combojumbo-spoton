@@ -25,15 +25,17 @@ class AddDeliveryAddress extends StatefulWidget {
 }
 
 class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
-  TextEditingController deliveryCtrl = TextEditingController();
+  // TextEditingController deliveryCtrl = TextEditingController();
   TextEditingController completeAddressCtrl1 = TextEditingController();
   TextEditingController completeAddressCtrl2 = TextEditingController();
   TextEditingController landmarkCtrl = TextEditingController();
   TextEditingController deliveryInstructionCtrl = TextEditingController();
   List<StateModel> stateList = [];
   List<CityModel> cityList = [];
+  List<PincodeModel> pincodeList = [];
   StateModel? selectedState = null;
   CityModel? selectedCity = null;
+  PincodeModel? selectedPincode = null;
   String addressType = 'HOME';
   late Size screenSize;
   late PincodeModel pincodeModel;
@@ -43,15 +45,18 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback(
-      (_) => _addressService.getStateList(context).then(
-        (value) {
-          setState(() {
-            stateList = value;
-          });
-        },
-      ),
-    );
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      _addressService.fetchAllPincodes(context).then((value) {
+        pincodeList = value;
+        _addressService.getStateList(context).then(
+          (value) {
+            setState(() {
+              stateList = value;
+            });
+          },
+        );
+      });
+    });
   }
 
   @override
@@ -59,7 +64,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
     _addressService = Provider.of<AddressService>(context);
     SnackBarService.instance.buildContext = context;
     pincodeModel = Constants.getDefaultPincode();
-    deliveryCtrl.text = pincodeModel.pincode;
+    // deliveryCtrl.text = pincodeModel.pincode;
     screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -77,24 +82,24 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                 child: ListView(
                   padding: EdgeInsets.only(bottom: defaultPadding),
                   children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(
-                                DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
-                            .then((value) {
-                          setState(() {});
-                        });
-                      },
-                      child: CustomTextFieldWithHeadingActionButton(
-                        teCtrl: deliveryCtrl,
-                        hint: 'Delivery Area',
-                        enabled: false,
-                        inputType: TextInputType.streetAddress,
-                        icondata: Icons.location_pin,
-                        onTap: () {},
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.of(context)
+                    //         .pushNamed(
+                    //             DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
+                    //         .then((value) {
+                    //       setState(() {});
+                    //     });
+                    //   },
+                    //   child: CustomTextFieldWithHeadingActionButton(
+                    //     teCtrl: deliveryCtrl,
+                    //     hint: 'Delivery Area',
+                    //     enabled: false,
+                    //     inputType: TextInputType.streetAddress,
+                    //     icondata: Icons.location_pin,
+                    //     onTap: () {},
+                    //   ),
+                    // ),
                     CustomTextFieldWithHeading(
                       teCtrl: completeAddressCtrl1,
                       hint: 'Address 1',
@@ -121,7 +126,34 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       height: 8,
                     ),
                     DropdownSearch<StateModel>(
-                      mode: Mode.MENU,
+                      mode: Mode.DIALOG,
+                      searchBoxDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                      popupTitle: Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: Text(
+                          'Select state',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      showSearchBox: true,
                       showSelectedItem: true,
                       items: stateList,
                       compareFn: (item, selectedItem) =>
@@ -177,7 +209,34 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       height: 8,
                     ),
                     DropdownSearch<CityModel>(
-                      mode: Mode.MENU,
+                      mode: Mode.DIALOG,
+                      searchBoxDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                      popupTitle: Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: Text(
+                          'Select city',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      showSearchBox: true,
                       showSelectedItem: true,
                       items: cityList,
                       itemAsString: (item) => item.name,
@@ -218,6 +277,87 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                     SizedBox(
                       height: defaultPadding,
                     ),
+
+                    Text(
+                      'Pincode',
+                      style: Theme.of(context)
+                          .textTheme
+                          .subtitle2
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    DropdownSearch<PincodeModel>(
+                      mode: Mode.DIALOG,
+                      searchBoxDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                      popupTitle: Padding(
+                        padding: const EdgeInsets.all(defaultPadding),
+                        child: Text(
+                          'Select pincode',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      showSearchBox: true,
+                      showSelectedItem: true,
+                      items: pincodeList,
+                      itemAsString: (item) => item.pincode,
+                      dropdownSearchDecoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: defaultPadding),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(4),
+                          borderSide:
+                              BorderSide(color: hintColor.withOpacity(0.5)),
+                        ),
+                      ),
+                      label: "Select pincode",
+                      hint: "Select pincode",
+                      compareFn: (item, selectedItem) =>
+                          item.pincode == selectedItem?.pincode,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedPincode = value;
+                          if (selectedCity == null) {
+                            SnackBarService.instance
+                                .showSnackBarInfo('Select your pincode');
+                            return;
+                          }
+                        });
+                      },
+                    ),
+                    SizedBox(
+                      height: defaultPadding,
+                    ),
+
                     CustomTextFieldWithHeading(
                       teCtrl: deliveryInstructionCtrl,
                       hint: 'Delivery Instruction',
@@ -296,7 +436,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                   Expanded(
                     child: TextButton(
                       onPressed: () {
-                        if (deliveryCtrl.text.isEmpty ||
+                        if (selectedPincode == null ||
                             completeAddressCtrl1.text.isEmpty ||
                             landmarkCtrl.text.isEmpty ||
                             selectedCity == null ||
@@ -306,7 +446,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                           return;
                         } else {
                           AddressModel addressModel = AddressModel(
-                              pincode: deliveryCtrl.text,
+                              pincode: selectedPincode!.pincode,
                               address1: completeAddressCtrl1.text,
                               address2: completeAddressCtrl2.text,
                               landmark: landmarkCtrl.text,

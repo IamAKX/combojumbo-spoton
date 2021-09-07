@@ -2,33 +2,35 @@
 // To be deleted before pushing the app to prod
 
 import 'package:cjspoton/model/cj_route_option_model.dart';
+import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
+import 'package:cjspoton/screen/menu/menu_screen.dart';
 
 List<CJRouteOptionModel> getCJRouteOptions() {
   return [
     CJRouteOptionModel(
         name: 'Table Booking',
         image: 'https://www.combojumbo.in/img/mini-banquet.png',
-        redirectionUrl: ''),
+        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
     CJRouteOptionModel(
         name: 'E-Dining',
         image: 'https://www.combojumbo.in/img/tbl-booking.png',
-        redirectionUrl: ''),
+        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
     CJRouteOptionModel(
         name: 'Home Delivery',
         image: 'https://www.combojumbo.in/img/delivery.png',
-        redirectionUrl: ''),
+        redirectionUrl: MenuScreen.MENU_SCREEN_ROUTE),
     CJRouteOptionModel(
         name: 'Take Away',
         image: 'https://www.combojumbo.in/img/Take%20away.png',
-        redirectionUrl: ''),
+        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
     CJRouteOptionModel(
         name: 'Mini Banquet',
         image: 'https://www.combojumbo.in/img/e-dining.png',
-        redirectionUrl: ''),
+        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
     CJRouteOptionModel(
         name: 'Party Packs',
         image: 'https://www.combojumbo.in/img/party-packs.png',
-        redirectionUrl: ''),
+        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
   ];
 }
 
