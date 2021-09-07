@@ -145,8 +145,8 @@ class CartHelper {
     return amt;
   }
 
-  static List<String> getGroupedCartJson() {
-    List<String> list = [];
+  static List<Map<String, dynamic>> getGroupedCartJson() {
+    List<Map<String, dynamic>> list = [];
     for (GroupedCartItemModel m in getGroupedCartItem()) {
       GroupedCartModel model = GroupedCartModel(
           id: m.cartItem.id,
@@ -159,7 +159,7 @@ class CartHelper {
           foodImage: m.cartItem.foodImage,
           addOns: [],
           qty: m.quantity);
-      list.add(model.toJson());
+      list.add(model.toMap());
     }
     return list;
   }

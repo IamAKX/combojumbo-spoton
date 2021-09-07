@@ -6,6 +6,7 @@ import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/services/address_service.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -34,10 +35,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
   String selectedAddress = '';
   late CartServices _cartServices;
+  late AddressService _addressService;
+  List<AddressModel> addressList = [];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) => reloadAddressList(context));
+  }
+
+  reloadAddressList(BuildContext context) {
+    _addressService.getAllAddress(context).then(
+      (value) {
+        setState(() {
+          addressList = value;
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     _cartServices = Provider.of<CartServices>(context);
+    _addressService = Provider.of<AddressService>(context);
     SnackBarService.instance.buildContext = context;
 
     return Scaffold(
@@ -126,7 +148,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 SizedBox(
                   height: defaultPadding,
                 ),
-                for (AddressModel address in Utilities.loadAllAddress()) ...{
+                for (AddressModel address in addressList) ...{
                   Container(
                     decoration: BoxDecoration(
                       border: Border.all(color: hintColor),
@@ -157,7 +179,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   onTap: () => Navigator.of(context)
                       .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE)
                       .then((value) {
-                    setState(() {});
+                    reloadAddressList(context);
                   }),
                   child: Container(
                     alignment: Alignment.center,
@@ -197,8 +219,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       showCloseIcon: false,
       btnOkOnPress: () {
         SnackBarService.instance.showSnackBarInfo('Please wait...');
-        AddressModel address = Utilities.loadAllAddress()
-            .firstWhere((element) => element.id == selectedAddress);
+        AddressModel address =
+            addressList.firstWhere((element) => element.id == selectedAddress);
         _cartServices
             .placeOrder(cartVriablesModel, address, response, paymentParam,
                 payUMoneyTxnId, 'success', context)
@@ -228,7 +250,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         showCloseIcon: false,
         btnOkOnPress: () {
           SnackBarService.instance.showSnackBarInfo('Please wait...');
-          AddressModel address = Utilities.loadAllAddress()
+          AddressModel address = addressList
               .firstWhere((element) => element.id == selectedAddress);
           _cartServices
               .placeOrder(cartVriablesModel, address, response, paymentParam,
@@ -320,6 +342,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         return Icon(Icons.work_outline);
       case 'OTHER':
         return Icon(Icons.my_location_sharp);
+      default:
+        return Icon(Icons.pin_drop_outlined);
     }
   }
 }

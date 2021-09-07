@@ -30,4 +30,6 @@ class API {
 
   static const String State = '${BASE_URL}state';
   static const String City = '${BASE_URL}city';
+  static const String AddAddress = '${BASE_URL}add-address';
+  static const String GetAddress = '${BASE_URL}myaddress.php';
 }

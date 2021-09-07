@@ -210,6 +210,7 @@ class CartServices extends ChangeNotifier {
         var body = resBody['body'];
 
         if (resBody['status'] == 1) {
+          body = body[0];
           couponDiscountDetailModel = CouponDiscountDetailModel(
             coupon_code: body['coupon_code'],
             coupon_type: body['coupon_type'],
@@ -259,11 +260,11 @@ class CartServices extends ChangeNotifier {
         OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     UserModel userModel =
         UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
-    var reqBody = FormData.fromMap({
-      'cust_id': '${userModel.id}',
+    var payload = {
+      'cust_id': "${userModel.id.toString()}",
       'outletid': '${outletModel.outletId}',
       'response': '$paymentState',
-      'responseDetials': json.encode(payUMoneyResponse),
+      'responseDetials': payUMoneyResponse,
       'oid': '${userModel.id}${DateTime.now().millisecond}',
       'subtotal': '${CartHelper.getTotalPriceOfCart()}',
       'couponcode':
@@ -290,36 +291,13 @@ class CartServices extends ChangeNotifier {
       'delivery_suggestion': '${cartVriablesModel.deliverySuggestion}',
       'delivery_instruction': '${addressModel.deliveryInstruction}',
       'cart': CartHelper.getGroupedCartJson()
-    });
+    };
+    var reqBody = FormData.fromMap(payload);
 
-    // log('''{
-    //   'cust_id': '${userModel.id}',
-    //   'outletid': '${outletModel.outletId}',
-    //   'response': '$paymentState',
-    //   'responseDetials': '${json.encode(payUMoneyResponse)}',
-    //   'oid': '${userModel.id}${DateTime.now().millisecond}',
-    //   'subtotal': '${CartHelper.getTotalPriceOfCart()}',
-    //   'couponcode':
-    //       '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
-    //   'actualdiscountvalue':
-    //       '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
-    //   'discountvalue':
-    //       '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
-    //   'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
-    //   'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
-    //   'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
-    //   'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
-    //   'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
-    //   'totalpaidamount': '${cartVriablesModel.netAmount}',
-    //   'pay': 'payumoney',
-    //   'transcation_id': '$payUMoneyTxnId',
-    //   'ordertype': 'Delivery',
-    //   'cart': ${CartHelper.getGroupedCartJson()}}
-    // }''');
-    log(reqBody.fields.toString());
+    log(json.encode(payload));
 
-    Response response = await _dio.post(API.PlaceOrder, data: reqBody);
-
+    Response response = await _dio.post(API.PlaceOrder, data: payload);
+    log('response : ' + response.data.toString());
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
       print('Response : ${response.data}');

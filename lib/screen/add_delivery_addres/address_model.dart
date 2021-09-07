@@ -12,7 +12,7 @@ class AddressModel {
   CityModel city;
   StateModel stateModel;
   String deliveryInstruction;
-  String addressType;
+  String addressType; 
   AddressModel({
     required this.id,
     required this.pincode,

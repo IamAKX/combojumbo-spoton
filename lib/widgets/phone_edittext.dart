@@ -18,7 +18,7 @@ class PhoneTextField extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            height: 66,
+            height: 65,
             width: 60,
             alignment: Alignment.center,
             child: Text(

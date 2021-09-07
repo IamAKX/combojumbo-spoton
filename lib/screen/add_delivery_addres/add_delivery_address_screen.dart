@@ -298,7 +298,6 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       onPressed: () {
                         if (deliveryCtrl.text.isEmpty ||
                             completeAddressCtrl1.text.isEmpty ||
-                            completeAddressCtrl2.text.isEmpty ||
                             landmarkCtrl.text.isEmpty ||
                             selectedCity == null ||
                             selectedState == null) {
@@ -316,10 +315,12 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                               id: DateTime.now().millisecond.toString(),
                               deliveryInstruction: deliveryInstructionCtrl.text,
                               addressType: addressType);
-                          Utilities.addAddress(addressModel);
-                          SnackBarService.instance
-                              .showSnackBarSuccess('Address saved');
-                          Navigator.of(context).pop();
+
+                          _addressService.addAddress(addressModel, context);
+                          // Utilities.addAddress(addressModel);
+                          // SnackBarService.instance
+                          //     .showSnackBarSuccess('Address saved');
+                          // Navigator.of(context).pop();
                         }
                       },
                       child: Text(

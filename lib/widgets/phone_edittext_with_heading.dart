@@ -33,7 +33,7 @@ class PhoneTextFieldWithHeading extends StatelessWidget {
           Row(
             children: [
               Container(
-                height: 50,
+                height: 49,
                 width: 60,
                 alignment: Alignment.center,
                 child: Text(
