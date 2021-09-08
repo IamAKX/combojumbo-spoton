@@ -245,7 +245,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Spacer(),
                             Container(
-                              height: 160,
+                              height: 120,
                               child: Stack(
                                 children: [
                                   Positioned(
@@ -253,9 +253,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     right: -30,
                                     child: Image.asset(
                                       model.imageLink,
-                                      height: 160,
+                                      height: 120,
                                       width: 160,
-                                      fit: BoxFit.fill,
+                                      fit: BoxFit.fitHeight,
                                     ),
                                   ),
                                   Positioned(
