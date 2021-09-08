@@ -55,7 +55,7 @@ dependencies:
   shared_preferences: ^2.0.6
   toggle_switch: ^1.2.0
   top_snackbar_flutter: ^1.0.0
-  url_launcher: ^6.0.10
+  url_launcher: ^6.0.0
   video_player: ^2.1.14
   whatsapp_unilink: ^2.0.0
 
@@ -66,14 +66,14 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  image: assets/images/logo.png
+  image: assets/images/cjspoton.png
   color: "#ffffff"
   web_image_mode: center
 
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/logo512.png"
+  image_path: "assets/images/cjspoton.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter.
