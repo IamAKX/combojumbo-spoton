@@ -52,8 +52,8 @@ class _OrderScreenState extends State<OrderScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SvgPicture.asset(
-                      'assets/svg/order_history.svg',
+                    Image.asset(
+                      'assets/images/order_history.png',
                       width: 300,
                     ),
                     SizedBox(

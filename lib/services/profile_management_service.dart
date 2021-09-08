@@ -28,7 +28,7 @@ class ProfileManagementService extends ChangeNotifier {
   }
 
   Future<void> fetchProfile(BuildContext context) async {
-    status = ProfileStatus.Ideal;
+    status = ProfileStatus.Loading;
     notifyListeners();
 
     try {
