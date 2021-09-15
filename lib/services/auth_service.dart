@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
@@ -85,6 +86,7 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: googleSignInAccount.photoUrl!);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
+
           status = AuthStatus.Authenticated;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
@@ -315,11 +317,16 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: body['image']);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
+          OutletModel outletModel =
+              OutletModel(outletId: 'ECJ29', outletName: 'Vashi');
+          prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
+          prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
           status = AuthStatus.Authenticated;
           notifyListeners();
-          SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          // SnackBarService.instance.showSnackBarSuccess(body['msg']);
           Navigator.of(context).pushNamedAndRemoveUntil(
-              ChooseOutletScreen.CHOOSE_OUTLET_ROUTE, (route) => false);
+              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+              arguments: 0);
         } else {
           status = AuthStatus.Error;
           notifyListeners();
@@ -379,10 +386,12 @@ class AuthenticationService extends ChangeNotifier {
           else if (currentScreen == 'ForgotPasswordScreen')
             Navigator.of(context)
                 .pushNamed(ResetPasswordScreen.RESET_PASSWORD_ROUTE);
-          else
+          else {
+            prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
             Navigator.of(context).pushNamedAndRemoveUntil(
                 MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
                 arguments: 0);
+          }
         } else {
           status = AuthStatus.Error;
           notifyListeners();
@@ -550,6 +559,65 @@ class AuthenticationService extends ChangeNotifier {
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
           Navigator.of(context).pushNamedAndRemoveUntil(
               LoginScreen.LOGIN_ROUTE, (route) => false);
+        } else {
+          status = AuthStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = AuthStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+  }
+
+  Future<void> changePassword(String oldPassword, String newPassword,
+      String confPassword, BuildContext context) async {
+    if (newPassword.isEmpty || confPassword.isEmpty || oldPassword.isEmpty) {
+      SnackBarService.instance.showSnackBarError('All fields are mandatory');
+      return;
+    }
+    if (newPassword != confPassword) {
+      SnackBarService.instance.showSnackBarError(
+          'New password and Confirm Password is not matching');
+      return;
+    }
+
+    status = AuthStatus.Authenticating;
+    notifyListeners();
+
+    try {
+      UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+      var reqBody = FormData.fromMap({
+        'cust_id': user.id,
+        'password': newPassword,
+        'confirm_password': confPassword,
+        'oldpassword': oldPassword
+      });
+
+      Response response = await _dio.post(
+        API.ChangePassword,
+        data: reqBody,
+      );
+      print('Request : ${reqBody.fields}');
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 0) {
+          status = AuthStatus.Authenticated;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          // Navigator.of(context).pushNamedAndRemoveUntil(
+          //     LoginScreen.LOGIN_ROUTE, (route) => false);
         } else {
           status = AuthStatus.Error;
           notifyListeners();

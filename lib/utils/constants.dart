@@ -9,7 +9,7 @@ class Constants {
   static const String PAYU_MONEY_MERCHANT_ID = '6713332';
   static const String PAYU_MONEY_SALT = '1cEIP21zvx';
 
-  static const String OWNER_CONTACT_NUMBER = '8850458452';
+  static const String OWNER_CONTACT_NUMBER = '+918850458452';
 
   static PincodeModel getDefaultPincode() {
     if (prefs.getString(PrefernceKey.SELECTED_PINCODE) != null)

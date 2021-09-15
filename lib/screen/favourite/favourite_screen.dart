@@ -6,6 +6,7 @@ import 'package:cjspoton/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:readmore/readmore.dart';
 
 class FavouriteScreen extends StatefulWidget {
   const FavouriteScreen({Key? key, required this.refreshMainContainerState})
@@ -120,36 +121,36 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                 ),
                               ),
                             ),
-                            Positioned(
-                              right: 10,
-                              bottom: 10,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                    color: Colors.green,
-                                    borderRadius: BorderRadius.circular(5)),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.star_outline,
-                                      color: Colors.white,
-                                      size: 18,
-                                    ),
-                                    Text(
-                                      '4.1',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          ?.copyWith(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
+                            // Positioned(
+                            //   right: 10,
+                            //   bottom: 10,
+                            //   child: Container(
+                            //     padding: EdgeInsets.symmetric(horizontal: 10),
+                            //     decoration: BoxDecoration(
+                            //         color: Colors.green,
+                            //         borderRadius: BorderRadius.circular(5)),
+                            //     child: Row(
+                            //       children: [
+                            //         Icon(
+                            //           Icons.star_outline,
+                            //           color: Colors.white,
+                            //           size: 18,
+                            //         ),
+                            //         Text(
+                            //           '4.1',
+                            //           style: Theme.of(context)
+                            //               .textTheme
+                            //               .headline6
+                            //               ?.copyWith(
+                            //                 color: Colors.white,
+                            //                 fontSize: 16,
+                            //                 fontWeight: FontWeight.bold,
+                            //               ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // )
                           ],
                         ),
                       ),
@@ -171,11 +172,14 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                     fontWeight: FontWeight.bold,
                                   ),
                             ),
-                            Text(
+                            ReadMoreText(
                               '${favList.elementAt(i).fooddescription}',
                               style: Theme.of(context).textTheme.caption,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
+                              trimLines: 2,
+                              trimMode: TrimMode.Line,
+                              colorClickableText: primaryColor,
+                              // trimCollapsedText: '...',
+                              trimExpandedText: 'Show less',
                             ),
                             Row(
                               children: [

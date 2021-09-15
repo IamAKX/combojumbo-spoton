@@ -5,4 +5,5 @@ class PrefernceKey {
   static const String LOCAL_CART = 'LOCAL_CART';
   static const String SELECTED_PINCODE = 'SELECTED_PINCODE';
   static const String ADDRESS = 'ADDRESS';
+  static const String IS_LOGGEDIN = 'IS_LOGGEDIN';
 }

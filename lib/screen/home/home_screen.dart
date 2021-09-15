@@ -5,6 +5,7 @@ import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/home/home_widgets.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
@@ -16,9 +17,11 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:cjspoton/widgets/subheading.dart';
+import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen(this.refreshMainContainerState) : super();
@@ -103,8 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 child: CircleAvatar(
                                   radius: 30,
-                                  backgroundColor:
-                                      primaryColor.withOpacity(0.1),
+                                  backgroundColor: categoryBackground,
                                   child: CachedNetworkImage(
                                     imageUrl: cjRouteModel.image,
                                     width: 30,
@@ -192,89 +194,123 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: CarouselSlider(
                   items: [
                     for (AddSliderCardModel model in getAdSlider()) ...{
-                      Container(
-                        height: 250,
-                        width: 200,
-                        padding: EdgeInsets.only(
-                          left: defaultPadding,
-                          top: defaultPadding,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          gradient: LinearGradient(
-                            end: Alignment.topLeft,
-                            begin: Alignment.bottomRight,
-                            colors: <Color>[
-                              model.color,
-                              model.color.withOpacity(0.5),
-                              model.color.withOpacity(0.3),
+                      InkWell(
+                        onTap: () {
+                          switch (model.redirection) {
+                            case MenuScreen.MENU_SCREEN_ROUTE:
+                              Navigator.of(context).pushNamed(
+                                MenuScreen.MENU_SCREEN_ROUTE,
+                                arguments: MenuScreenNavigatorPayloadModel(
+                                  categoryId: "${model.arguments}",
+                                  refreshMainContainerState:
+                                      widget.refreshMainContainerState,
+                                ),
+                              );
+                              return;
+                            case WebviewInternal.WEBVIEW_ROUTE:
+                              Navigator.of(context).pushNamed(
+                                WebviewInternal.WEBVIEW_ROUTE,
+                                arguments: model.arguments,
+                              );
+                              return;
+                            case CommingSoonScreen.COMMING_SOON_ROUTE:
+                              Navigator.of(context).pushNamed(
+                                CommingSoonScreen.COMMING_SOON_ROUTE,
+                                arguments: MenuScreenNavigatorPayloadModel(
+                                  categoryId: "${model.arguments}",
+                                  refreshMainContainerState:
+                                      widget.refreshMainContainerState,
+                                ),
+                              );
+                              return;
+                          }
+                        },
+                        child: Container(
+                          height: 250,
+                          width: 200,
+                          padding: EdgeInsets.only(
+                            left: defaultPadding,
+                            top: defaultPadding,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            gradient: LinearGradient(
+                              end: Alignment.topLeft,
+                              begin: Alignment.bottomRight,
+                              colors: <Color>[
+                                model.color,
+                                model.color.withOpacity(0.5),
+                                model.color.withOpacity(0.3),
+                              ],
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '${model.text1}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 35,
+                                        height: 0.8),
+                              ),
+                              Text(
+                                '${model.text2}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      height: 0.9,
+                                    ),
+                              ),
+                              Text(
+                                '${model.text3}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption
+                                    ?.copyWith(
+                                      color: Colors.white,
+                                    ),
+                              ),
+                              Spacer(),
+                              Container(
+                                height: 120,
+                                child: Stack(
+                                  children: [
+                                    Positioned(
+                                      bottom: -20,
+                                      right: -30,
+                                      child: Image.asset(
+                                        model.imageLink,
+                                        height: 120,
+                                        width: 160,
+                                        fit: BoxFit.fitHeight,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: 10,
+                                      left: 0,
+                                      child: CircleAvatar(
+                                        backgroundColor: bgColor,
+                                        radius: 20,
+                                        child: Icon(
+                                          Icons.keyboard_arrow_right,
+                                          size: 30,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${model.text1}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 35,
-                                      height: 0.8),
-                            ),
-                            Text(
-                              '${model.text2}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1
-                                  ?.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    height: 0.9,
-                                  ),
-                            ),
-                            Text(
-                              '${model.text3}',
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        color: Colors.white,
-                                      ),
-                            ),
-                            Spacer(),
-                            Container(
-                              height: 120,
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    bottom: -20,
-                                    right: -30,
-                                    child: Image.asset(
-                                      model.imageLink,
-                                      height: 120,
-                                      width: 160,
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: 10,
-                                    left: 0,
-                                    child: CircleAvatar(
-                                      backgroundColor: bgColor,
-                                      radius: 20,
-                                      child: Icon(
-                                        Icons.keyboard_arrow_right,
-                                        size: 30,
-                                        color: textColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            )
-                          ],
                         ),
                       ),
                     }
@@ -318,25 +354,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   favList: favList,
                   reloadFavList: loadFavouriteFood,
                   refreshState: refreshState),
-              Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: defaultPadding, horizontal: defaultPadding / 2),
-                height: 200,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  // child: CachedNetworkImage(
-                  //   fit: BoxFit.cover,
-                  //   imageUrl:
-                  //       'https://askbootstrap.com/preview/swiggi/template2/img/banner.png',
-                  //   progressIndicatorBuilder:
-                  //       (context, url, downloadProgress) => Center(
-                  //           child: CircularProgressIndicator(
-                  //               value: downloadProgress.progress)),
-                  //   errorWidget: (context, url, error) => Icon(Icons.error),
-                  // ),
-                  child: Image.asset(
-                    'assets/images/banner.jpg',
-                    fit: BoxFit.cover,
+              InkWell(
+                onTap: () => Navigator.of(context).pushNamed(
+                  MenuScreen.MENU_SCREEN_ROUTE,
+                  arguments: MenuScreenNavigatorPayloadModel(
+                    categoryId: "0",
+                    refreshMainContainerState: widget.refreshMainContainerState,
+                  ),
+                ),
+                child: Container(
+                  margin: EdgeInsets.symmetric(
+                      vertical: defaultPadding, horizontal: defaultPadding / 2),
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    // child: CachedNetworkImage(
+                    //   fit: BoxFit.cover,
+                    //   imageUrl:
+                    //       'https://askbootstrap.com/preview/swiggi/template2/img/banner.png',
+                    //   progressIndicatorBuilder:
+                    //       (context, url, downloadProgress) => Center(
+                    //           child: CircularProgressIndicator(
+                    //               value: downloadProgress.progress)),
+                    //   errorWidget: (context, url, error) => Icon(Icons.error),
+                    // ),
+                    child: Image.asset(
+                      'assets/images/banner.jpg',
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -433,11 +478,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
-                                Text(
+                                ReadMoreText(
                                   '${list.elementAt(2).foodList.elementAt(i).fooddescription.toCamelCase()}',
                                   style: Theme.of(context).textTheme.caption,
-                                  maxLines: 5,
-                                  overflow: TextOverflow.ellipsis,
+                                  trimLines: 3,
+                                  trimMode: TrimMode.Line,
+                                  colorClickableText: primaryColor,
+                                  // trimCollapsedText: '...',
+                                  trimExpandedText: 'Show less',
                                 ),
                                 Row(
                                   children: [

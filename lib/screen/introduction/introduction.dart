@@ -16,22 +16,19 @@ class Introduction extends StatefulWidget {
 class _IntroductionState extends State<Introduction> {
   List<PageViewModel> pages = [
     PageViewModel(
-      title: 'Discover Place Near You',
-      body:
-          'We make it simple to find the food you crave. Enter your address and let us do the rest.',
-      image: SvgPicture.asset('assets/svg/landing1.svg'),
+      title: 'Explore Deliciousness',
+      body: 'Browse & Select From Multiple Cuisines & Exotic Dishes.',
+      image: Image.asset('assets/images/intro1.png'),
     ),
     PageViewModel(
-      title: 'Discover Place Near You',
-      body:
-          'We make it simple to find the food you crave. Enter your address and let us do the rest.',
-      image: SvgPicture.asset('assets/svg/landing2.svg'),
+      title: 'Select the nearest outlet',
+      body: 'hoose Your Favourite CJ Outlet which delivers to you.',
+      image: Image.asset('assets/images/intro2.png'),
     ),
     PageViewModel(
-      title: 'Discover Place Near You',
-      body:
-          'We make it simple to find the food you crave. Enter your address and let us do the rest.',
-      image: SvgPicture.asset('assets/svg/landing3.svg'),
+      title: 'Select the nearest outlet',
+      body: 'Choose Your Favourite CJ Outlet which delivers to you.',
+      image: Image.asset('assets/images/intro3.png'),
     ),
   ];
 

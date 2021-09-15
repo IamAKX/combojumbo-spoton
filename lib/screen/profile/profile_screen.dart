@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
+import 'package:cjspoton/screen/change_password/change_password.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
@@ -11,10 +12,12 @@ import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
+import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -152,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         ListTile(
           onTap: () => Navigator.of(context)
-              .pushNamed(ResetPasswordScreen.RESET_PASSWORD_ROUTE),
+              .pushNamed(ChangePasswordScreen.CHANGE_PASSWORD_ROUTE),
           tileColor: bgColor,
           title: Text(
             'Change Password',
@@ -186,6 +189,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
         //   color: borderColor,
         //   height: 1,
         // ),
+        ListTile(
+          onTap: () => Navigator.of(context).pushNamed(
+              WebviewInternal.WEBVIEW_ROUTE,
+              arguments: API.MUNCHBOX),
+          leading: CircleAvatar(
+            backgroundImage: AssetImage('assets/images/munch_box.png'),
+          ),
+          tileColor: bgColor,
+          title: Text(
+            'Munch Box',
+            style:
+                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+          ),
+          minVerticalPadding: defaultPadding * 1.5,
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+        Divider(
+          color: borderColor,
+          height: 1,
+        ),
+        ListTile(
+          onTap: () => Navigator.of(context)
+              .pushNamed(WebviewInternal.WEBVIEW_ROUTE, arguments: API.HOTCASE),
+          leading: CircleAvatar(
+            backgroundImage: AssetImage('assets/images/hotcase_1.png'),
+          ),
+          tileColor: bgColor,
+          title: Text(
+            'CJ\'s Hotcase',
+            style:
+                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+          ),
+          minVerticalPadding: defaultPadding * 1.5,
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+        Divider(
+          color: borderColor,
+          height: 1,
+        ),
         ListTile(
           onTap: () =>
               Navigator.of(context).pushNamed(FeedbackScreen.FEEDBACK_ROUTE),

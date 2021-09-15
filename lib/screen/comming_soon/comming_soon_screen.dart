@@ -33,7 +33,7 @@ class _CommingSoonScreenState extends State<CommingSoonScreen> {
             Padding(
               padding: const EdgeInsets.all(defaultPadding),
               child: Text(
-                'Comming soon..',
+                'Coming soon..',
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme

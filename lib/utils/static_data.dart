@@ -6,6 +6,8 @@ import 'package:cjspoton/model/cj_route_option_model.dart';
 import 'package:cjspoton/model/review_model.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
+import 'package:cjspoton/utils/api.dart';
+import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
 
 List<AddSliderCardModel> getAdSlider() {
@@ -15,43 +17,49 @@ List<AddSliderCardModel> getAdSlider() {
         text2: 'Coke!',
         text3: 'On Every CJ SpotOn Order',
         imageLink: 'assets/images/coke.png',
-        redirection: '',
-        color: Colors.lightBlueAccent),
+        redirection: MenuScreen.MENU_SCREEN_ROUTE,
+        color: Colors.lightBlueAccent,
+        arguments: '0'),
     AddSliderCardModel(
         text1: 'The Party',
         text2: 'Snackbox',
         text3: 'For All the merry times!',
         imageLink: 'assets/images/pizzapockets.png',
-        redirection: '',
-        color: Colors.lightGreen),
+        redirection: WebviewInternal.WEBVIEW_ROUTE,
+        color: Colors.lightGreen,
+        arguments: API.HOTCASE),
     AddSliderCardModel(
         text1: 'Combo Meals',
         text2: 'Jumbo Deals',
         text3: 'The max quantity in the min budget.',
         imageLink: 'assets/images/jumboqty.png',
-        redirection: '',
-        color: Colors.orangeAccent),
+        redirection: MenuScreen.MENU_SCREEN_ROUTE,
+        color: Colors.orangeAccent,
+        arguments: '0'),
     AddSliderCardModel(
         text1: 'Only at',
         text2: 'CJ Spoton',
         text3: 'The Best Jain in Town',
         imageLink: 'assets/images/jain.png',
-        redirection: '',
-        color: Colors.redAccent),
+        redirection: CommingSoonScreen.COMMING_SOON_ROUTE,
+        color: Colors.redAccent,
+        arguments: '0'),
     AddSliderCardModel(
-        text1: 'You Lunch',
+        text1: 'Your Lunch',
         text2: 'and Dinner',
         text3: 'Is now Sorted Only on CJ Spot On',
         imageLink: 'assets/images/hotcase.png',
-        redirection: '',
-        color: Colors.indigoAccent),
+        redirection: WebviewInternal.WEBVIEW_ROUTE,
+        color: Colors.indigoAccent,
+        arguments: API.MUNCHBOX),
     AddSliderCardModel(
         text1: 'The Ultimate',
         text2: 'Combos',
         text3: 'Across Cuisines only on CJ Spot On',
         imageLink: 'assets/images/exclusivecombos.png',
-        redirection: '',
-        color: Colors.tealAccent),
+        redirection: MenuScreen.MENU_SCREEN_ROUTE,
+        color: Colors.tealAccent,
+        arguments: '38'),
   ];
 }
 
@@ -78,7 +86,7 @@ Will definetely visit again''', name: 'Paresh Doshi'),
 List<CJRouteOptionModel> getCJRouteOptions() {
   return [
     CJRouteOptionModel(
-        name: 'Table Booking',
+        name: 'Book Table',
         image: 'https://www.combojumbo.in/img/mini-banquet.png',
         redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
     CJRouteOptionModel(
@@ -86,7 +94,7 @@ List<CJRouteOptionModel> getCJRouteOptions() {
         image: 'https://www.combojumbo.in/img/tbl-booking.png',
         redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
     CJRouteOptionModel(
-        name: 'Home Delivery',
+        name: 'Delivery',
         image: 'https://www.combojumbo.in/img/delivery.png',
         redirectionUrl: MenuScreen.MENU_SCREEN_ROUTE),
     CJRouteOptionModel(

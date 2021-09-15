@@ -1,5 +1,6 @@
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
+import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
@@ -22,13 +23,15 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late SharedPreferences prefs;
-late String? CURRENT_USER = null;
+// late String? CURRENT_USER = null;
+late bool? isLoggedIn = null;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   prefs = await SharedPreferences.getInstance();
-  CURRENT_USER = prefs.getString(PrefernceKey.USER);
+  // CURRENT_USER = prefs.getString(PrefernceKey.USER);
+  isLoggedIn = prefs.getBool(PrefernceKey.IS_LOGGEDIN);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -74,7 +77,7 @@ class MyApp extends StatelessWidget {
         title: 'FastCheque',
         theme: globalTheme(context),
         onGenerateRoute: NavRoute.generatedRoute,
-        home: (CURRENT_USER == null)
+        home: (isLoggedIn == null)
             ? LoginScreen()
             : prefs.getString(PrefernceKey.SELECTED_OUTLET) == null
                 ? ChooseOutletScreen()

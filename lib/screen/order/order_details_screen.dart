@@ -142,7 +142,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               SizedBox(
                 width: 5,
               ),
-              Text('Taxes'),
+              Text('Service Charge'),
+              Spacer(),
+              Text(
+                  '${Constants.RUPEE} ${widget.orderDetailModel.order.service_charge.toDouble().toStringAsFixed(2)}'),
+            ],
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 5,
+              ),
+              Text('GST'),
               Spacer(),
               Text(
                   '${Constants.RUPEE} ${widget.orderDetailModel.order.gst_amount.toDouble().toStringAsFixed(2)}'),

@@ -21,6 +21,7 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
+import '../utils/constants.dart';
 
 enum CartStatus {
   Ideal,
@@ -149,7 +150,10 @@ class CartServices extends ChangeNotifier {
     try {
       OutletModel outletModel =
           OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
-      var reqBody = FormData.fromMap({'outletid': outletModel.outletId});
+      UserModel userModel =
+          UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+      var reqBody = FormData.fromMap(
+          {'outletid': outletModel.outletId, 'cust_id': userModel.id});
       Response response = await _dio.post(API.CouponCode, data: reqBody);
 
       var resBody = json.decode(response.data);
@@ -211,7 +215,7 @@ class CartServices extends ChangeNotifier {
 
         if (resBody['status'] == 1) {
           body = body[0];
-          couponDiscountDetailModel = CouponDiscountDetailModel(
+          CouponDiscountDetailModel cModel = CouponDiscountDetailModel(
             coupon_code: body['coupon_code'],
             coupon_type: body['coupon_type'],
             coupon_value: body['coupon_value'],
@@ -220,10 +224,19 @@ class CartServices extends ChangeNotifier {
             maximum_order_value: body['maximum_order_value'],
             no_times: body['no_times'],
           );
-          status = CartStatus.Success;
-          SnackBarService.instance
-              .showSnackBarSuccess((resBody['msg']).toString().trim());
-
+          double cartAmt = double.parse(totalAmount);
+          if (cModel != null &&
+              cartAmt >= cModel.maximum_order_value.toDouble() &&
+              cartAmt <= cModel.maximum_order_value.toDouble()) {
+            couponDiscountDetailModel = cModel;
+            status = CartStatus.Success;
+            SnackBarService.instance
+                .showSnackBarSuccess((resBody['msg']).toString().trim());
+          } else {
+            status = CartStatus.Failed;
+            SnackBarService.instance.showSnackBarSuccess(
+                'Cart amount must be between ${Constants.RUPEE} ${cModel.minimum_order_value.toDouble().toStringAsFixed(2)} and ${Constants.RUPEE} ${cModel.maximum_order_value.toDouble().toStringAsFixed(2)}');
+          }
           notifyListeners();
         } else {
           status = CartStatus.Failed;

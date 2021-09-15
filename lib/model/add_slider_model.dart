@@ -8,6 +8,7 @@ class AddSliderCardModel {
   String text3;
   String imageLink;
   String redirection;
+  dynamic arguments;
   Color color;
   AddSliderCardModel({
     required this.text1,
@@ -15,6 +16,7 @@ class AddSliderCardModel {
     required this.text3,
     required this.imageLink,
     required this.redirection,
+    required this.arguments,
     required this.color,
   });
 
@@ -24,6 +26,7 @@ class AddSliderCardModel {
     String? text3,
     String? imageLink,
     String? redirection,
+    dynamic? arguments,
     Color? color,
   }) {
     return AddSliderCardModel(
@@ -32,6 +35,7 @@ class AddSliderCardModel {
       text3: text3 ?? this.text3,
       imageLink: imageLink ?? this.imageLink,
       redirection: redirection ?? this.redirection,
+      arguments: arguments ?? this.arguments,
       color: color ?? this.color,
     );
   }
@@ -43,6 +47,7 @@ class AddSliderCardModel {
       'text3': text3,
       'imageLink': imageLink,
       'redirection': redirection,
+      'arguments': arguments,
       'color': color.value,
     };
   }
@@ -54,6 +59,7 @@ class AddSliderCardModel {
       text3: map['text3'],
       imageLink: map['imageLink'],
       redirection: map['redirection'],
+      arguments: map['arguments'],
       color: Color(map['color']),
     );
   }
@@ -65,7 +71,7 @@ class AddSliderCardModel {
 
   @override
   String toString() {
-    return 'AddSliderCardModel(text1: $text1, text2: $text2, text3: $text3, imageLink: $imageLink, redirection: $redirection, color: $color)';
+    return 'AddSliderCardModel(text1: $text1, text2: $text2, text3: $text3, imageLink: $imageLink, redirection: $redirection, arguments: $arguments, color: $color)';
   }
 
   @override
@@ -78,6 +84,7 @@ class AddSliderCardModel {
         other.text3 == text3 &&
         other.imageLink == imageLink &&
         other.redirection == redirection &&
+        other.arguments == arguments &&
         other.color == color;
   }
 
@@ -88,6 +95,7 @@ class AddSliderCardModel {
         text3.hashCode ^
         imageLink.hashCode ^
         redirection.hashCode ^
+        arguments.hashCode ^
         color.hashCode;
   }
 }

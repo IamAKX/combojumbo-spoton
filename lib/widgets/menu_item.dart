@@ -6,6 +6,7 @@ import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:readmore/readmore.dart';
 
 class MenuItem extends StatelessWidget {
   MenuItem({
@@ -62,10 +63,13 @@ class MenuItem extends StatelessWidget {
                 ),
             ],
           ),
-          subtitle: Text(
+          subtitle: ReadMoreText(
             '${subTitle.toCamelCase()}',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
+            trimLines: 2,
+            trimMode: TrimMode.Line,
+            colorClickableText: primaryColor,
+            // trimCollapsedText: '...',
+            trimExpandedText: 'Show less',
             style: Theme.of(context)
                 .textTheme
                 .subtitle2

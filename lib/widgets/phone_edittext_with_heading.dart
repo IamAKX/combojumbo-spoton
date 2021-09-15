@@ -30,57 +30,58 @@ class PhoneTextFieldWithHeading extends StatelessWidget {
           SizedBox(
             height: 8,
           ),
-          Row(
-            children: [
-              Container(
-                height: 49,
-                width: 60,
-                alignment: Alignment.center,
-                child: Text(
-                  '+91',
-                  style: Theme.of(context).textTheme.subtitle1,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.amber[100],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(4),
-                    bottomLeft: Radius.circular(4),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.amber[100],
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  alignment: Alignment.center,
+                  child: Text(
+                    '+91',
+                    style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),
-              ),
-              Expanded(
-                child: TextField(
-                  keyboardType: TextInputType.phone,
-                  autocorrect: true,
-                  controller: _phoneCtrl,
-                  maxLength: 10,
-                  decoration: InputDecoration(
-                    hintText: 'Mobile',
-                    counterText: "",
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: defaultPadding),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(4),
-                          topRight: Radius.circular(4)),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(4),
-                          topRight: Radius.circular(4)),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(4),
-                          topRight: Radius.circular(4)),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                Expanded(
+                  child: TextField(
+                    keyboardType: TextInputType.phone,
+                    autocorrect: true,
+                    controller: _phoneCtrl,
+                    maxLength: 10,
+                    decoration: InputDecoration(
+                      hintText: 'Mobile',
+                      counterText: "",
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: defaultPadding),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(4),
+                            topRight: Radius.circular(4)),
+                        borderSide:
+                            BorderSide(color: hintColor.withOpacity(0.5)),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(4),
+                            topRight: Radius.circular(4)),
+                        borderSide:
+                            BorderSide(color: hintColor.withOpacity(0.5)),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(4),
+                            topRight: Radius.circular(4)),
+                        borderSide:
+                            BorderSide(color: hintColor.withOpacity(0.5)),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

@@ -14,6 +14,7 @@ class API {
   static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
   static const String ForgotPassword = '${BASE_URL}forgotpassword.php';
   static const String ResetPassword = '${BASE_URL}reset-password.php';
+  static const String ChangePassword = '${BASE_URL}resetpassword.php';
 
   static const String Profile = '${BASE_URL}myprofile.php';
   static const String UpdateProfile = '${BASE_URL}update-profile';
@@ -32,4 +33,9 @@ class API {
   static const String City = '${BASE_URL}city';
   static const String AddAddress = '${BASE_URL}add-address';
   static const String GetAddress = '${BASE_URL}myaddress.php';
+
+  // Webview urls
+  static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';
+  static const String MUNCHBOX =
+      'https://www.combojumbo.in/cj-hotcase/index#munchbox';
 }

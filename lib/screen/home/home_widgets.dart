@@ -12,6 +12,7 @@ import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:readmore/readmore.dart';
 
 class RecomendedItems extends StatelessWidget {
   const RecomendedItems({
@@ -151,11 +152,14 @@ class RecomendedItems extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      Text(
+                      ReadMoreText(
                         '${list.first.foodList.elementAt(i).fooddescription.toCamelCase()}',
                         style: Theme.of(context).textTheme.caption,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                        trimLines: 2,
+                        trimMode: TrimMode.Line,
+                        colorClickableText: primaryColor,
+                        // trimCollapsedText: '...',
+                        trimExpandedText: 'Show less',
                       ),
                       Row(
                         children: [

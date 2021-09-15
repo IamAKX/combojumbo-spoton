@@ -28,7 +28,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset("assets/videos/background.mp4")
+    _controller = VideoPlayerController.asset("assets/videos/background_2.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -91,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ?.copyWith(color: Colors.white),
                 ),
                 Text(
-                  'Password reset link will be sent to this email',
+                  'OTP will be sent to this mobile number for verification',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1

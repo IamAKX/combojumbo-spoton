@@ -1,5 +1,7 @@
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
+import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
+import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -31,7 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset("assets/videos/background.mp4")
+    _controller = VideoPlayerController.asset("assets/videos/background_2.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);
@@ -130,9 +132,35 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               },
                             ),
                           ),
-                          Text(
-                            'I agree all terms and conditions',
-                            style: TextStyle(color: bgColor),
+                          Expanded(
+                            child: Wrap(
+                              children: [
+                                Text(
+                                  'I accept all the ',
+                                  style: TextStyle(color: bgColor),
+                                ),
+                                InkWell(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed(TermOfUseSceen.TERMS_ROUTE),
+                                  child: Text(
+                                    'Terms & Conditions',
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                ),
+                                Text(
+                                  ' and ',
+                                  style: TextStyle(color: bgColor),
+                                ),
+                                InkWell(
+                                  onTap: () => Navigator.of(context).pushNamed(
+                                      PrivacyPolicyScreen.PRIVACY_ROUTE),
+                                  child: Text(
+                                    'Privacy Policy.',
+                                    style: TextStyle(color: primaryColor),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),

@@ -24,7 +24,7 @@ class _LoginEmailScreenState extends State<LoginEmailScreen> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.asset("assets/videos/background.mp4")
+    _controller = VideoPlayerController.asset("assets/videos/background_2.mp4")
       ..initialize().then((_) {
         _controller.play();
         _controller.setLooping(true);

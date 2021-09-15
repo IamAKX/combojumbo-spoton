@@ -50,26 +50,26 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
       appBar: AppBar(
         iconTheme: IconThemeData(color: primaryColor),
         actions: [
-          InkWell(
-            onTap: () {
-              if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                    MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-                    arguments: 0);
-              else
-                SnackBarService.instance.showSnackBarError('Choose an outlet');
-            },
-            child: Container(
-              padding: EdgeInsets.all(15),
-              child: Text(
-                'DONE',
-                style: Theme.of(context)
-                    .textTheme
-                    .button
-                    ?.copyWith(color: primaryColor),
-              ),
-            ),
-          )
+          // InkWell(
+          //   onTap: () {
+          //     if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
+          //       Navigator.of(context).pushNamedAndRemoveUntil(
+          //           MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+          //           arguments: 0);
+          //     else
+          //       SnackBarService.instance.showSnackBarError('Choose an outlet');
+          //   },
+          //   child: Container(
+          //     padding: EdgeInsets.all(15),
+          //     child: Text(
+          //       'DONE',
+          //       style: Theme.of(context)
+          //           .textTheme
+          //           .button
+          //           ?.copyWith(color: primaryColor),
+          //     ),
+          //   ),
+          // )
         ],
         elevation: 0,
         backgroundColor: Colors.transparent,
@@ -136,7 +136,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                     ),
                     dense: true,
                     title: Text('CJ ${_selectedOutlet.outletName}'),
-                    subtitle: Text('${_selectedOutlet.outletId}'),
+                    // subtitle: Text('${_selectedOutlet.outletId}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
                       _modalBottomSheetMenu();
@@ -209,7 +209,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                     ),
                     dense: true,
                     title: Text('CJ ${model.outletName}'),
-                    subtitle: Text('${model.outletId}'),
+                    // subtitle: Text('${model.outletId}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
                       Navigator.of(context).pop();
@@ -217,6 +217,14 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                         prefs.setString(
                             PrefernceKey.SELECTED_OUTLET, model.toJson());
                       });
+                      if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            MainContainer.MAIN_CONTAINER_ROUTE,
+                            (route) => false,
+                            arguments: 0);
+                      else
+                        SnackBarService.instance
+                            .showSnackBarError('Choose an outlet');
                     },
                   );
                 },

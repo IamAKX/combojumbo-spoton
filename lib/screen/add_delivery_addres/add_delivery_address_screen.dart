@@ -438,7 +438,6 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       onPressed: () {
                         if (selectedPincode == null ||
                             completeAddressCtrl1.text.isEmpty ||
-                            landmarkCtrl.text.isEmpty ||
                             selectedCity == null ||
                             selectedState == null) {
                           SnackBarService.instance

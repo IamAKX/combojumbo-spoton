@@ -94,7 +94,7 @@ class _MainContainerState extends State<MainContainer> {
           ),
           FloatingNavbarItem(
             icon: Icons.favorite_border_outlined,
-            title: 'Favourite',
+            title: 'CJ Fav',
           ),
           FloatingNavbarItem(
             icon: Icons.person_outline,
@@ -231,7 +231,7 @@ class _MainContainerState extends State<MainContainer> {
         return null;
       case 3:
         return AppBar(
-          title: Text('Favourite'),
+          title: Text('CJ Fav'),
           backgroundColor: bgColor,
           centerTitle: false,
           actions: [

@@ -69,10 +69,104 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         title: Text('Checkout'),
         centerTitle: false,
       ),
-      body: ListView(
+      body: Column(
         children: [
+          Expanded(
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: defaultPadding * 2,
+                ),
+                Container(
+                  padding: EdgeInsets.all(defaultPadding),
+                  color: bgColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'DELIVERY ADDRESS',
+                            style:
+                                Theme.of(context).textTheme.subtitle1?.copyWith(
+                                      color: textColor,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          InkWell(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AddDeliveryAddress
+                                    .ADD_DELIVERY_ADDRESS_ROUTE)
+                                .then((value) {
+                              reloadAddressList(context);
+                            }),
+                            child: Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: defaultPadding * 0.5,
+                                vertical: defaultPadding * 0.25,
+                              ),
+                              child: Text(
+                                'ADD ADDRESS',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .caption
+                                    ?.copyWith(color: textColor),
+                              ),
+                              decoration: BoxDecoration(
+                                  color: primaryColor,
+                                  borderRadius: BorderRadius.circular(4)),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: defaultPadding,
+                      ),
+                      for (AddressModel address in addressList) ...{
+                        Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(color: hintColor),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: RadioListTile(
+                            // leading: getAddressIcon(address.addressType),
+                            secondary: getAddressIcon(address.addressType),
+                            title: Text('${address.addressType}'),
+                            isThreeLine: true,
+                            subtitle: Text(
+                                '${address.address1}\n${address.address2}'),
+                            value: address.id,
+                            groupValue: selectedAddress,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedAddress = value.toString();
+                              });
+                            },
+                          ),
+                          // child: RadioListTile(
+                          //    value: address.id,
+                          //     groupValue: selectedAddress,
+                          //     onChanged: (value) {
+                          //       setState(() {
+                          //         selectedAddress = value.toString();
+                          //       });
+                          //     },
+                          // ),
+                        ),
+                        SizedBox(
+                          height: defaultPadding,
+                        ),
+                      },
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
           SizedBox(
-            height: defaultPadding,
+            height: defaultPadding * 2,
           ),
           Container(
             padding: EdgeInsets.all(defaultPadding),
@@ -128,82 +222,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 // ),
               ],
             ),
-          ),
-          SizedBox(
-            height: defaultPadding * 2,
-          ),
-          Container(
-            padding: EdgeInsets.all(defaultPadding),
-            color: bgColor,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'DELIVERY ADDRESS',
-                  style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                        color: textColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
-                for (AddressModel address in addressList) ...{
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: hintColor),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: RadioListTile(
-                      // leading: getAddressIcon(address.addressType),
-                      secondary: getAddressIcon(address.addressType),
-                      title: Text('${address.addressType}'),
-                      isThreeLine: true,
-                      subtitle:
-                          Text('${address.address1}\n${address.address2}'),
-                      value: address.id,
-                      groupValue: selectedAddress,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedAddress = value.toString();
-                        });
-                      },
-                    ),
-                    // child: RadioListTile(
-                    //    value: address.id,
-                    //     groupValue: selectedAddress,
-                    //     onChanged: (value) {
-                    //       setState(() {
-                    //         selectedAddress = value.toString();
-                    //       });
-                    //     },
-                    // ),
-                  ),
-                  SizedBox(
-                    height: defaultPadding,
-                  ),
-                },
-                InkWell(
-                  onTap: () => Navigator.of(context)
-                      .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE)
-                      .then((value) {
-                    reloadAddressList(context);
-                  }),
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    padding: EdgeInsets.all(defaultPadding),
-                    child: Text('ADD NEW ADDRESS'),
-                    decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: BorderRadius.circular(4)),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: defaultPadding * 2,
           ),
         ],
       ),

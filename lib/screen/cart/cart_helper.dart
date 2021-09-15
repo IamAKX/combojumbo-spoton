@@ -8,6 +8,7 @@ import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
 import 'package:cjspoton/screen/checkout/grouped_cart_model.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
+import '../../utils/constants.dart';
 
 class CartHelper {
   static int getCartCount() {
@@ -139,10 +140,21 @@ class CartHelper {
     amt += double.parse(selectedPincode.charge);
     if (allChargesModel != null)
       amt += double.parse(allChargesModel.Packing_Charge) +
-          double.parse(allChargesModel.Service_Charge);
+          double.parse(allChargesModel.Service_Charge) +
+          getServiceCharge(allChargesModel);
+    if (getTotalPriceOfCart() < allChargesModel!.min_order_online.toDouble())
+      amt += selectedPincode.charge.toDouble();
     if (couponDiscountDetailModel != null)
       amt -= getDiscountPrice(couponDiscountDetailModel);
     return amt;
+  }
+
+  static double getServiceCharge(
+    AllChargesModel? allChargesModel,
+  ) {
+    double amt = getTotalPriceOfCart();
+    double gst = double.parse(allChargesModel!.gst);
+    return amt * gst / 100;
   }
 
   static List<Map<String, dynamic>> getGroupedCartJson() {
