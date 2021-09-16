@@ -92,7 +92,10 @@ class ProfileManagementService extends ChangeNotifier {
         if (resBody['status'] == 1) {
           for (var outlet in body) {
             OutletModel outletModel = OutletModel(
-                outletId: outlet['OutletId'], outletName: outlet['OutletName']);
+                outletId: outlet['OutletId'],
+                outletName: outlet['OutletName'],
+                address: outlet['Address'],
+                image: outlet['Image']);
             list.add(outletModel);
           }
           status = ProfileStatus.Success;

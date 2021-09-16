@@ -122,8 +122,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       right: 10,
                     ),
                     leading: CachedNetworkImage(
-                      imageUrl:
-                          "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
+                      imageUrl: _selectedOutlet.image ?? '',
                       progressIndicatorBuilder:
                           (context, url, downloadProgress) => Center(
                         child: CircularProgressIndicator(
@@ -136,7 +135,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                     ),
                     dense: true,
                     title: Text('CJ ${_selectedOutlet.outletName}'),
-                    // subtitle: Text('${_selectedOutlet.outletId}'),
+                    subtitle: Text('${_selectedOutlet.address}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
                       _modalBottomSheetMenu();
@@ -195,8 +194,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       right: 10,
                     ),
                     leading: CachedNetworkImage(
-                      imageUrl:
-                          "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
+                      imageUrl: model.image ?? '',
                       progressIndicatorBuilder:
                           (context, url, downloadProgress) => Center(
                         child: CircularProgressIndicator(
@@ -209,7 +207,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                     ),
                     dense: true,
                     title: Text('CJ ${model.outletName}'),
-                    // subtitle: Text('${model.outletId}'),
+                    subtitle: Text('${model.address}'),
                     trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     onTap: () {
                       Navigator.of(context).pop();

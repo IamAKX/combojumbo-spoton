@@ -90,7 +90,7 @@ class AuthenticationService extends ChangeNotifier {
 
           status = AuthStatus.Authenticated;
           notifyListeners();
-          SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          // SnackBarService.instance.showSnackBarSuccess(body['msg']);
           Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
         } else {
           status = AuthStatus.Error;
@@ -141,7 +141,7 @@ class AuthenticationService extends ChangeNotifier {
     var _accessToken = await FacebookAuth.instance.login(
       permissions: ['public_profile', 'email'],
     );
-    _printCredentials(_accessToken);
+    // _printCredentials(_accessToken);
     Map<String, dynamic> _facebookUser =
         await FacebookAuth.instance.getUserData();
     print('Facebook data : ${prettyPrint(_facebookUser)}');
@@ -156,14 +156,7 @@ class AuthenticationService extends ChangeNotifier {
         'fb_id': _facebookUser['id'],
         'mobileid': fcmToken
       });
-      var tmp = {
-        'fb_name': _facebookUser['name'],
-        'fb_contact': _facebookUser['phone'] ?? '',
-        'fb_email': _facebookUser['email'] ?? '',
-        'fb_id': _facebookUser['id'],
-        'mobileid': fcmToken
-      };
-      print(tmp);
+
       Response response = await _dio.post(
         API.FacebookRegisteration,
         data: reqBody,
@@ -173,20 +166,22 @@ class AuthenticationService extends ChangeNotifier {
         print('Response : ${response.data}');
         var body = responseBody['body'];
         if (responseBody['status'] == 1) {
+          print('inside if');
           UserModel userModel = UserModel(
               id: body['user_id'],
-              name: _facebookUser['name'],
-              phone: _facebookUser['phone'],
+              name: _facebookUser['name'] ?? '',
+              phone: _facebookUser['phone'] ?? '',
               token: '',
-              fcmToken: fcmToken!,
-              email: _facebookUser['email'],
-              profileImage: _facebookUser['picture']['data']['url']);
+              fcmToken: fcmToken ?? '',
+              email: _facebookUser['email'] ?? '',
+              profileImage: _facebookUser['picture']['data']['url'] ?? '');
+          print(userModel);
           prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;
           notifyListeners();
-          SnackBarService.instance.showSnackBarSuccess(body['msg']);
+          // SnackBarService.instance.showSnackBarSuccess(body['msg']);
           Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
         } else {
           status = AuthStatus.Error;
@@ -319,8 +314,14 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: body['image']);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
-          OutletModel outletModel =
-              OutletModel(outletId: 'ECJ29', outletName: 'Vashi');
+          OutletModel outletModel = OutletModel(
+            outletId: 'ECJ29',
+            outletName: 'Vashi',
+            address:
+                'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
+            image:
+                "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
+          );
           prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
           prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
           status = AuthStatus.Authenticated;

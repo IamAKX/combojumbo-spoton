@@ -3,18 +3,26 @@ import 'dart:convert';
 class OutletModel {
   String outletId;
   String outletName;
+  String? address;
+  String? image;
   OutletModel({
     required this.outletId,
     required this.outletName,
+    required this.address,
+    required this.image,
   });
 
   OutletModel copyWith({
     String? outletId,
     String? outletName,
+    String? address,
+    String? image,
   }) {
     return OutletModel(
       outletId: outletId ?? this.outletId,
       outletName: outletName ?? this.outletName,
+      address: address ?? this.address,
+      image: image ?? this.image,
     );
   }
 
@@ -22,6 +30,8 @@ class OutletModel {
     return {
       'outletId': outletId,
       'outletName': outletName,
+      'address': address,
+      'image': image,
     };
   }
 
@@ -29,6 +39,8 @@ class OutletModel {
     return OutletModel(
       outletId: map['outletId'],
       outletName: map['outletName'],
+      address: map['address'],
+      image: map['image'],
     );
   }
 
@@ -38,8 +50,9 @@ class OutletModel {
       OutletModel.fromMap(json.decode(source));
 
   @override
-  String toString() =>
-      'OutletModel(outletId: $outletId, outletName: $outletName)';
+  String toString() {
+    return 'OutletModel(outletId: $outletId, outletName: $outletName, address: $address, image: $image)';
+  }
 
   @override
   bool operator ==(Object other) {
@@ -47,9 +60,16 @@ class OutletModel {
 
     return other is OutletModel &&
         other.outletId == outletId &&
-        other.outletName == outletName;
+        other.outletName == outletName &&
+        other.address == address &&
+        other.image == image;
   }
 
   @override
-  int get hashCode => outletId.hashCode ^ outletName.hashCode;
+  int get hashCode {
+    return outletId.hashCode ^
+        outletName.hashCode ^
+        address.hashCode ^
+        image.hashCode;
+  }
 }

@@ -253,8 +253,7 @@ class _CartScreenState extends State<CartScreen> {
                     right: 10,
                   ),
                   leading: CachedNetworkImage(
-                    imageUrl:
-                        "https://images.unsplash.com/photo-1514933651103-005eec06c04b?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1567&q=80",
+                    imageUrl: outletModel.image?? '',
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                       child: CircularProgressIndicator(
@@ -267,7 +266,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   dense: true,
                   title: Text('${outletModel.outletName}'),
-                  // subtitle: Text('${outletModel.outletId}'),
+                  subtitle: Text('${outletModel.address}'),
                 ),
                 SizedBox(
                   height: defaultPadding,
