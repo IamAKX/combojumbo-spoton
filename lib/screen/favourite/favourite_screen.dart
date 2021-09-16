@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
+import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,6 +22,12 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   late Size screenSize;
 
   late List<FoodModel> favList;
+
+  refreshState() {
+    widget.refreshMainContainerState();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     favList = Utilities().getAllFavouriteFood();
@@ -178,34 +186,28 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                               trimLines: 2,
                               trimMode: TrimMode.Line,
                               colorClickableText: primaryColor,
-                              // trimCollapsedText: '...',
-                              trimExpandedText: 'Show less',
+                              trimCollapsedText: 'Read more',
+                              trimExpandedText: 'show less',
                             ),
                             Row(
                               children: [
                                 Text('₹ ${favList.elementAt(i).foodamount}'),
                                 Spacer(),
-                                // InkWell(
-                                //   onTap: () {},
-                                //   child: Container(
-                                //     margin: EdgeInsets.only(top: 5),
-                                //     padding:
-                                //         EdgeInsets.symmetric(horizontal: 10),
-                                //     decoration: BoxDecoration(
-                                //       border: Border.all(color: primaryColor),
-                                //       borderRadius: BorderRadius.circular(5),
-                                //     ),
-                                //     child: Text(
-                                //       'ADD',
-                                //       style: Theme.of(context)
-                                //           .textTheme
-                                //           .button
-                                //           ?.copyWith(
-                                //             color: primaryColor,
-                                //           ),
-                                //     ),
-                                //   ),
-                                // )
+                                if (CartHelper.getItemCountInCart(
+                                        CartHelper.transformFoodModel(
+                                            favList.elementAt(i))) ==
+                                    0)
+                                  CartButton().getCartButtonSimple(
+                                    context,
+                                    favList.elementAt(i),
+                                    refreshState,
+                                  )
+                                else
+                                  CartButton().getCartButtonComplex(
+                                    context,
+                                    favList.elementAt(i),
+                                    refreshState,
+                                  ),
                               ],
                             ),
                           ],

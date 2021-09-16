@@ -35,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
   List<FoodModel> favList = [];
+  late CategoryModel combocategory;
 
   @override
   void initState() {
@@ -47,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
         (value) {
           setState(() {
             list = value;
+            combocategory = list.firstWhere((element) => element.id == '38');
           });
         },
       ),
@@ -396,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 refreshState: refreshState,
               ),
-              for (int i = 0; i < 4; i++) ...{
+              for (FoodModel foodModel in combocategory.foodList) ...{
                 Container(
                   width: double.infinity,
                   color: bgColor,
@@ -416,8 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 150,
                                 width: 150,
                                 fit: BoxFit.cover,
-                                imageUrl:
-                                    '${list.elementAt(2).foodList.elementAt(i).foodImage}',
+                                imageUrl: '${foodModel.foodImage}',
                                 progressIndicatorBuilder:
                                     (context, url, downloadProgress) => Center(
                                         child: CircularProgressIndicator(
@@ -468,7 +469,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${list.elementAt(2).foodList.elementAt(i).foodname.toWordCase()}',
+                                  '${foodModel.foodname.toWordCase()}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6
@@ -479,13 +480,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                 ),
                                 ReadMoreText(
-                                  '${list.elementAt(2).foodList.elementAt(i).fooddescription.toCamelCase()}',
+                                  '${foodModel.fooddescription.toCamelCase()}',
                                   style: Theme.of(context).textTheme.caption,
                                   trimLines: 3,
                                   trimMode: TrimMode.Line,
                                   colorClickableText: primaryColor,
-                                  // trimCollapsedText: '...',
-                                  trimExpandedText: 'Show less',
+                                  trimCollapsedText: 'Read more',
+                                  trimExpandedText: 'show less',
                                 ),
                                 Row(
                                   children: [
@@ -494,10 +495,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          ' ₹ ${list.elementAt(2).foodList.elementAt(i).foodamount} ',
+                                          ' ₹ ${foodModel.foodamount} ',
                                         ),
                                         Text(
-                                          ' ₹ ${int.parse(list.elementAt(2).foodList.elementAt(i).foodamount) + 100}',
+                                          ' ₹ ${int.parse(foodModel.foodamount) + 100}',
                                           style: TextStyle(
                                               decoration:
                                                   TextDecoration.lineThrough),
@@ -507,25 +508,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Spacer(),
                                     (CartHelper.getItemCountInCart(
                                                 CartHelper.transformFoodModel(
-                                                    list
-                                                        .elementAt(2)
-                                                        .foodList
-                                                        .elementAt(i))) ==
+                                                    foodModel)) ==
                                             0)
                                         ? CartButton().getCartButtonSimple(
-                                            context,
-                                            list
-                                                .elementAt(2)
-                                                .foodList
-                                                .elementAt(i),
-                                            refreshState)
+                                            context, foodModel, refreshState)
                                         : CartButton().getCartButtonComplex(
-                                            context,
-                                            list
-                                                .elementAt(2)
-                                                .foodList
-                                                .elementAt(i),
-                                            refreshState)
+                                            context, foodModel, refreshState)
                                   ],
                                 ),
                               ],

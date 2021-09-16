@@ -86,6 +86,7 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: googleSignInAccount.photoUrl!);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
+          prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
 
           status = AuthStatus.Authenticated;
           notifyListeners();
@@ -180,6 +181,7 @@ class AuthenticationService extends ChangeNotifier {
               fcmToken: fcmToken!,
               email: _facebookUser['email'],
               profileImage: _facebookUser['picture']['data']['url']);
+          prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
           status = AuthStatus.Authenticated;

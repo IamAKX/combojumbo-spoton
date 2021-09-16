@@ -22,12 +22,13 @@ class _IntroductionState extends State<Introduction> {
     ),
     PageViewModel(
       title: 'Select the nearest outlet',
-      body: 'hoose Your Favourite CJ Outlet which delivers to you.',
+      body: 'Choose Your Favourite CJ Outlet which delivers to you.',
       image: Image.asset('assets/images/intro2.png'),
     ),
     PageViewModel(
-      title: 'Select the nearest outlet',
-      body: 'Choose Your Favourite CJ Outlet which delivers to you.',
+      title: 'Get quick deliveries',
+      body:
+          'Order & await Luscious delicacies to be delivered at your doorstep.',
       image: Image.asset('assets/images/intro3.png'),
     ),
   ];

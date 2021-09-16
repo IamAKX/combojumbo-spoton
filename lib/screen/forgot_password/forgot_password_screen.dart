@@ -91,7 +91,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ?.copyWith(color: Colors.white),
                 ),
                 Text(
-                  'OTP will be sent to this mobile number for verification',
+                  'Please enter your registered mobile number',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1
@@ -125,12 +125,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   child: InkWell(
                     onTap: () => Navigator.of(context).pushNamedAndRemoveUntil(
                         RegisterScreen.REGISTER_ROUTE, (route) => false),
-                    child: Text(
-                      'New to Combo Jumbo, register',
-                      style: Theme.of(context)
-                          .textTheme
-                          .caption
-                          ?.copyWith(color: Colors.white),
+                    child: RichText(
+                      text: TextSpan(
+                        text: 'Don\'t have an account? ',
+                        style: Theme.of(context)
+                            .textTheme
+                            .caption
+                            ?.copyWith(color: Colors.white),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: 'Sign Up',
+                            style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

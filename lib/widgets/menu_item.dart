@@ -68,8 +68,8 @@ class MenuItem extends StatelessWidget {
             trimLines: 2,
             trimMode: TrimMode.Line,
             colorClickableText: primaryColor,
-            // trimCollapsedText: '...',
-            trimExpandedText: 'Show less',
+            trimCollapsedText: 'Read more',
+            trimExpandedText: 'show less',
             style: Theme.of(context)
                 .textTheme
                 .subtitle2

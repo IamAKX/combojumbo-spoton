@@ -240,6 +240,9 @@ class _CartScreenState extends State<CartScreen> {
             )
           : ListView(
               children: [
+                SizedBox(
+                  height: defaultPadding,
+                ),
                 ListTile(
                   tileColor: bgColor,
                   minVerticalPadding: 1.0,
@@ -264,7 +267,7 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   dense: true,
                   title: Text('${outletModel.outletName}'),
-                  subtitle: Text('${outletModel.outletId}'),
+                  // subtitle: Text('${outletModel.outletId}'),
                 ),
                 SizedBox(
                   height: defaultPadding,
@@ -604,9 +607,16 @@ class _CartScreenState extends State<CartScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Packing charge'),
-                              Text(
-                                  '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
+                              Text('Packing Charges'),
+                              if (allChargesModel!.Packing_Charge.toDouble() ==
+                                  0)
+                                Text(
+                                  'FREE',
+                                  style: TextStyle(color: Colors.green),
+                                )
+                              else
+                                Text(
+                                    '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
                             ],
                           ),
                           if (double.parse(allChargesModel!.Service_Charge) >

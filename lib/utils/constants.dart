@@ -41,16 +41,19 @@ extension StringExtension on String {
   String toCamelCase() {
     if (this.length == 0) return this;
     if (this.length > 1)
-      return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
+      return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}"
+          .replaceAll('Cj', 'CJ');
     else
-      return "${this[0].toUpperCase()}${this.substring(1)}";
+      return "${this[0].toUpperCase()}${this.substring(1)}"
+          .replaceAll('Cj', 'CJ');
   }
 
   String toWordCase() {
     if (this.length == 0)
       return this;
     else
-      return "${this.split(" ").map((str) => str.toCamelCase()).join(" ")}";
+      return "${this.split(" ").map((str) => str.toCamelCase()).join(" ")}"
+          .replaceAll('Cj', 'CJ');
   }
 
   double toDouble() {

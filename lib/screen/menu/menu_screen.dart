@@ -362,7 +362,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           width: defaultPadding,
                         ),
                         Text(
-                          '9.0',
+                          '10.0',
                           style:
                               Theme.of(context).textTheme.subtitle1?.copyWith(),
                         ),
@@ -385,7 +385,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           width: defaultPadding,
                         ),
                         Text(
-                          '8.0',
+                          '9.5',
                           style:
                               Theme.of(context).textTheme.subtitle1?.copyWith(),
                         ),
@@ -408,7 +408,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           width: defaultPadding,
                         ),
                         Text(
-                          '9.5',
+                          '9.0',
                           style:
                               Theme.of(context).textTheme.subtitle1?.copyWith(),
                         ),
@@ -431,7 +431,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           width: defaultPadding,
                         ),
                         Text(
-                          '8.5',
+                          '9.5',
                           style:
                               Theme.of(context).textTheme.subtitle1?.copyWith(),
                         ),

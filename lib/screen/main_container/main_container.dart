@@ -218,7 +218,7 @@ class _MainContainerState extends State<MainContainer> {
         );
       case 1:
         return AppBar(
-          title: Text('Order'),
+          title: Text('My Orders'),
           backgroundColor: bgColor,
           centerTitle: false,
           actions: [

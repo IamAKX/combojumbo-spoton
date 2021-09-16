@@ -68,7 +68,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter_native_splash:
-  image: assets/images/spash_screen_3.png
+  image: assets/images/spash_screen_2.png
   color: "#ffffff"
   web_image_mode: center
   android_gravity: fill

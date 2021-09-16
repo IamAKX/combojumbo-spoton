@@ -120,10 +120,16 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               SizedBox(
                 width: 5,
               ),
-              Text('Order Packaging Charge'),
+              Text('Order Packaging Charges'),
               Spacer(),
-              Text(
-                  '${Constants.RUPEE} ${widget.orderDetailModel.order.packging_charge.toDouble().toStringAsFixed(2)}'),
+              if (widget.orderDetailModel.order.packging_charge.toDouble() == 0)
+                Text(
+                  'FREE',
+                  style: TextStyle(color: Colors.green),
+                )
+              else
+                Text(
+                    '${Constants.RUPEE} ${widget.orderDetailModel.order.packging_charge.toDouble().toStringAsFixed(2)}'),
             ],
           ),
           Row(

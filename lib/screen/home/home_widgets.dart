@@ -158,8 +158,8 @@ class RecomendedItems extends StatelessWidget {
                         trimLines: 2,
                         trimMode: TrimMode.Line,
                         colorClickableText: primaryColor,
-                        // trimCollapsedText: '...',
-                        trimExpandedText: 'Show less',
+                        trimCollapsedText: 'Read more',
+                        trimExpandedText: 'show less',
                       ),
                       Row(
                         children: [

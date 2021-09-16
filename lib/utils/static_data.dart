@@ -27,7 +27,7 @@ List<AddSliderCardModel> getAdSlider() {
         imageLink: 'assets/images/pizzapockets.png',
         redirection: WebviewInternal.WEBVIEW_ROUTE,
         color: Colors.lightGreen,
-        arguments: API.HOTCASE),
+        arguments: API.MUNCHBOX),
     AddSliderCardModel(
         text1: 'Combo Meals',
         text2: 'Jumbo Deals',
