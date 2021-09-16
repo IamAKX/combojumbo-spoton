@@ -143,17 +143,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   '${Constants.RUPEE} ${widget.orderDetailModel.order.delivery_charge.toDouble().toStringAsFixed(2)}'),
             ],
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 5,
-              ),
-              Text('Service Charge'),
-              Spacer(),
-              Text(
-                  '${Constants.RUPEE} ${widget.orderDetailModel.order.service_charge.toDouble().toStringAsFixed(2)}'),
-            ],
-          ),
+          if (widget.orderDetailModel.order.service_charge.toDouble() > 0)
+            Row(
+              children: [
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Service Charge'),
+                Spacer(),
+                Text(
+                    '${Constants.RUPEE} ${widget.orderDetailModel.order.service_charge.toDouble().toStringAsFixed(2)}'),
+              ],
+            ),
           Row(
             children: [
               SizedBox(

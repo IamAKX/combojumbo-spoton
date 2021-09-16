@@ -51,7 +51,7 @@ List<AddSliderCardModel> getAdSlider() {
         imageLink: 'assets/images/hotcase.png',
         redirection: WebviewInternal.WEBVIEW_ROUTE,
         color: Colors.indigoAccent,
-        arguments: API.MUNCHBOX),
+        arguments: API.HOTCASE  ),
     AddSliderCardModel(
         text1: 'The Ultimate',
         text2: 'Combos',

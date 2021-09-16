@@ -72,6 +72,7 @@ flutter_native_splash:
   color: "#ffffff"
   web_image_mode: center
   android_gravity: fill
+  ios_content_mode: scaleToFill
 # flutter pub run flutter_native_splash:create
 flutter_icons:
   android: "launcher_icon"

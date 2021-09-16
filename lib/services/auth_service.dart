@@ -64,7 +64,8 @@ class AuthenticationService extends ChangeNotifier {
         'name': _googleSignInAccount!.displayName,
         'email': _googleSignInAccount!.email,
         'g_id': _googleSignInAccount!.id,
-        'mobileid': fcmToken
+        'mobileid': fcmToken,
+        'profileImage': googleSignInAccount.photoUrl ?? ''
       });
       print('Request : $reqBody');
       Response response = await _dio.post(
@@ -91,7 +92,13 @@ class AuthenticationService extends ChangeNotifier {
           status = AuthStatus.Authenticated;
           notifyListeners();
           // SnackBarService.instance.showSnackBarSuccess(body['msg']);
-          Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+
+          if (body['is_new_user'] == 'Y')
+            Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+          else
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+                arguments: 0);
         } else {
           status = AuthStatus.Error;
           notifyListeners();
@@ -154,7 +161,8 @@ class AuthenticationService extends ChangeNotifier {
         'fb_email':
             _facebookUser['email'] == null ? '' : _facebookUser['email'],
         'fb_id': _facebookUser['id'],
-        'mobileid': fcmToken
+        'mobileid': fcmToken,
+        'profileImage': _facebookUser['picture']['data']['url']
       });
 
       Response response = await _dio.post(
@@ -182,7 +190,12 @@ class AuthenticationService extends ChangeNotifier {
           status = AuthStatus.Authenticated;
           notifyListeners();
           // SnackBarService.instance.showSnackBarSuccess(body['msg']);
-          Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+          if (body['is_new_user'] == 'Y')
+            Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+          else
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+                arguments: 0);
         } else {
           status = AuthStatus.Error;
           notifyListeners();

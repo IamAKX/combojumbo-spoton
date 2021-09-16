@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Spacer(),
                               Container(
-                                height: 120,
+                                height: 118,
                                 child: Stack(
                                   children: [
                                     Positioned(

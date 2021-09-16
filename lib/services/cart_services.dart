@@ -289,7 +289,7 @@ class CartServices extends ChangeNotifier {
       'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
       'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
       'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
-      'gstvalue': '${cartVriablesModel.allChargesModel!.gst}',
+      'gstvalue': '${CartHelper.getServiceCharge(cartVriablesModel.allChargesModel).toStringAsFixed(2)}',
       'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
       'totalpaidamount': '${cartVriablesModel.netAmount}',
       'pay': 'payumoney',
