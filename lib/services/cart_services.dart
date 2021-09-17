@@ -289,14 +289,15 @@ class CartServices extends ChangeNotifier {
       'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
       'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
       'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
-      'gstvalue': '${CartHelper.getServiceCharge(cartVriablesModel.allChargesModel).toStringAsFixed(2)}',
+      'gstvalue':
+          '${CartHelper.getServiceCharge(cartVriablesModel.allChargesModel).toStringAsFixed(2)}',
       'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
       'totalpaidamount': '${cartVriablesModel.netAmount}',
       'pay': 'payumoney',
       'transcation_id': '$payUMoneyTxnId',
       'ordertype': 'Delivery',
       'address1': '${addressModel.address1}',
-      'address2': '${addressModel.address1}',
+      'address2': '${addressModel.address2}',
       'landmark': '${addressModel.landmark}',
       'state': '${addressModel.stateModel.id}',
       'city': '${addressModel.city.id}',
@@ -353,7 +354,7 @@ class CartServices extends ChangeNotifier {
     UserModel userModel =
         UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
     var reqBody = FormData.fromMap({
-      'cust_id': userModel.id,
+      'cust_id': '${userModel.id} ',
     });
     Response response = await _dio.post(API.OrderHistory, data: reqBody);
 

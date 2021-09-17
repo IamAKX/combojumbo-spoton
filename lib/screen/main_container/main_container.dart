@@ -149,7 +149,7 @@ class _MainContainerState extends State<MainContainer> {
                       });
                     },
                     child: Container(
-                      width: MediaQuery.of(context).size.width * 0.6,
+                      // width: MediaQuery.of(context).size.width * 0.6,
                       child: Text(
                         '${_pincodeModel.location}',
                         style: TextStyle(

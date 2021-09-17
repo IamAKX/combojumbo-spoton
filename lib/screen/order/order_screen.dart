@@ -47,7 +47,7 @@ class _OrderScreenState extends State<OrderScreen> {
         ? Center(
             child: CircularProgressIndicator(),
           )
-        : _cartServices.status == CartStatus.Failed
+        : orders.isEmpty
             ? Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

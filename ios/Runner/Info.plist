@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>894941577952837</string>
 	<key>FacebookDisplayName</key>
@@ -64,6 +64,10 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
+	<string>Need access to browser profile image</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Need access to browser profile image</string>
+	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Need access to browser profile image</string>
 	<key>UIBackgroundModes</key>
 	<array>

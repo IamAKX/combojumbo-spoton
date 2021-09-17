@@ -166,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 refreshState: refreshState,
               ),
               Container(
-                height: (screenSize.width * 0.65),
+                height: (screenSize.width * 0.67),
                 width: screenSize.width * 0.7,
                 child: _catalogService.status == CatalogStatus.Loading
                     ? Center(
@@ -230,6 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Container(
                           height: 250,
                           width: 200,
+                          margin: EdgeInsets.symmetric(horizontal: 5),
                           padding: EdgeInsets.only(
                             left: defaultPadding,
                             top: defaultPadding,
@@ -251,6 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Text(
                                 '${model.text1}',
+                                // maxLines: 1,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1
@@ -262,6 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Text(
                                 '${model.text2}',
+                                maxLines: 1,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1

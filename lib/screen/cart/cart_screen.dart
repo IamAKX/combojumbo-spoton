@@ -253,7 +253,7 @@ class _CartScreenState extends State<CartScreen> {
                     right: 10,
                   ),
                   leading: CachedNetworkImage(
-                    imageUrl: outletModel.image?? '',
+                    imageUrl: outletModel.image ?? '',
                     progressIndicatorBuilder:
                         (context, url, downloadProgress) => Center(
                       child: CircularProgressIndicator(
@@ -319,8 +319,8 @@ class _CartScreenState extends State<CartScreen> {
                                     width: 5,
                                   ),
                                   Container(
-                                    width: MediaQuery.of(context).size.width *
-                                        0.45,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
                                       '${groupedItem.cartItem.foodname.toWordCase()}',
                                       style:

@@ -209,7 +209,7 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkWell( 
       onTap: () {
         Navigator.of(context).pushNamed(
           MenuScreen.MENU_SCREEN_ROUTE,
