@@ -12,6 +12,7 @@ import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
+import 'package:cjspoton/screen/take_away/take_away_cart/take_away_cart_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -27,20 +28,20 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 
-class MenuScreen extends StatefulWidget {
-  const MenuScreen({
+class TakeAwayMenuScreen extends StatefulWidget {
+  const TakeAwayMenuScreen({
     Key? key,
     required this.menuScreenNavigatorPayloadModel,
   }) : super(key: key);
-  static const String MENU_SCREEN_ROUTE = '/menuScreen';
+  static const String TAKE_AWAY_MENU_SCREEN_ROUTE = '/takeAwayMenuScreen';
   // final Function() refreshMainContainerState;
   final MenuScreenNavigatorPayloadModel menuScreenNavigatorPayloadModel;
 
   @override
-  _MenuScreenState createState() => _MenuScreenState();
+  _TakeAwayMenuScreenState createState() => _TakeAwayMenuScreenState();
 }
 
-class _MenuScreenState extends State<MenuScreen> {
+class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
   final GlobalKey _menuKey = new GlobalKey();
   ScrollController _scrollController = ScrollController();
   late OutletModel _outletModel;
@@ -163,7 +164,7 @@ class _MenuScreenState extends State<MenuScreen> {
           IconButton(
             onPressed: () {
               Navigator.of(context)
-                  .pushNamed(CartScreen.CART_ROUTE,
+                  .pushNamed(TakeAwayCartScreen.TAKE_AWAY_CART_ROUTE,
                       arguments: widget.menuScreenNavigatorPayloadModel
                           .refreshMainContainerState)
                   .then((value) => refreshState());
@@ -234,14 +235,14 @@ class _MenuScreenState extends State<MenuScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'CJ ${_outletModel.outletName} - Home Delivery',
+                      'CJ ${_outletModel.outletName} - Take Away',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
                     Text(
-                      'Delivering to ${_pincodeModel.pincode} - ${_pincodeModel.location}',
+                      'Take Away from ${_pincodeModel.pincode} - ${_pincodeModel.location}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,

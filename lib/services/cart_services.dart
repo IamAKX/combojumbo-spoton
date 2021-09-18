@@ -320,7 +320,7 @@ class CartServices extends ChangeNotifier {
         status = CartStatus.Success;
         SnackBarService.instance
             .showSnackBarSuccess((resBody['msg']).toString().trim());
-        CartHelper.clearCart();
+        if (paymentState == 'success') CartHelper.clearCart();
         notifyListeners();
         return true;
       } else {
@@ -482,5 +482,93 @@ class CartServices extends ChangeNotifier {
     //   SnackBarService.instance.showSnackBarError(e.toString());
     // }
     return list;
+  }
+
+  Future<bool> placeTakeAwayOrder(
+      CartVriablesModel cartVriablesModel,
+      Map? payUMoneyResponse,
+      PaymentParams paymentParam,
+      String payUMoneyTxnId,
+      String paymentState,
+      BuildContext context) async {
+    status = CartStatus.Loading;
+    notifyListeners();
+
+    // try {
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+    UserModel userModel =
+        UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var payload = {
+      'cust_id': "${userModel.id.toString()}",
+      'outletid': '${outletModel.outletId}',
+      'response': '$paymentState',
+      'responseDetials': payUMoneyResponse,
+      'oid': '${userModel.id}${DateTime.now().millisecond}',
+      'subtotal': '${CartHelper.getTotalPriceOfCart()}',
+      'couponcode':
+          '${cartVriablesModel.couponDiscountDetailModel?.coupon_code}',
+      'actualdiscountvalue':
+          '${CartHelper.getDiscountPrice(cartVriablesModel.couponDiscountDetailModel)}',
+      'discountvalue':
+          '${cartVriablesModel.couponDiscountDetailModel?.coupon_value}',
+      'deliverycharge': '${cartVriablesModel.selectedPincode.charge}',
+      'packingcharge': '${cartVriablesModel.allChargesModel!.Packing_Charge}',
+      'gstpercentage': '${cartVriablesModel.allChargesModel!.gst}',
+      'gstvalue':
+          '${CartHelper.getServiceCharge(cartVriablesModel.allChargesModel).toStringAsFixed(2)}',
+      'servicecharge': '${cartVriablesModel.allChargesModel!.Service_Charge}',
+      'totalpaidamount': '${cartVriablesModel.netAmount}',
+      'pay': 'payumoney',
+      'transcation_id': '$payUMoneyTxnId',
+      'ordertype': 'Take Away',
+      'address1': '',
+      'address2': '',
+      'landmark': '',
+      'state': '',
+      'city': '',
+      'pincode': '${cartVriablesModel.selectedPincode.id}',
+      'delivery_suggestion': '${cartVriablesModel.deliverySuggestion}',
+      'delivery_instruction': '',
+      'cart': CartHelper.getGroupedCartJson()
+    };
+    var reqBody = FormData.fromMap(payload);
+
+    log(json.encode(payload));
+
+    Response response = await _dio.post(API.PlaceOrder, data: payload);
+    log('response : ' + response.data.toString());
+    var resBody = json.decode(response.data);
+    if (response.statusCode == 200) {
+      print('Response : ${response.data}');
+      var body = resBody['body'];
+      if (resBody['status'] == 1) {
+        status = CartStatus.Success;
+        SnackBarService.instance
+            .showSnackBarSuccess((resBody['msg']).toString().trim());
+        if (paymentState == 'success') CartHelper.clearCart();
+        notifyListeners();
+        return true;
+      } else {
+        status = CartStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarError((body['msg']));
+        return false;
+      }
+    } else {
+      status = CartStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
+      return false;
+    }
+    // }
+    // catch (e) {
+    //   status = CartStatus.Failed;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    //   return false;
+    // }
+    return false;
   }
 }

@@ -21,6 +21,8 @@ import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
+import 'package:cjspoton/screen/take_away/take_away_cart/take_away_cart_screen.dart';
+import 'package:cjspoton/screen/take_away/take_away_menu/take_away_menu_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/widgets/webview_internal.dart';
@@ -106,6 +108,20 @@ class NavRoute {
             url: settings.arguments as String,
           ),
         );
+
+      // Take Away
+      case TakeAwayMenuScreen.TAKE_AWAY_MENU_SCREEN_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => TakeAwayMenuScreen(
+            menuScreenNavigatorPayloadModel:
+                settings.arguments as MenuScreenNavigatorPayloadModel,
+          ),
+        );
+      case TakeAwayCartScreen.TAKE_AWAY_CART_ROUTE:
+        return MaterialPageRoute(
+            builder: (_) => TakeAwayCartScreen(
+                  refreshMainContainerState: settings.arguments as Function(),
+                ));
 
       default:
         return _errorRoute();

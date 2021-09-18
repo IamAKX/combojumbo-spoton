@@ -6,6 +6,7 @@ import 'package:cjspoton/model/cj_route_option_model.dart';
 import 'package:cjspoton/model/review_model.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
+import 'package:cjspoton/screen/take_away/take_away_menu/take_away_menu_screen.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,7 @@ List<AddSliderCardModel> getAdSlider() {
         imageLink: 'assets/images/hotcase.png',
         redirection: WebviewInternal.WEBVIEW_ROUTE,
         color: Colors.indigoAccent,
-        arguments: API.HOTCASE  ),
+        arguments: API.HOTCASE),
     AddSliderCardModel(
         text1: 'The Ultimate',
         text2: 'Combos',
@@ -100,7 +101,7 @@ List<CJRouteOptionModel> getCJRouteOptions() {
     CJRouteOptionModel(
         name: 'Take Away',
         image: 'https://www.combojumbo.in/img/Take%20away.png',
-        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
+        redirectionUrl: TakeAwayMenuScreen.TAKE_AWAY_MENU_SCREEN_ROUTE),
     CJRouteOptionModel(
         name: 'Mini Banquet',
         image: 'https://www.combojumbo.in/img/e-dining.png',

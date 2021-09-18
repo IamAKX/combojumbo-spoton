@@ -137,13 +137,28 @@ class CartHelper {
       PincodeModel selectedPincode,
       CouponDiscountDetailModel? couponDiscountDetailModel) {
     double amt = getTotalPriceOfCart();
-    amt += double.parse(selectedPincode.charge);
     if (allChargesModel != null)
       amt += double.parse(allChargesModel.Packing_Charge) +
           double.parse(allChargesModel.Service_Charge) +
           getServiceCharge(allChargesModel);
-    if (getTotalPriceOfCart() < allChargesModel!.min_order_online.toDouble())
+    if (getTotalPriceOfCart() >=
+        allChargesModel!.min_order_free_shipping.toDouble())
       amt += selectedPincode.charge.toDouble();
+    if (couponDiscountDetailModel != null)
+      amt -= getDiscountPrice(couponDiscountDetailModel);
+    return amt;
+  }
+
+  static double getTakeAwayNetAmount(
+      AllChargesModel? allChargesModel,
+      PincodeModel selectedPincode,
+      CouponDiscountDetailModel? couponDiscountDetailModel) {
+    double amt = getTotalPriceOfCart();
+    if (allChargesModel != null)
+      amt += double.parse(allChargesModel.Packing_Charge) +
+          double.parse(allChargesModel.Service_Charge) +
+          getServiceCharge(allChargesModel);
+
     if (couponDiscountDetailModel != null)
       amt -= getDiscountPrice(couponDiscountDetailModel);
     return amt;
