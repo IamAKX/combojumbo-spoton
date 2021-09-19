@@ -521,7 +521,7 @@ class CartServices extends ChangeNotifier {
       'totalpaidamount': '${cartVriablesModel.netAmount}',
       'pay': 'payumoney',
       'transcation_id': '$payUMoneyTxnId',
-      'ordertype': 'Take Away',
+      'ordertype': 'Take-Away',
       'address1': '',
       'address2': '',
       'landmark': '',

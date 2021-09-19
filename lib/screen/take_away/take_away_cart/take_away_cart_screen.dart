@@ -676,9 +676,9 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      // amount:
-      //     "${CartHelper.getTakeAwayNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}",
-      amount: '0.5',
+      amount:
+          "${CartHelper.getTakeAwayNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}",
+      // amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",
