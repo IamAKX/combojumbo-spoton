@@ -7,6 +7,7 @@ import 'package:cjspoton/model/coupon_discount_detail_model.dart';
 import 'package:cjspoton/model/coupon_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
+import 'package:cjspoton/model/section_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
@@ -15,6 +16,7 @@ import 'package:cjspoton/screen/order/order_detail.dart';
 import 'package:cjspoton/screen/order/order_food_model.dart';
 import 'package:cjspoton/screen/order/order_menu_details.dart';
 import 'package:cjspoton/screen/order/order_model.dart';
+import 'package:cjspoton/screen/table_booking/table_booking_model/table_booking_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -569,6 +571,122 @@ class CartServices extends ChangeNotifier {
     //   SnackBarService.instance.showSnackBarError(e.toString());
     //   return false;
     // }
+    return false;
+  }
+
+  Future<List<SectionModel>> getAllSection(BuildContext context) async {
+    status = CartStatus.Loading;
+    notifyListeners();
+    List<SectionModel> list = [];
+    try {
+      OutletModel outletModel =
+          OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+
+      var reqBody = FormData.fromMap({'outletid': outletModel.outletId});
+      Response response = await _dio.post(API.GetSection, data: reqBody);
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 1) {
+          for (var section in body) {
+            SectionModel model = SectionModel(
+                id: section['id'],
+                selectedOutlet: section['outletid'],
+                sectionname: section['sectionname'],
+                guest: section['guest']);
+            list.add(model);
+          }
+          status = CartStatus.Success;
+          notifyListeners();
+        } else {
+          status = CartStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((resBody['msg']));
+        }
+      } else {
+        status = CartStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = CartStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+    return list;
+  }
+
+  Future<bool> placeTableBookingOrder(
+      TableBookingModel tableBookingModel,
+      Map? payUMoneyResponse,
+      PaymentParams paymentParam,
+      String payUMoneyTxnId,
+      String paymentState,
+      BuildContext context) async {
+    status = CartStatus.Loading;
+    notifyListeners();
+
+    try {
+      OutletModel outletModel =
+          OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+      UserModel userModel =
+          UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+      var payload = {
+        'cust_id': "${userModel.id.toString()}",
+        'outletid': '${outletModel.outletId}',
+        'response': '$paymentState',
+        'responseDetials': payUMoneyResponse,
+        'oid': '${userModel.id}${DateTime.now().millisecond}',
+        'subtotal':
+            '${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble()}',
+        'pay': 'payumoney',
+        'transcation_id': '$payUMoneyTxnId',
+        'ordertype': 'Table Booking',
+        'sectionid': '${tableBookingModel.section.id}',
+        'dateTime': '${tableBookingModel.bookingSlot}',
+        'guestcount': '${tableBookingModel.numberOfGuest}',
+      };
+      var reqBody = FormData.fromMap(payload);
+
+      log(json.encode(payload));
+
+      Response response = await _dio.post(API.PlaceOrder, data: payload);
+      log('response : ' + response.data.toString());
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+        var body = resBody['body'];
+        if (resBody['status'] == 1) {
+          status = CartStatus.Success;
+          SnackBarService.instance
+              .showSnackBarSuccess((resBody['msg']).toString().trim());
+          if (paymentState == 'success') CartHelper.clearCart();
+          notifyListeners();
+          return true;
+        } else {
+          status = CartStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+          return false;
+        }
+      } else {
+        status = CartStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+        return false;
+      }
+    } catch (e) {
+      status = CartStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+      return false;
+    }
     return false;
   }
 }

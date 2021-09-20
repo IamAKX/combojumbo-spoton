@@ -3,17 +3,19 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFieldWithHeading extends StatelessWidget {
-  const CustomTextFieldWithHeading({
-    Key? key,
-    required TextEditingController teCtrl,
-    required this.hint,
-    required this.inputType,
-  })  : _teCtrl = teCtrl,
+  const CustomTextFieldWithHeading(
+      {Key? key,
+      required TextEditingController teCtrl,
+      required this.hint,
+      required this.inputType,
+      this.enabled})
+      : _teCtrl = teCtrl,
         super(key: key);
 
   final TextEditingController _teCtrl;
   final String hint;
   final TextInputType inputType;
+  final bool? enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class CustomTextFieldWithHeading extends StatelessWidget {
           TextField(
             keyboardType: inputType,
             autocorrect: true,
+            enabled: enabled ?? true,
             controller: _teCtrl,
             textCapitalization: inputType == TextInputType.name
                 ? TextCapitalization.words

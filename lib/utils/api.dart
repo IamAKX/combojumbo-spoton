@@ -34,6 +34,8 @@ class API {
   static const String AddAddress = '${BASE_URL}add-address';
   static const String GetAddress = '${BASE_URL}myaddress.php';
 
+  static const String GetSection = '${BASE_URL}section.php';
+
   // Webview urls
   static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';
   static const String MUNCHBOX =
