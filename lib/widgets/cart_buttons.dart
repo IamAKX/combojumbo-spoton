@@ -107,7 +107,7 @@ class CartButton {
                       Spacer(),
                       IconButton(
                         icon: Icon(Icons.close),
-                        onPressed: () {
+                        onPressed: () { 
                           Navigator.of(context).pop();
                         },
                       )

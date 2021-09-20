@@ -228,7 +228,7 @@ class CartServices extends ChangeNotifier {
           );
           double cartAmt = double.parse(totalAmount);
           if (cModel != null &&
-              cartAmt >= cModel.maximum_order_value.toDouble() &&
+              cartAmt >= cModel.minimum_order_value.toDouble() &&
               cartAmt <= cModel.maximum_order_value.toDouble()) {
             couponDiscountDetailModel = cModel;
             status = CartStatus.Success;
