@@ -642,7 +642,7 @@ class CartServices extends ChangeNotifier {
         'response': '$paymentState',
         'responseDetials': payUMoneyResponse,
         'oid': '${userModel.id}${DateTime.now().millisecond}',
-        'subtotal':
+        'totalpaidamount':
             '${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble()}',
         'pay': 'payumoney',
         'transcation_id': '$payUMoneyTxnId',

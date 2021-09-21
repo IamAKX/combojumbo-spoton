@@ -1,3 +1,5 @@
+import 'package:cjspoton/model/add_on_model.dart';
+import 'package:cjspoton/model/add_on_model_item.dart';
 import 'package:cjspoton/model/cart_item.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
@@ -63,7 +65,9 @@ class CartButton {
         if (foodModel.addons.isEmpty) {
           CartItem cartItem = CartHelper.transformFoodModel(foodModel);
           CartHelper.addItemToCart(cartItem);
-        } else {}
+        } else {
+          addNewItemToCart(context, foodModel);
+        }
         refreshState();
       },
       child: Container(
@@ -84,8 +88,8 @@ class CartButton {
   }
 
   ScrollController _scrollController = ScrollController();
-  Future<void> addNewItemToCart(BuildContext context) {
-    int singleSelectOption = 0;
+  Future<void> addNewItemToCart(BuildContext context, FoodModel foodModel) {
+    Map<String, String> singleSelectOption = {};
     List multiSelect = [];
     return showModalBottomSheet<void>(
       builder: (BuildContext context) {
@@ -122,104 +126,201 @@ class CartButton {
                         }
                         return true;
                       },
-                      child: ListView(
+                      // child: ListView(
+                      //   controller: _scrollController,
+                      //   children: [
+                      //     Padding(
+                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //       child: Row(
+                      //         children: [
+                      //           Text(
+                      //             'Burger Combo Item ',
+                      //             style: Theme.of(context).textTheme.subtitle1,
+                      //           ),
+                      //           Text(
+                      //             '(4)',
+                      //             style: Theme.of(context).textTheme.caption,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //       child: Text(
+                      //         'Choose any 1 extra (*Mandatory)',
+                      //         style: Theme.of(context).textTheme.caption,
+                      //       ),
+                      //     ),
+                      //     for (var i = 0; i < 4; i++) ...{
+                      //       RadioListTile(
+                      //         title: Text('Option $i'),
+                      //         value: i,
+                      //         secondary: Text('${Constants.RUPEE} 123.00'),
+                      //         activeColor: primaryColor,
+                      //         groupValue: singleSelectOption,
+                      //         onChanged: (value) {
+                      //           setState(() {
+                      //             singleSelectOption =
+                      //                 int.parse(value.toString());
+                      //           });
+                      //         },
+                      //       ),
+                      //     },
+                      //     SizedBox(
+                      //       height: defaultPadding,
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //       child: Row(
+                      //         children: [
+                      //           Text(
+                      //             'Fries and Sauce ',
+                      //             style: Theme.of(context).textTheme.subtitle1,
+                      //           ),
+                      //           Text(
+                      //             '(6)',
+                      //             style: Theme.of(context).textTheme.caption,
+                      //           ),
+                      //         ],
+                      //       ),
+                      //     ),
+                      //     Padding(
+                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //       child: Text(
+                      //         'Choose any extra (*Mandatory)',
+                      //         style: Theme.of(context).textTheme.caption,
+                      //       ),
+                      //     ),
+                      //     for (var i = 0; i < 4; i++) ...{
+                      //       CheckboxListTile(
+                      //         dense: true,
+                      //         title: Text('Option $i'),
+                      //         controlAffinity: ListTileControlAffinity.leading,
+                      //         value: multiSelect.contains(i),
+                      //         secondary: Text('${Constants.RUPEE} 5.00'),
+                      //         activeColor: primaryColor,
+                      //         onChanged: (value) {
+                      //           setState(() {
+                      //             if (value!)
+                      //               multiSelect.add(i);
+                      //             else
+                      //               multiSelect.remove(value);
+                      //           });
+                      //         },
+                      //       ),
+                      //     },
+                      //     SizedBox(
+                      //       height: defaultPadding * 2,
+                      //     ),
+                      // Padding(
+                      //   padding: const EdgeInsets.symmetric(
+                      //       horizontal: defaultPadding),
+                      //   child: TextButton(
+                      //     onPressed: () {},
+                      //     child: Text(
+                      //       'ADD',
+                      //       style: Theme.of(context).textTheme.button,
+                      //     ),
+                      //   ),
+                      // ),
+                      //   ],
+                      // ),
+                      child: ListView.builder(
+                        itemCount: foodModel.addons.length,
                         controller: _scrollController,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Burger Combo Item ',
-                                  style: Theme.of(context).textTheme.subtitle1,
+                        itemBuilder: (context, index) {
+                          AddOnModel addOnModel =
+                              foodModel.addons.elementAt(index);
+                          if (addOnModel.Type == 'Single')
+                            singleSelectOption[addOnModel.id] = ' ';
+                          print(singleSelectOption);    
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '${addOnModel.Mainheading} ',
+                                      style:
+                                          Theme.of(context).textTheme.subtitle1,
+                                    ),
+                                    Text(
+                                      '(${addOnModel.subaddons.length})',
+                                      style:
+                                          Theme.of(context).textTheme.caption,
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  '(4)',
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              'Choose any 1 extra (*Mandatory)',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                          for (var i = 0; i < 4; i++) ...{
-                            RadioListTile(
-                              title: Text('Option $i'),
-                              value: i,
-                              secondary: Text('${Constants.RUPEE} 123.00'),
-                              activeColor: primaryColor,
-                              groupValue: singleSelectOption,
-                              onChanged: (value) {
-                                setState(() {
-                                  singleSelectOption =
-                                      int.parse(value.toString());
-                                });
-                              },
-                            ),
-                          },
-                          SizedBox(
-                            height: defaultPadding,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Fries and Sauce ',
-                                  style: Theme.of(context).textTheme.subtitle1,
-                                ),
-                                Text(
-                                  '(6)',
-                                  style: Theme.of(context).textTheme.caption,
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: Text(
-                              'Choose any extra (*Mandatory)',
-                              style: Theme.of(context).textTheme.caption,
-                            ),
-                          ),
-                          for (var i = 0; i < 4; i++) ...{
-                            CheckboxListTile(
-                              dense: true,
-                              title: Text('Option $i'),
-                              controlAffinity: ListTileControlAffinity.leading,
-                              value: multiSelect.contains(i),
-                              secondary: Text('${Constants.RUPEE} 5.00'),
-                              activeColor: primaryColor,
-                              onChanged: (value) {
-                                setState(() {
-                                  if (value!)
-                                    multiSelect.add(i);
-                                  else
-                                    multiSelect.remove(value);
-                                });
-                              },
-                            ),
-                          },
-                          SizedBox(
-                            height: defaultPadding * 2,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: defaultPadding),
-                            child: TextButton(
-                              onPressed: () {},
-                              child: Text(
-                                'ADD',
-                                style: Theme.of(context).textTheme.button,
                               ),
-                            ),
-                          ),
-                        ],
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: addOnModel.Type == 'Single'
+                                    ? Text(
+                                        'Choose any 1 extra (${addOnModel.Requirement})',
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      )
+                                    : Text(
+                                        'Choose any extra (${addOnModel.Requirement})',
+                                        style:
+                                            Theme.of(context).textTheme.caption,
+                                      ),
+                              ),
+                              if (addOnModel.Type == 'Single') ...{
+                                for (AddOnItemModel addOnItemModel
+                                    in addOnModel.subaddons) ...{
+                                  RadioListTile(
+                                    title:
+                                        Text('${addOnItemModel.subaddonsname}'),
+                                    value: addOnItemModel.id,
+                                    secondary: Text(
+                                        '${Constants.RUPEE} ${addOnItemModel.amount.toDouble().toStringAsFixed(2)}'),
+                                    activeColor: primaryColor,
+                                    groupValue:
+                                        singleSelectOption[addOnModel.id],
+                                    onChanged: (value) {
+                                      setState(() {
+                                        singleSelectOption[addOnModel.id] =
+                                            addOnItemModel.id;
+                                      });
+                                    },
+                                  ),
+                                },
+                              } else ...{
+                                for (AddOnItemModel addOnItemModel
+                                    in addOnModel.subaddons) ...{
+                                  CheckboxListTile(
+                                    dense: true,
+                                    title:
+                                        Text('${addOnItemModel.subaddonsname}'),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    value:
+                                        multiSelect.contains(addOnItemModel.id),
+                                    secondary: Text(
+                                        '${Constants.RUPEE} ${addOnItemModel.amount.toDouble().toStringAsFixed(2)}'),
+                                    activeColor: primaryColor,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value!)
+                                          multiSelect.add(addOnItemModel.id);
+                                        else
+                                          multiSelect.remove(addOnItemModel.id);
+                                      });
+                                    },
+                                  ),
+                                },
+                              },
+                              SizedBox(
+                                height: defaultPadding,
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                   ),
