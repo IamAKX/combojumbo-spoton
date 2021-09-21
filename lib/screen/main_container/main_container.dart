@@ -12,6 +12,7 @@ import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
+import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
 import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -224,6 +225,11 @@ class _MainContainerState extends State<MainContainer> {
           actions: [
             GetCartButton(
               refreshState: refreshState,
+            ),
+            IconButton(
+              onPressed: () => Navigator.of(context)
+                  .pushNamed(TableBookingScreens.TABLE_BOOKING_HISTORY_ROUTE),
+              icon: Icon(Icons.history_outlined),
             ),
           ],
         );

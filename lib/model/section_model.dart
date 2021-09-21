@@ -5,11 +5,13 @@ class SectionModel {
   String selectedOutlet;
   String sectionname;
   String guest;
+  String image;
   SectionModel({
     required this.id,
     required this.selectedOutlet,
     required this.sectionname,
     required this.guest,
+    required this.image,
   });
 
   SectionModel copyWith({
@@ -17,12 +19,14 @@ class SectionModel {
     String? selectedOutlet,
     String? sectionname,
     String? guest,
+    String? image,
   }) {
     return SectionModel(
       id: id ?? this.id,
       selectedOutlet: selectedOutlet ?? this.selectedOutlet,
       sectionname: sectionname ?? this.sectionname,
       guest: guest ?? this.guest,
+      image: image ?? this.image,
     );
   }
 
@@ -32,6 +36,7 @@ class SectionModel {
       'selectedOutlet': selectedOutlet,
       'sectionname': sectionname,
       'guest': guest,
+      'image': image,
     };
   }
 
@@ -41,6 +46,7 @@ class SectionModel {
       selectedOutlet: map['selectedOutlet'],
       sectionname: map['sectionname'],
       guest: map['guest'],
+      image: map['image'],
     );
   }
 
@@ -51,7 +57,7 @@ class SectionModel {
 
   @override
   String toString() {
-    return 'SectionModel(id: $id, selectedOutlet: $selectedOutlet, sectionname: $sectionname, guest: $guest)';
+    return 'SectionModel(id: $id, selectedOutlet: $selectedOutlet, sectionname: $sectionname, guest: $guest, image: $image)';
   }
 
   @override
@@ -62,7 +68,8 @@ class SectionModel {
         other.id == id &&
         other.selectedOutlet == selectedOutlet &&
         other.sectionname == sectionname &&
-        other.guest == guest;
+        other.guest == guest &&
+        other.image == image;
   }
 
   @override
@@ -70,6 +77,7 @@ class SectionModel {
     return id.hashCode ^
         selectedOutlet.hashCode ^
         sectionname.hashCode ^
-        guest.hashCode;
+        guest.hashCode ^
+        image.hashCode;
   }
 }

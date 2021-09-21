@@ -445,7 +445,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                           return;
                         } else {
                           AddressModel addressModel = AddressModel(
-                              pincode: selectedPincode!.pincode,
+                              pincode: selectedPincode!.id,
                               address1: completeAddressCtrl1.text,
                               address2: completeAddressCtrl2.text,
                               landmark: landmarkCtrl.text,

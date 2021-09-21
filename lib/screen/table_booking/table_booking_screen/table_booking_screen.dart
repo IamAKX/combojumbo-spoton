@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/all_charges_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
@@ -9,9 +11,11 @@ import 'package:cjspoton/model/section_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_model/table_booking_model.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
+import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -55,6 +59,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
   TextEditingController outletCtrl = TextEditingController();
   TextEditingController slotCtrl = TextEditingController();
   TextEditingController guestCtrl = TextEditingController();
+  TextEditingController sectionCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -80,7 +85,10 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
   Widget build(BuildContext context) {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
-
+    sectionCtrl.text =
+        selectedSection == null || selectedSection!.sectionname == null
+            ? ''
+            : selectedSection!.sectionname;
     selectedOutlet =
         OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     outletCtrl.text = selectedOutlet.outletName;
@@ -98,85 +106,166 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
           : ListView(
               padding: EdgeInsets.all(defaultPadding),
               children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Select Section',
+                    style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                          // fontWeight: FontWeight.bold,
+                          color: Colors.grey,
+                          fontSize: 18,
+                        ),
+                  ),
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
+                GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: sectionList.length,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2),
+                  itemBuilder: (BuildContext context, int index) {
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedSection = sectionList.elementAt(index);
+                        });
+                      },
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: ColorFiltered(
+                              colorFilter: ColorFilter.mode(
+                                selectedSection == null ||
+                                        selectedSection!.id !=
+                                            sectionList.elementAt(index).id
+                                    ? hintColor
+                                    : Colors.transparent,
+                                BlendMode.saturation,
+                              ),
+                              child: Container(
+                                width: 100,
+                                height: 100,
+                                child: CachedNetworkImage(
+                                  imageUrl:
+                                      sectionList.elementAt(index).image.trim(),
+                                  fit: BoxFit.cover,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Center(
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: defaultPadding / 2,
+                          ),
+                          Text(
+                            '${sectionList.elementAt(index).sectionname}',
+                            style:
+                                Theme.of(context).textTheme.subtitle2?.copyWith(
+                                      // fontWeight: FontWeight.bold,
+                                      color: textColor,
+                                    ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
                 CustomTextFieldWithHeading(
                   teCtrl: outletCtrl,
                   hint: 'Outlet',
                   inputType: TextInputType.text,
                   enabled: false,
                 ),
-                Text(
-                  'Section',
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      ?.copyWith(fontWeight: FontWeight.bold),
+                CustomTextFieldWithHeading(
+                  teCtrl: sectionCtrl,
+                  hint: 'Section',
+                  inputType: TextInputType.text,
+                  enabled: false,
                 ),
-                SizedBox(
-                  height: 8,
-                ),
-                DropdownSearch<SectionModel>(
-                  mode: Mode.DIALOG,
-                  searchBoxDecoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: defaultPadding),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                  ),
-                  popupTitle: Padding(
-                    padding: const EdgeInsets.all(defaultPadding),
-                    child: Text(
-                      'Select Section',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  showSearchBox: true,
-                  showSelectedItem: true,
-                  items: sectionList,
-                  itemAsString: (item) => item.sectionname,
-                  dropdownSearchDecoration: InputDecoration(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: defaultPadding),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
-                    ),
-                  ),
-                  label: "Select Section",
-                  hint: "Select Section",
-                  compareFn: (item, selectedItem) =>
-                      item.id == selectedItem?.id,
-                  onChanged: (value) {
-                    setState(() {
-                      if (value == null) {
-                        SnackBarService.instance
-                            .showSnackBarInfo('Select an Section');
-                        return;
-                      } else
-                        selectedSection = value;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: defaultPadding,
-                ),
+                // Text(
+                //   'Section',
+                //   style: Theme.of(context)
+                //       .textTheme
+                //       .subtitle2
+                //       ?.copyWith(fontWeight: FontWeight.bold),
+                // ),
+                // SizedBox(
+                //   height: 8,
+                // ),
+                // DropdownSearch<SectionModel>(
+                //   mode: Mode.DIALOG,
+                //   searchBoxDecoration: InputDecoration(
+                //     contentPadding:
+                //         EdgeInsets.symmetric(horizontal: defaultPadding),
+                //     enabledBorder: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(4),
+                //       borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                //     ),
+                //     focusedBorder: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(4),
+                //       borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                //     ),
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(4),
+                //       borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                //     ),
+                //   ),
+                //   popupTitle: Padding(
+                //     padding: const EdgeInsets.all(defaultPadding),
+                //     child: Text(
+                //       'Select Section',
+                //       style: TextStyle(fontWeight: FontWeight.bold),
+                //     ),
+                //   ),
+                //   showSearchBox: true,
+                //   showSelectedItem: true,
+                //   items: sectionList,
+                //   itemAsString: (item) => item.sectionname,
+                //   dropdownSearchDecoration: InputDecoration(
+                //     contentPadding:
+                //         EdgeInsets.symmetric(horizontal: defaultPadding),
+                //     enabledBorder: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(4),
+                //       borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                //     ),
+                //     focusedBorder: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(4),
+                //       borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                //     ),
+                //     border: OutlineInputBorder(
+                //       borderRadius: BorderRadius.circular(4),
+                //       borderSide: BorderSide(color: hintColor.withOpacity(0.5)),
+                //     ),
+                //   ),
+                //   label: "Select Section",
+                //   hint: "Select Section",
+                //   compareFn: (item, selectedItem) =>
+                //       item.id == selectedItem?.id,
+                //   onChanged: (value) {
+                //     setState(() {
+                //       if (value == null) {
+                //         SnackBarService.instance
+                //             .showSnackBarInfo('Select an Section');
+                //         return;
+                //       } else
+                //         selectedSection = value;
+                //     });
+                //   },
+                // ),
+                // SizedBox(
+                //   height: defaultPadding,
+                // ),
                 InkWell(
                   onTap: () {
                     DatePicker.showDateTimePicker(
@@ -194,12 +283,13 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                         ),
                       ),
                       onConfirm: (date) {
-                        if (date.isBefore(DateTime.now()))
+                        if (date.isBefore(DateTime.now())) {
                           SnackBarService.instance
                               .showSnackBarError('Enter a valid date');
-                        else
+                          slotCtrl.text = '';
+                        } else
                           slotCtrl.text =
-                              DateFormat('dd-MM-yyyy HH:mm:ss').format(date);
+                              DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
                       },
                       currentTime: DateTime.now(),
                     );
@@ -243,7 +333,8 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                         section: selectedSection!,
                         outlet: selectedOutlet,
                         numberOfGuest: guestCtrl.text,
-                        bookingSlot: slotCtrl.text);
+                        bookingSlot: slotCtrl.text,
+                        allChargesModel: allChargesModel);
 
                     startPayUMoneyPayment(tableBookingModel);
                   },
@@ -270,13 +361,43 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
 
   Future<void> startPayUMoneyPayment(
       TableBookingModel tableBookingModel) async {
+    if (user.email.isEmpty || user.name.isEmpty || user.phone.isEmpty) {
+      SnackBarService.instance
+          .showSnackBarError('Complete your profile to place order');
+      Navigator.of(context)
+          .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+          .then((value) {
+        setState(() {});
+      });
+      return;
+    }
+    if (!Utilities().isValidEmail(user.email)) {
+      SnackBarService.instance
+          .showSnackBarError('Your email address is not valid.');
+      Navigator.of(context)
+          .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+          .then((value) {
+        setState(() {});
+      });
+      return;
+    }
+    if (!Utilities().isValidPhone(user.phone)) {
+      SnackBarService.instance
+          .showSnackBarError('Your mobile number is not valid.');
+      Navigator.of(context)
+          .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+          .then((value) {
+        setState(() {});
+      });
+      return;
+    }
     PaymentParams _paymentParam = PaymentParams(
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      amount:
-          "${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble().toStringAsFixed(2)}",
-      // amount: '0.5',
+      // amount:
+      //     "${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble().toStringAsFixed(2)}",
+      amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",
@@ -366,9 +487,11 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                 payUMoneyTxnId, 'success', context)
             .then((value) {
           if (value)
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-                arguments: 1);
+            Navigator.of(context)
+                .pushNamed(TableBookingScreens.TABLE_BOOKING_HISTORY_ROUTE)
+                .then((value) => Navigator.of(context).pushNamedAndRemoveUntil(
+                    MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+                    arguments: 0));
         });
       },
     )..show();

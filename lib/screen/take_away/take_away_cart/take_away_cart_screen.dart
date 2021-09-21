@@ -21,6 +21,7 @@ import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_payu_unofficial/flutter_payu_unofficial.dart';
@@ -672,6 +673,36 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
 
   Future<void> startPayUMoneyPayment(
       CartVriablesModel cartVriablesModel) async {
+    if (user.email.isEmpty || user.name.isEmpty || user.phone.isEmpty) {
+      SnackBarService.instance
+          .showSnackBarError('Complete your profile to place order');
+      Navigator.of(context)
+          .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+          .then((value) {
+        setState(() {});
+      });
+      return;
+    }
+    if (!Utilities().isValidEmail(user.email)) {
+      SnackBarService.instance
+          .showSnackBarError('Your email address is not valid.');
+      Navigator.of(context)
+          .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+          .then((value) {
+        setState(() {});
+      });
+      return;
+    }
+    if (!Utilities().isValidPhone(user.phone)) {
+      SnackBarService.instance
+          .showSnackBarError('Your mobile number is not valid.');
+      Navigator.of(context)
+          .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
+          .then((value) {
+        setState(() {});
+      });
+      return;
+    }
     PaymentParams _paymentParam = PaymentParams(
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,

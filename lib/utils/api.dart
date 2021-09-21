@@ -35,6 +35,7 @@ class API {
   static const String GetAddress = '${BASE_URL}myaddress.php';
 
   static const String GetSection = '${BASE_URL}section.php';
+  static const String TableBookingOrderHistory = '${BASE_URL}table_history.php';
 
   // Webview urls
   static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';

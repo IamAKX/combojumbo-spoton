@@ -21,6 +21,7 @@ import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
+import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_screen/table_booking_screen.dart';
 import 'package:cjspoton/screen/take_away/take_away_cart/take_away_cart_screen.dart';
 import 'package:cjspoton/screen/take_away/take_away_menu/take_away_menu_screen.dart';
@@ -131,6 +132,10 @@ class NavRoute {
             menuScreenNavigatorPayloadModel:
                 settings.arguments as MenuScreenNavigatorPayloadModel,
           ),
+        );
+      case TableBookingScreens.TABLE_BOOKING_HISTORY_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => TableBookingScreens(),
         );
 
       default:
