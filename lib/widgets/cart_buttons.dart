@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cjspoton/model/add_on_model.dart';
 import 'package:cjspoton/model/add_on_model_item.dart';
 import 'package:cjspoton/model/cart_item.dart';
@@ -89,7 +91,10 @@ class CartButton {
 
   ScrollController _scrollController = ScrollController();
   Future<void> addNewItemToCart(BuildContext context, FoodModel foodModel) {
-    Map<String, String> singleSelectOption = {};
+    Map<String, String> singleSelectOption = Map<String, String>();
+    for (AddOnModel addOnModel
+        in foodModel.addons.where((element) => element.Type == 'Single'))
+      singleSelectOption[addOnModel.id] = '';
     List multiSelect = [];
     return showModalBottomSheet<void>(
       builder: (BuildContext context) {
@@ -103,18 +108,26 @@ class CartButton {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 10),
                     child: Row(children: [
-                      Text('Customize',
-                          style:
-                              Theme.of(context).textTheme.subtitle1?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                  )),
-                      Spacer(),
+                      // Text('Customize',
+                      //     style:
+                      //         Theme.of(context).textTheme.subtitle1?.copyWith(
+                      //               fontWeight: FontWeight.bold,
+                      //             )),
+                      // Spacer(),
                       IconButton(
                         icon: Icon(Icons.close),
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                      )
+                      ),
+                      Spacer(),
+                      ElevatedButton(
+                        onPressed: () {},
+                        child: Text(
+                          'ADD',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
                     ]),
                   ),
                   Expanded(
@@ -126,114 +139,13 @@ class CartButton {
                         }
                         return true;
                       },
-                      // child: ListView(
-                      //   controller: _scrollController,
-                      //   children: [
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //       child: Row(
-                      //         children: [
-                      //           Text(
-                      //             'Burger Combo Item ',
-                      //             style: Theme.of(context).textTheme.subtitle1,
-                      //           ),
-                      //           Text(
-                      //             '(4)',
-                      //             style: Theme.of(context).textTheme.caption,
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //       child: Text(
-                      //         'Choose any 1 extra (*Mandatory)',
-                      //         style: Theme.of(context).textTheme.caption,
-                      //       ),
-                      //     ),
-                      //     for (var i = 0; i < 4; i++) ...{
-                      //       RadioListTile(
-                      //         title: Text('Option $i'),
-                      //         value: i,
-                      //         secondary: Text('${Constants.RUPEE} 123.00'),
-                      //         activeColor: primaryColor,
-                      //         groupValue: singleSelectOption,
-                      //         onChanged: (value) {
-                      //           setState(() {
-                      //             singleSelectOption =
-                      //                 int.parse(value.toString());
-                      //           });
-                      //         },
-                      //       ),
-                      //     },
-                      //     SizedBox(
-                      //       height: defaultPadding,
-                      //     ),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //       child: Row(
-                      //         children: [
-                      //           Text(
-                      //             'Fries and Sauce ',
-                      //             style: Theme.of(context).textTheme.subtitle1,
-                      //           ),
-                      //           Text(
-                      //             '(6)',
-                      //             style: Theme.of(context).textTheme.caption,
-                      //           ),
-                      //         ],
-                      //       ),
-                      //     ),
-                      //     Padding(
-                      //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      //       child: Text(
-                      //         'Choose any extra (*Mandatory)',
-                      //         style: Theme.of(context).textTheme.caption,
-                      //       ),
-                      //     ),
-                      //     for (var i = 0; i < 4; i++) ...{
-                      //       CheckboxListTile(
-                      //         dense: true,
-                      //         title: Text('Option $i'),
-                      //         controlAffinity: ListTileControlAffinity.leading,
-                      //         value: multiSelect.contains(i),
-                      //         secondary: Text('${Constants.RUPEE} 5.00'),
-                      //         activeColor: primaryColor,
-                      //         onChanged: (value) {
-                      //           setState(() {
-                      //             if (value!)
-                      //               multiSelect.add(i);
-                      //             else
-                      //               multiSelect.remove(value);
-                      //           });
-                      //         },
-                      //       ),
-                      //     },
-                      //     SizedBox(
-                      //       height: defaultPadding * 2,
-                      //     ),
-                      // Padding(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: defaultPadding),
-                      //   child: TextButton(
-                      //     onPressed: () {},
-                      //     child: Text(
-                      //       'ADD',
-                      //       style: Theme.of(context).textTheme.button,
-                      //     ),
-                      //   ),
-                      // ),
-                      //   ],
-                      // ),
                       child: ListView.builder(
                         itemCount: foodModel.addons.length,
                         controller: _scrollController,
                         itemBuilder: (context, index) {
                           AddOnModel addOnModel =
                               foodModel.addons.elementAt(index);
-                          if (addOnModel.Type == 'Single')
-                            singleSelectOption[addOnModel.id] = ' ';
-                          print(singleSelectOption);    
+
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -286,6 +198,7 @@ class CartButton {
                                       setState(() {
                                         singleSelectOption[addOnModel.id] =
                                             addOnItemModel.id;
+                                        log(singleSelectOption.toString());
                                       });
                                     },
                                   ),
