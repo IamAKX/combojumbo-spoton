@@ -133,10 +133,14 @@ class _MenuScreenState extends State<MenuScreen> {
             _scrollToIndex(height);
             break;
           default:
-            int height = 1;
+            double height = 1;
             for (CategoryModel cat in list) {
-              if (value == cat.id) break;
-              height += cat.foodList.length + 1;
+              if (value == cat.id) {
+                height += 1;
+                break;
+              }
+
+              height += cat.foodList.length * 1.014 + 1;
             }
             _scrollToIndex(height);
             break;
