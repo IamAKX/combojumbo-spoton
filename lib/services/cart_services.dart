@@ -630,62 +630,62 @@ class CartServices extends ChangeNotifier {
     status = CartStatus.Loading;
     notifyListeners();
 
-    try {
-      OutletModel outletModel =
-          OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
-      UserModel userModel =
-          UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
-      var payload = {
-        'cust_id': "${userModel.id.toString()}",
-        'outletid': '${outletModel.outletId}',
-        'response': '$paymentState',
-        'responseDetials': payUMoneyResponse,
-        'oid': '${userModel.id}${DateTime.now().millisecond}',
-        'totalpaidamount':
-            '${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble()}',
-        'pay': 'payumoney',
-        'transcation_id': '$payUMoneyTxnId',
-        'ordertype': 'Table Booking',
-        'sectionid': '${tableBookingModel.section.id}',
-        'dateTime': '${tableBookingModel.bookingSlot}',
-        'guestcount': '${tableBookingModel.numberOfGuest}',
-      };
-      var reqBody = FormData.fromMap(payload);
+    // try {
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+    UserModel userModel =
+        UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var payload = {
+      'cust_id': "${userModel.id.toString()}",
+      'outletid': '${outletModel.outletId}',
+      'response': '$paymentState',
+      'responseDetials': payUMoneyResponse,
+      'oid': '${userModel.id}${DateTime.now().millisecond}',
+      'totalpaidamount':
+          '${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble()}',
+      'pay': 'payumoney',
+      'transcation_id': '$payUMoneyTxnId',
+      'ordertype': 'Table Booking',
+      'sectionid': '${tableBookingModel.section.id}',
+      'dateTime': '${tableBookingModel.bookingSlot}',
+      'guestcount': '${tableBookingModel.numberOfGuest}',
+    };
+    var reqBody = FormData.fromMap(payload);
 
-      log(json.encode(payload));
+    log(json.encode(payload));
 
-      Response response = await _dio.post(API.PlaceOrder, data: payload);
-      log('response : ' + response.data.toString());
-      var resBody = json.decode(response.data);
-      if (response.statusCode == 200) {
-        print('Response : ${response.data}');
-        var body = resBody['body'];
-        if (resBody['status'] == 1) {
-          status = CartStatus.Success;
-          SnackBarService.instance
-              .showSnackBarSuccess((resBody['msg']).toString().trim());
-          if (paymentState == 'success') CartHelper.clearCart();
-          notifyListeners();
-          return true;
-        } else {
-          status = CartStatus.Failed;
-          notifyListeners();
-          SnackBarService.instance.showSnackBarError((body['msg']));
-          return false;
-        }
+    Response response = await _dio.post(API.PlaceOrder, data: payload);
+    log('response : ' + response.data.toString());
+    var resBody = json.decode(response.data);
+    if (response.statusCode == 200) {
+      print('Response : ${response.data}');
+      var body = resBody['body'];
+      if (resBody['status'] == 1) {
+        status = CartStatus.Success;
+        SnackBarService.instance
+            .showSnackBarSuccess((resBody['msg']).toString().trim());
+        if (paymentState == 'success') CartHelper.clearCart();
+        notifyListeners();
+        return true;
       } else {
         status = CartStatus.Failed;
         notifyListeners();
-        SnackBarService.instance
-            .showSnackBarError('Error : ${response.statusMessage!}');
+        SnackBarService.instance.showSnackBarError((body['msg']));
         return false;
       }
-    } catch (e) {
+    } else {
       status = CartStatus.Failed;
       notifyListeners();
-      SnackBarService.instance.showSnackBarError(e.toString());
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
       return false;
     }
+    // } catch (e) {
+    //   status = CartStatus.Failed;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    //   return false;
+    // }
     return false;
   }
 }
