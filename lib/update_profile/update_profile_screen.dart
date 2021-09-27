@@ -10,6 +10,7 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/phone_edittext_with_heading.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -34,9 +35,37 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      setState(() {
-        imageFile = File(image.path);
-      });
+      // imageFile = File(image.path);
+      imageFile = await ImageCropper.cropImage(
+          sourcePath: image.path,
+          aspectRatioPresets: [
+            CropAspectRatioPreset.square,
+
+            // CropAspectRatioPreset.ratio3x2,
+            // CropAspectRatioPreset.original,
+            // CropAspectRatioPreset.ratio4x3,
+            // CropAspectRatioPreset.ratio16x9
+          ],
+          cropStyle: CropStyle.circle,
+          maxHeight: 100,
+          maxWidth: 100 ,
+          compressQuality: 99,
+          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+          androidUiSettings: AndroidUiSettings(
+              toolbarTitle: 'Profile Image',
+              toolbarColor: bgColor,
+              toolbarWidgetColor: primaryColor,
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true),
+          iosUiSettings: IOSUiSettings(
+            minimumAspectRatio: 1.0,
+            aspectRatioLockEnabled: true,
+            title: 'Profile Image',
+            resetAspectRatioEnabled: true,
+            aspectRatioLockDimensionSwapEnabled: true,
+            aspectRatioPickerButtonHidden: true,
+          ));
+      setState(() {});
     }
   }
 
@@ -61,14 +90,46 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           children: [
             InkWell(
               onTap: () => pickProfileImage(),
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: imageFile == null
-                    ? NetworkImage(user.profileImage.isEmpty
-                        ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
-                        : user.profileImage)
-                    : FileImage(imageFile!) as ImageProvider,
+              child: Container(
+                alignment: Alignment.center,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(50),
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageFile == null
+                            ? NetworkImage(
+                                user.profileImage.isEmpty
+                                    ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
+                                    : user.profileImage,
+                                scale: 1,
+                              )
+                            : FileImage(
+                                imageFile!,
+                                scale: 1,
+                              ) as ImageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
               ),
+              // child: CircleAvatar(
+              //   radius: 60,
+              //   backgroundImage: imageFile == null
+              //       ? NetworkImage(
+              //           user.profileImage.isEmpty
+              //               ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
+              //               : user.profileImage,
+              //           scale: 1,
+              //         )
+              //       : FileImage(
+              //           imageFile!,
+              //           scale: 5,
+              //         ) as ImageProvider,
+              // ),
             ),
             CustomTextFieldWithHeading(
               teCtrl: _nameCtrl,

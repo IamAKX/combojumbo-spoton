@@ -398,7 +398,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       case 'WORK':
         return Icon(Icons.work_outline);
       case 'OTHER':
-        return Icon(Icons.my_location_sharp);
+        return Icon(Icons.pin_drop_outlined);
       default:
         return Icon(Icons.pin_drop_outlined);
     }

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
+import 'package:cjspoton/screen/all_address/all_address.dart';
 import 'package:cjspoton/screen/change_password/change_password.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
@@ -121,6 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 .then((value) {
               setState(() {
                 user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+                log(user.toString());
               });
             });
           },
@@ -139,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         ListTile(
           onTap: () => Navigator.of(context)
-              .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE),
+              .pushNamed(AllAddressScreen.ALL_ADDRESS_ROUTE),
           tileColor: bgColor,
           title: Text(
             'Address',
@@ -198,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           tileColor: bgColor,
           title: Text(
-            'Munch Box',
+            'MunchBox',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),

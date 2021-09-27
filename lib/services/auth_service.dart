@@ -13,6 +13,7 @@ import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -58,63 +59,71 @@ class AuthenticationService extends ChangeNotifier {
 
     status = AuthStatus.Authenticating;
     notifyListeners();
-    try {
-      String? fcmToken = await FirebaseMessaging.instance.getToken();
-      var reqBody = FormData.fromMap({
-        'name': _googleSignInAccount!.displayName,
-        'email': _googleSignInAccount!.email,
-        'g_id': _googleSignInAccount!.id,
-        'mobileid': fcmToken,
-        'profileImage': googleSignInAccount.photoUrl ?? ''
-      });
-      print('Request : $reqBody');
-      Response response = await _dio.post(
-        API.GoogleRegisteration,
-        data: reqBody,
-      );
-      if (response.statusCode == 200) {
-        print('Response : ${response.data}');
-        var responseBody = json.decode(response.data);
-        var body = responseBody['body'];
-        if (responseBody['status'] == 1) {
-          UserModel userModel = UserModel(
-              id: body['user_id'],
-              name: googleSignInAccount.displayName!,
-              phone: '',
-              token: '',
-              email: body['email'],
-              fcmToken: fcmToken!,
-              profileImage: googleSignInAccount.photoUrl!);
+    // try {
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    var reqBody = FormData.fromMap({
+      'name': _googleSignInAccount!.displayName,
+      'email': _googleSignInAccount!.email,
+      'g_id': _googleSignInAccount!.id,
+      'mobileid': fcmToken,
+      'profileImage': googleSignInAccount.photoUrl ?? ''
+    });
+    print('Request : $reqBody');
+    Response response = await _dio.post(
+      API.GoogleRegisteration,
+      data: reqBody,
+    );
+    if (response.statusCode == 200) {
+      print('Response : ${response.data}');
+      var responseBody = json.decode(response.data);
+      var body = responseBody['body'];
+      if (responseBody['status'] == 1) {
+        UserModel userModel = UserModel(
+            id: body['user_id'],
+            name: googleSignInAccount.displayName!,
+            phone: '',
+            token: '',
+            email: body['email'],
+            fcmToken: fcmToken!,
+            profileImage: googleSignInAccount.photoUrl!);
 
-          prefs.setString(PrefernceKey.USER, userModel.toJson());
-          prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
+        prefs.setString(PrefernceKey.USER, userModel.toJson());
+        prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
+        OutletModel outletModel = OutletModel(
+          outletId: 'ECJ29',
+          outletName: 'Vashi',
+          address:
+              'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
+          image:
+              "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
+        );
+        prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
+        status = AuthStatus.Authenticated;
+        notifyListeners();
+        // SnackBarService.instance.showSnackBarSuccess(body['msg']);
 
-          status = AuthStatus.Authenticated;
-          notifyListeners();
-          // SnackBarService.instance.showSnackBarSuccess(body['msg']);
-
-          if (body['is_new_user'] == 'Y')
-            Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
-          else
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-                arguments: 0);
-        } else {
-          status = AuthStatus.Error;
-          notifyListeners();
-          SnackBarService.instance.showSnackBarError((body['msg']));
-        }
+        if (body['is_new_user'] == 'Y')
+          Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+        else
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+              arguments: 0);
       } else {
         status = AuthStatus.Error;
         notifyListeners();
-        SnackBarService.instance
-            .showSnackBarError('Error : ${response.statusMessage!}');
+        SnackBarService.instance.showSnackBarError((body['msg']));
       }
-    } catch (e) {
+    } else {
       status = AuthStatus.Error;
       notifyListeners();
-      SnackBarService.instance.showSnackBarError(e.toString());
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
     }
+    // } catch (e) {
+    //   status = AuthStatus.Error;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
   }
 
   Future registerUserWithFacebook(BuildContext context) async {
@@ -187,6 +196,15 @@ class AuthenticationService extends ChangeNotifier {
           prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
+          OutletModel outletModel = OutletModel(
+            outletId: 'ECJ29',
+            outletName: 'Vashi',
+            address:
+                'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
+            image:
+                "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
+          );
+          prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
           status = AuthStatus.Authenticated;
           notifyListeners();
           // SnackBarService.instance.showSnackBarSuccess(body['msg']);
@@ -221,6 +239,10 @@ class AuthenticationService extends ChangeNotifier {
     if (name.isEmpty || phone.isEmpty || password.isEmpty) {
       status = AuthStatus.Error;
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
+      return;
+    }
+    if (!Utilities().isValidPassword(password)) {
+      status = AuthStatus.Error;
       return;
     }
     if (phone.length != 10) {
@@ -259,6 +281,15 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: '');
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
+          OutletModel outletModel = OutletModel(
+            outletId: 'ECJ29',
+            outletName: 'Vashi',
+            address:
+                'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
+            image:
+                "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
+          );
+          prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
           status = AuthStatus.Authenticated;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
@@ -602,6 +633,10 @@ class AuthenticationService extends ChangeNotifier {
     if (newPassword != confPassword) {
       SnackBarService.instance.showSnackBarError(
           'New password and Confirm Password is not matching');
+      return;
+    }
+    if (!Utilities().isValidPassword(confPassword)) {
+      status = AuthStatus.Error;
       return;
     }
 

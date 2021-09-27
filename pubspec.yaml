@@ -47,9 +47,12 @@ dependencies:
   future_progress_dialog: ^0.2.0
   google_fonts: ^2.1.0
   google_sign_in: ^5.0.7
+  http: ^0.13.3
+  image_cropper: ^1.4.1
   image_picker: ^0.8.4
   intl: ^0.17.0
   introduction_screen: ^2.1.0
+  path: ^1.8.0
   permission_handler: ^8.1.4+2
   pin_code_fields: ^7.3.0
   provider: ^5.0.0

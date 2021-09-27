@@ -1,5 +1,7 @@
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
+import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
+import 'package:cjspoton/screen/all_address/all_address.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/change_password/change_password.dart';
@@ -26,6 +28,7 @@ import 'package:cjspoton/screen/table_booking/table_booking_screen/table_booking
 import 'package:cjspoton/screen/take_away/take_away_cart/take_away_cart_screen.dart';
 import 'package:cjspoton/screen/take_away/take_away_menu/take_away_menu_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
+import 'package:cjspoton/screen/update_address/update_delivery_address_screen.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +65,13 @@ class NavRoute {
                 ));
       case AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE:
         return MaterialPageRoute(builder: (_) => AddDeliveryAddress());
+      case AllAddressScreen.ALL_ADDRESS_ROUTE:
+        return MaterialPageRoute(builder: (_) => AllAddressScreen());
+      case UpdateDeliveryAddress.UPDATE_DELIVERY_ADDRESS_ROUTE:
+        return MaterialPageRoute(
+            builder: (_) => UpdateDeliveryAddress(
+                  address: settings.arguments as AddressModel,
+                ));
       case TermOfUseSceen.TERMS_ROUTE:
         return MaterialPageRoute(builder: (_) => TermOfUseSceen());
       case PrivacyPolicyScreen.PRIVACY_ROUTE:

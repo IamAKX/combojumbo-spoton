@@ -572,21 +572,15 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                                   '${Constants.RUPEE} ${CartHelper.getServiceCharge(allChargesModel).toStringAsFixed(2)}')
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Packing Charges'),
-                              if (allChargesModel!.Packing_Charge.toDouble() ==
-                                  0)
-                                Text(
-                                  'FREE',
-                                  style: TextStyle(color: Colors.green),
-                                )
-                              else
+                          if (allChargesModel!.Packing_Charge.toDouble() > 0)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Packing Charges'),
                                 Text(
                                     '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
-                            ],
-                          ),
+                              ],
+                            ),
                           if (double.parse(allChargesModel!.Service_Charge) >
                               0) ...{
                             Row(
@@ -598,17 +592,17 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                               ],
                             ),
                           },
-                          if (CartHelper.getTotalPriceOfCart() >=
-                              allChargesModel!.min_order_free_shipping
-                                  .toDouble())
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text('Delivery Fees'),
-                                Text(
-                                    '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
-                              ],
-                            ),
+                          // if (CartHelper.getTotalPriceOfCart() >=
+                          //     allChargesModel!.min_order_free_shipping
+                          //         .toDouble())
+                          //   Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       Text('Delivery Fees'),
+                          //       Text(
+                          //           '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
+                          //     ],
+                          //   ),
                         },
                         if (couponDiscountDetailModel != null)
                           Row(
