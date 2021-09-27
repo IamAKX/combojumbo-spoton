@@ -103,7 +103,13 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${_cat.categoryName.toWordCase()}'),
+                  Container(
+                    child: Text(
+                      '${_cat.categoryName.toWordCase()}',
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    width: 220,
+                  ),
                   CircleAvatar(
                     backgroundColor: primaryColor,
                     radius: 12,

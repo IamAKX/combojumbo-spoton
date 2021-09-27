@@ -63,47 +63,58 @@ class _MainContainerState extends State<MainContainer> {
     MainContainer.profileManagementService =
         Provider.of<ProfileManagementService>(context);
     return Scaffold(
-      extendBody: true,
-      backgroundColor: greyedBgColor,
-      appBar: getAppBar(),
-      bottomNavigationBar: FloatingNavbar(
-        elevation: 80,
-        margin: EdgeInsets.all(defaultPadding),
-        backgroundColor: bgColor,
-        padding: EdgeInsets.zero,
-        fontSize: 10,
-        borderRadius: 0,
-        selectedBackgroundColor: Colors.transparent,
-        selectedItemColor: primaryColor,
-        unselectedItemColor: textColor,
-        onTap: (int val) => setState(() => _selectedIndex = val),
-        currentIndex: _selectedIndex,
-        items: [
-          FloatingNavbarItem(
-            icon: Icons.home_outlined,
-            title: 'Home',
-          ),
-          FloatingNavbarItem(
-            icon: Icons.history,
-            title: 'Orders',
-          ),
-          FloatingNavbarItem(
-            customWidget: Image.asset(
-              'assets/images/cjspoton.png',
+        extendBody: true,
+        backgroundColor: greyedBgColor,
+        appBar: getAppBar(),
+        bottomNavigationBar: FloatingNavbar(
+          elevation: 80,
+          margin: EdgeInsets.all(defaultPadding),
+          backgroundColor: bgColor,
+          padding: EdgeInsets.zero,
+          fontSize: 10,
+          borderRadius: 0,
+          selectedBackgroundColor: Colors.transparent,
+          selectedItemColor: primaryColor,
+          unselectedItemColor: textColor,
+          onTap: (int val) => setState(() => _selectedIndex = val),
+          currentIndex: _selectedIndex,
+          items: [
+            FloatingNavbarItem(
+              icon: Icons.home_outlined,
+              title: 'Home',
             ),
-          ),
-          FloatingNavbarItem(
-            icon: Icons.favorite_border_outlined,
-            title: 'CJ Fav',
-          ),
-          FloatingNavbarItem(
-            icon: Icons.person_outline,
-            title: 'Profile',
-          ),
-        ],
-      ),
-      body: getBody(),
-    );
+            FloatingNavbarItem(
+              icon: Icons.history,
+              title: 'Orders',
+            ),
+            FloatingNavbarItem(
+              customWidget: Image.asset(
+                'assets/images/cjspoton.png',
+              ),
+            ),
+            FloatingNavbarItem(
+              icon: Icons.favorite_border_outlined,
+              title: 'CJ Fav',
+            ),
+            FloatingNavbarItem(
+              icon: Icons.person_outline,
+              title: 'Profile',
+            ),
+          ],
+        ),
+        body: WillPopScope(
+          child: getBody(),
+          onWillPop: () async {
+            if (_selectedIndex != 0) {
+              setState(() {
+                _selectedIndex = 0;
+              });
+              return false;
+            } else {
+              return true;
+            }
+          },
+        ));
   }
 
   getBody() {
@@ -149,7 +160,7 @@ class _MainContainerState extends State<MainContainer> {
                       });
                     },
                     child: Container(
-                      // width: MediaQuery.of(context).size.width * 0.6,
+                      width: MediaQuery.of(context).size.width * 0.6,
                       child: Text(
                         '${_pincodeModel.location}',
                         style: TextStyle(

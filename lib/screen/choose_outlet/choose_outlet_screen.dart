@@ -100,7 +100,7 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
           Align(
             alignment: Alignment.center,
             child: Text(
-              'Choose the Combo Jumbo Outlet',
+              'Choose your nearest Combo Jumbo Outlet',
               style: Theme.of(context)
                   .textTheme
                   .caption

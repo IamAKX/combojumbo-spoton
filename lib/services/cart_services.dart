@@ -228,8 +228,7 @@ class CartServices extends ChangeNotifier {
           );
           double cartAmt = double.parse(totalAmount);
           if (cModel != null &&
-              cartAmt >= cModel.minimum_order_value.toDouble() &&
-              cartAmt <= cModel.maximum_order_value.toDouble()) {
+              cartAmt > cModel.minimum_order_value.toDouble()) {
             couponDiscountDetailModel = cModel;
             status = CartStatus.Success;
             SnackBarService.instance
@@ -237,7 +236,7 @@ class CartServices extends ChangeNotifier {
           } else {
             status = CartStatus.Failed;
             SnackBarService.instance.showSnackBarSuccess(
-                'Cart amount must be between ${Constants.RUPEE} ${cModel.minimum_order_value.toDouble().toStringAsFixed(2)} and ${Constants.RUPEE} ${cModel.maximum_order_value.toDouble().toStringAsFixed(2)}');
+                'Cart amount must be more than ${Constants.RUPEE} ${cModel.minimum_order_value.toDouble().toStringAsFixed(2)}');
           }
           notifyListeners();
         } else {

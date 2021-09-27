@@ -117,7 +117,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               ],
                             ),
                             Text(
-                              '${order.order.oid}',
+                              '${order.order.trans_id}',
                               style: Theme.of(context).textTheme.caption,
                             ),
                             Text(

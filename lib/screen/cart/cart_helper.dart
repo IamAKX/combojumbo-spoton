@@ -126,7 +126,10 @@ class CartHelper {
     switch (couponDiscountDetailModel.coupon_type) {
       case 'Percentage':
         amt = amt * double.parse(couponDiscountDetailModel.coupon_value) / 100;
-        return amt;
+        if (amt >= couponDiscountDetailModel.maximum_order_value.toDouble())
+          return couponDiscountDetailModel.maximum_order_value.toDouble();
+        else
+          return amt;
       default:
         return double.parse(couponDiscountDetailModel.coupon_value);
     }

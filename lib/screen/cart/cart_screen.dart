@@ -535,6 +535,7 @@ class _CartScreenState extends State<CartScreen> {
                           )),
                           top: BorderSide(color: hintColor.withOpacity(0.5)),
                           bottom: BorderSide(color: hintColor.withOpacity(0.5)),
+                          right: BorderSide(color: hintColor.withOpacity(0.5)),
                         ),
                       ),
                       child: IntrinsicHeight(
@@ -603,21 +604,15 @@ class _CartScreenState extends State<CartScreen> {
                                   '${Constants.RUPEE} ${CartHelper.getServiceCharge(allChargesModel).toStringAsFixed(2)}')
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text('Packing Charges'),
-                              if (allChargesModel!.Packing_Charge.toDouble() ==
-                                  0)
-                                Text(
-                                  'FREE',
-                                  style: TextStyle(color: Colors.green),
-                                )
-                              else
+                          if (allChargesModel!.Packing_Charge.toDouble() > 0)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Packing Charges'),
                                 Text(
                                     '${Constants.RUPEE} ${double.parse(allChargesModel!.Packing_Charge).toStringAsFixed(2)}')
-                            ],
-                          ),
+                              ],
+                            ),
                           if (double.parse(allChargesModel!.Service_Charge) >
                               0) ...{
                             Row(
@@ -636,8 +631,13 @@ class _CartScreenState extends State<CartScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Delivery Fees'),
-                                Text(
-                                    '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
+                                selectedPincode.charge.toDouble() == 0
+                                    ? Text(
+                                        'FREE',
+                                        style: TextStyle(color: Colors.green),
+                                      )
+                                    : Text(
+                                        '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
                               ],
                             ),
                         },

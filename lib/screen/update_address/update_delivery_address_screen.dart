@@ -16,15 +16,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
-class AddDeliveryAddress extends StatefulWidget {
-  const AddDeliveryAddress({Key? key}) : super(key: key);
-  static const String ADD_DELIVERY_ADDRESS_ROUTE = '/addDeliveryAddress';
+class UpdateDeliveryAddress extends StatefulWidget {
+  const UpdateDeliveryAddress({Key? key, required this.address})
+      : super(key: key);
+  static const String UPDATE_DELIVERY_ADDRESS_ROUTE = '/updateDeliveryAddress';
+  final AddressModel address;
 
   @override
-  _AddDeliveryAddressState createState() => _AddDeliveryAddressState();
+  _UpdateDeliveryAddressState createState() => _UpdateDeliveryAddressState();
 }
 
-class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
+class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
   // TextEditingController deliveryCtrl = TextEditingController();
   TextEditingController completeAddressCtrl1 = TextEditingController();
   TextEditingController completeAddressCtrl2 = TextEditingController();
@@ -34,8 +36,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   List<CityModel> cityList = [];
   List<PincodeModel> pincodeList = [];
   StateModel? selectedState = null;
-  CityModel? selectedCity =
-      CityModel(id: '2726', name: 'Navi Mumbai', state_id: '22');
+  CityModel? selectedCity = null;
   PincodeModel? selectedPincode = null;
   String addressType = 'HOME';
   late Size screenSize;
@@ -46,17 +47,26 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    completeAddressCtrl1.text = widget.address.address1;
+    completeAddressCtrl2.text = widget.address.address2;
+    landmarkCtrl.text = widget.address.landmark;
+    deliveryInstructionCtrl.text = widget.address.deliveryInstruction;
+    selectedState = widget.address.stateModel;
+    selectedCity = widget.address.city;
+
+    addressType = widget.address.addressType;
+
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addressService.fetchAllPincodes(context).then((value) {
         pincodeList = value;
-        selectedPincode = pincodeList.first;
+        selectedPincode = pincodeList
+            .firstWhere((element) => element.pincode == widget.address.pincode);
         _addressService.getStateList(context).then(
-          (value) { 
-              setState(() {
-                stateList = value;
-                selectedState =
-                    stateList.firstWhere((element) => element.id == '22');
-              });
+          (value) {
+            setState(() {
+              stateList = value;
+            });
           },
         );
       });
@@ -86,24 +96,6 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                 child: ListView(
                   padding: EdgeInsets.only(bottom: defaultPadding),
                   children: [
-                    // InkWell(
-                    //   onTap: () {
-                    //     Navigator.of(context)
-                    //         .pushNamed(
-                    //             DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
-                    //         .then((value) {
-                    //       setState(() {});
-                    //     });
-                    //   },
-                    //   child: CustomTextFieldWithHeadingActionButton(
-                    //     teCtrl: deliveryCtrl,
-                    //     hint: 'Delivery Area',
-                    //     enabled: false,
-                    //     inputType: TextInputType.streetAddress,
-                    //     icondata: Icons.location_pin,
-                    //     onTap: () {},
-                    //   ),
-                    // ),
                     CustomTextFieldWithHeading(
                       teCtrl: completeAddressCtrl1,
                       hint: 'Address 1',
@@ -157,13 +149,13 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      selectedItem: selectedState,
                       showSearchBox: true,
                       showSelectedItem: true,
                       items: stateList,
                       compareFn: (item, selectedItem) =>
                           item.id == selectedItem?.id,
                       itemAsString: (item) => item.name,
+                      selectedItem: selectedState,
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -196,15 +188,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
 
                           _addressService
                               .getCityList(selectedState!, context)
-                              .then((value) {
-                            cityList = value;
-                            if (selectedState != null &&
-                                selectedState!.id == '22')
-                              selectedCity = cityList.firstWhere(
-                                  (element) => element.id == '2726');
-                            else
-                              selectedCity = null;
-                          });
+                              .then((value) => cityList = value);
                         });
                       },
                     ),
@@ -249,10 +233,10 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      selectedItem: selectedCity,
                       showSearchBox: true,
                       showSelectedItem: true,
                       items: cityList,
+                      selectedItem: selectedCity,
                       itemAsString: (item) => item.name,
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding:
@@ -291,7 +275,6 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                     SizedBox(
                       height: defaultPadding,
                     ),
-
                     Text(
                       'Pincode',
                       style: Theme.of(context)
@@ -330,8 +313,8 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      selectedItem: selectedPincode,
                       showSearchBox: true,
+                      selectedItem: selectedPincode,
                       showSelectedItem: true,
                       items: pincodeList,
                       itemAsString: (item) => item.pincode,
@@ -372,7 +355,6 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                     SizedBox(
                       height: defaultPadding,
                     ),
-
                     Visibility(
                       visible: false,
                       child: CustomTextFieldWithHeading(
@@ -469,11 +451,13 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                               landmark: landmarkCtrl.text,
                               city: selectedCity!,
                               stateModel: selectedState!,
-                              id: DateTime.now().millisecond.toString(),
+                              id: widget.address.id,
                               deliveryInstruction: deliveryInstructionCtrl.text,
                               addressType: addressType);
 
-                          _addressService.addAddress(addressModel, context);
+                          _addressService
+                              .updateAddress(addressModel, context)
+                              .then((value) => Navigator.of(context).pop());
                           // Utilities.addAddress(addressModel);
                           // SnackBarService.instance
                           //     .showSnackBarSuccess('Address saved');
@@ -481,7 +465,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                         }
                       },
                       child: Text(
-                        'SAVE CHANGES',
+                        'UPDATE CHANGES',
                         style: TextStyle(
                           color: bgColor,
                         ),

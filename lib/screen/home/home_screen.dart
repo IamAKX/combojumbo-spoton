@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cjspoton/model/add_slider_model.dart';
@@ -48,7 +50,10 @@ class _HomeScreenState extends State<HomeScreen> {
         (value) {
           setState(() {
             list = value;
-            combocategory = list.firstWhere((element) => element.id == '38');
+            if (list.any((element) => element.id == '38'))
+              combocategory = list.firstWhere((element) => element.id == '38');
+            else
+              combocategory = list.first;
           });
         },
       ),
@@ -396,7 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 routePath: MenuScreen.MENU_SCREEN_ROUTE,
                 menuScreenNavigatorPayloadModel:
                     MenuScreenNavigatorPayloadModel(
-                  categoryId: "38",
+                  categoryId: combocategory.id,
                   refreshMainContainerState: widget.refreshMainContainerState,
                 ),
                 refreshState: refreshState,

@@ -74,7 +74,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             passwordCtrl: _confPasswordCtrl,
             isPasswordVisible: _isConfPassHidden,
             tooglePasswordVisibility: _toggleConfPasswordVisibility,
-            hint: 'Confirm Password',
+            hint: 'Confirm New Password',
           ),
           SizedBox(
             height: defaultPadding,

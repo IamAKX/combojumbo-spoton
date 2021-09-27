@@ -1,6 +1,8 @@
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
+import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 
 class Utilities {
@@ -46,6 +48,61 @@ class Utilities {
     return true;
   }
 
+  bool isValidPassword(String password) {
+    // check for min length
+    if (password.length < 6) {
+      SnackBarService.instance
+          .showSnackBarInfo('Password must be of alteast 6 charater');
+      return false;
+    }
+
+    // check for lowercase
+    int count = 0;
+    for (var c in password.split('')) {
+      if (Constants.LOWERCASE_ALPHABET.contains(c)) count++;
+    }
+    if (count == 0) {
+      SnackBarService.instance
+          .showSnackBarInfo('Password must contain atleast 1 lowercase alphabet');
+      return false;
+    }
+
+    // check for uppercase
+    count = 0;
+    for (var c in password.split('')) {
+      if (Constants.UPPERCASE_ALPHABET.contains(c)) count++;
+    }
+    if (count == 0) {
+      SnackBarService.instance
+          .showSnackBarInfo('Password must contain atleast 1 uppercase alphabet');
+      return false;
+    }
+
+    // check for digit
+    count = 0;
+    for (var c in password.split('')) {
+      if (Constants.DIGITS.contains(c)) count++;
+    }
+    if (count == 0) {
+      SnackBarService.instance
+          .showSnackBarInfo('Password must contain atleast 1 digit');
+      return false;
+    }
+
+    // check for sepcial character
+    count = 0;
+    for (var c in password.split('')) {
+      if (Constants.SPECIAL_CHARACTER.contains(c)) count++;
+    }
+    if (count == 0) {
+      SnackBarService.instance
+          .showSnackBarInfo('Password must contain atleast 1 special character');
+      return false;
+    }
+
+    return true;
+  }
+
   // static List<AddressModel> loadAllAddress() {
   //   List<AddressModel> list = [];
   //   if (prefs.getStringList(PrefernceKey.ADDRESS) != null) {
@@ -60,7 +117,7 @@ class Utilities {
   //   List<String> stringList = [];
   //   for (AddressModel m in list) {
   //     stringList.add(m.toJson());
-  //   }
+  //   }  
   //   stringList.add(model.toJson());
   //   prefs.setStringList(PrefernceKey.ADDRESS, stringList);
   // }

@@ -11,6 +11,11 @@ class Constants {
 
   static const String OWNER_CONTACT_NUMBER = '+918850458452';
 
+  static const String UPPERCASE_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  static const String LOWERCASE_ALPHABET = 'abcdefghijklmnopqrstuvwxyz';
+  static const String DIGITS = '0123456789';
+  static const String SPECIAL_CHARACTER = '.,/<>?;:[]\{}|!@#%^&*()-=_+';
+
   static PincodeModel getDefaultPincode() {
     if (prefs.getString(PrefernceKey.SELECTED_PINCODE) != null)
       return PincodeModel.fromJson(
@@ -42,10 +47,11 @@ extension StringExtension on String {
     if (this.length == 0) return this;
     if (this.length > 1)
       return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}"
-          .replaceAll('Cj', 'CJ');
+          .replaceAll('Cj', 'CJ')
+          .replaceAll('jain', 'Jain');
     else
       return "${this[0].toUpperCase()}${this.substring(1)}"
-          .replaceAll('Cj', 'CJ');
+          .replaceAll('jain', 'Jain');
   }
 
   String toWordCase() {
@@ -53,7 +59,8 @@ extension StringExtension on String {
       return this;
     else
       return "${this.split(" ").map((str) => str.toCamelCase()).join(" ")}"
-          .replaceAll('Cj', 'CJ');
+          .replaceAll('Cj', 'CJ')
+          .replaceAll('jain', 'Jain');
   }
 
   double toDouble() {

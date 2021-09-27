@@ -1,6 +1,7 @@
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
+import '../utils/constants.dart';
 
 class MenuSubheading extends StatelessWidget {
   const MenuSubheading({
@@ -31,7 +32,7 @@ class MenuSubheading extends StatelessWidget {
                 width: defaultPadding * 0.5,
               ),
               Text(
-                "$itemCount ITMES",
+                "$itemCount ${itemCount.toDouble() > 1 ? 'ITEMS' : 'ITEM'}",
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2

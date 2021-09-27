@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
+import 'package:async/async.dart';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/outlet_model.dart';
@@ -10,6 +12,8 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 
 enum ProfileStatus {
   Ideal,
@@ -121,6 +125,7 @@ class ProfileManagementService extends ChangeNotifier {
 
   Future<void> updateProfile(String name, String email, String phone,
       File? image, BuildContext context) async {
+    log(image!.path);
     if (name.isEmpty || email.isEmpty || phone.isEmpty) {
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
       return;
@@ -144,9 +149,10 @@ class ProfileManagementService extends ChangeNotifier {
       'contact': phone,
       'email': email,
       if (image != null)
-        'image': await MultipartFile.fromFile(image.path,
+        'aimage': await MultipartFile.fromFile(image.path,
             filename: image.path.split('/').last),
     });
+
     try {
       Response response = await _dio.post(
         API.UpdateProfile,

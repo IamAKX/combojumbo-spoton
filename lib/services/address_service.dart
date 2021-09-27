@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/city_model.dart';
@@ -271,5 +272,102 @@ class AddressService extends ChangeNotifier {
       SnackBarService.instance.showSnackBarError(e.toString());
     }
     return list;
+  }
+
+  Future<bool> deleteAddress(AddressModel address, BuildContext context) async {
+    status = AddressStatus.Loading;
+    notifyListeners();
+    UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody =
+        FormData.fromMap({'id': '${address.id}', 'cust_id': '${user.id}'});
+    try {
+      Response response = await _dio.post(API.DeleteAddress, data: reqBody);
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        if (resBody['status'] == 1) {
+          status = AddressStatus.Success;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess((resBody['msg']));
+          return true;
+        } else {
+          status = AddressStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((resBody['msg']));
+          return false;
+        }
+      } else {
+        status = AddressStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+        return false;
+      }
+    } catch (e) {
+      status = AddressStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+      return false;
+    }
+  }
+
+  Future<void> updateAddress(AddressModel address, BuildContext context) async {
+    status = AddressStatus.Loading;
+    notifyListeners();
+    UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'cust_id': '${user.id}',
+      'id': '${address.id}',
+      'add1': '${address.address1}',
+      'add2': '${address.address2}',
+      'landmark': '${address.landmark}',
+      'state': '${address.stateModel.id}',
+      'city': '${address.city.id}',
+      'pincode': '${address.pincode}',
+      'nickname': '${address.addressType}',
+      'delivery_instruction': '${address.deliveryInstruction}',
+    });
+    var tem = {
+      'cust_id': '${user.id}',
+      'id': '${address.id}',
+      'add1': '${address.address1}',
+      'add2': '${address.address2}',
+      'landmark': '${address.landmark}',
+      'state': '${address.stateModel.id}',
+      'city': '${address.city.id}',
+      'pincode': '${address.pincode}',
+      'nickname': '${address.addressType}',
+      'delivery_instruction': '${address.deliveryInstruction}',
+    };
+    log(tem.toString());
+    try {
+      Response response = await _dio.post(API.UpdateAddress, data: reqBody);
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        if (resBody['status'] == 1) {
+          status = AddressStatus.Success;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess((resBody['msg']));
+        } else {
+          status = AddressStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((resBody['msg']));
+        }
+      } else {
+        status = AddressStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AddressStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
   }
 }

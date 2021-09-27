@@ -28,6 +28,10 @@ class PasswordTextField extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hint == null ? 'Password' : hint,
           counterText: "",
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(),
+            borderRadius: BorderRadius.circular(10),
+          ),
           suffixIcon: IconButton(
             icon: Icon(
               isPasswordVisible ? Icons.visibility : Icons.visibility_off,
