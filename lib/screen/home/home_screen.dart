@@ -12,6 +12,7 @@ import 'package:cjspoton/screen/home/home_widgets.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
+import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/static_data.dart';
@@ -50,8 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
         (value) {
           setState(() {
             list = value;
-            if (list.any((element) => element.id == '38'))
-              combocategory = list.firstWhere((element) => element.id == '38');
+            if (list.any((element) =>
+                element.categoryName.toLowerCase().contains('combo')))
+              combocategory = list.firstWhere((element) =>
+                  element.categoryName.toLowerCase().contains('combo'));
             else
               combocategory = list.first;
           });
@@ -93,11 +96,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             Navigator.of(context).pushNamed(
                               cjRouteModel.redirectionUrl,
-                              arguments: MenuScreenNavigatorPayloadModel(
-                                categoryId: "0",
-                                refreshMainContainerState:
-                                    widget.refreshMainContainerState,
-                              ),
+                              arguments: cjRouteModel.redirectionUrl ==
+                                      WebviewInternal.WEBVIEW_ROUTE
+                                  ? API.BANQUET_PPC
+                                  : MenuScreenNavigatorPayloadModel(
+                                      categoryId: "0",
+                                      refreshMainContainerState:
+                                          widget.refreshMainContainerState,
+                                    ),
                             );
                           },
                           child: Column(

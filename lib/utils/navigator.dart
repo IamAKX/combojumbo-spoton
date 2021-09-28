@@ -64,7 +64,10 @@ class NavRoute {
                   initialIndex: settings.arguments as int,
                 ));
       case AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE:
-        return MaterialPageRoute(builder: (_) => AddDeliveryAddress());
+        return MaterialPageRoute(
+            builder: (_) => AddDeliveryAddress(
+                  filterPincode: settings.arguments as String,
+                ));
       case AllAddressScreen.ALL_ADDRESS_ROUTE:
         return MaterialPageRoute(builder: (_) => AllAddressScreen());
       case UpdateDeliveryAddress.UPDATE_DELIVERY_ADDRESS_ROUTE:

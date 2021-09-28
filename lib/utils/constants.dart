@@ -75,3 +75,16 @@ extension StringExtension on String {
     }
   }
 }
+
+String getOrderStatus(String status) {
+  switch (status) {
+    case 'delivered':
+      return 'Delivered';
+    case 'food-preparing':
+      return 'In Kitchen';
+    case 'food-prepared':
+      return 'Out for delivery';
+    default:
+      return 'Order Received ';
+  }
+}

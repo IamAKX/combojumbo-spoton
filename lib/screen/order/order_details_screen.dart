@@ -33,7 +33,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
-              'Ordered at ${formatOrderTime(widget.orderDetailModel.order.date_creation)}',
+              'Ordered on ${formatOrderTime(widget.orderDetailModel.order.date_creation)}',
               style: Theme.of(context).textTheme.caption,
             ),
           ],
@@ -43,24 +43,25 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       body: ListView(
         padding: EdgeInsets.all(defaultPadding),
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.delivery_dining,
-                color: primaryColor,
-              ),
-              SizedBox(
-                width: defaultPadding / 2,
-              ),
-              Text(
-                'Order delivered by ${widget.orderDetailModel.order.delivey_who.isEmpty ? 'unknown' : widget.orderDetailModel.order.delivey_who}',
-                style: Theme.of(context)
-                    .textTheme
-                    .subtitle2
-                    ?.copyWith(color: hintColor),
-              ),
-            ],
-          ),
+          if (widget.orderDetailModel.order.delivery_boy_name.trim().isNotEmpty)
+            Row(
+              children: [
+                Icon(
+                  Icons.delivery_dining,
+                  color: primaryColor,
+                ),
+                SizedBox(
+                  width: defaultPadding / 2,
+                ),
+                Text(
+                  'Order delivered by ${widget.orderDetailModel.order.delivery_boy_name.isEmpty ? 'unknown' : widget.orderDetailModel.order.delivery_boy_name}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      ?.copyWith(color: hintColor),
+                ),
+              ],
+            ),
           SizedBox(
             height: defaultPadding,
           ),
@@ -115,34 +116,30 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   '${Constants.RUPEE} ${widget.orderDetailModel.order.subtotal.toDouble().toStringAsFixed(2)}'),
             ],
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: 5,
-              ),
-              Text('Order Packaging Charges'),
-              Spacer(),
-              if (widget.orderDetailModel.order.packging_charge.toDouble() == 0)
-                Text(
-                  'FREE',
-                  style: TextStyle(color: Colors.green),
-                )
-              else
+          if (widget.orderDetailModel.order.packging_charge.toDouble() > 0)
+            Row(
+              children: [
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Order Packing Charges'),
+                Spacer(),
                 Text(
                     '${Constants.RUPEE} ${widget.orderDetailModel.order.packging_charge.toDouble().toStringAsFixed(2)}'),
-            ],
-          ),
-          Row(
-            children: [
-              SizedBox(
-                width: 5,
-              ),
-              Text('Delivery Partner fee'),
-              Spacer(),
-              Text(
-                  '${Constants.RUPEE} ${widget.orderDetailModel.order.delivery_charge.toDouble().toStringAsFixed(2)}'),
-            ],
-          ),
+              ],
+            ),
+          if (widget.orderDetailModel.order.delivery_charge.toDouble() > 0)
+            Row(
+              children: [
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Delivery Partner fee'),
+                Spacer(),
+                Text(
+                    '${Constants.RUPEE} ${widget.orderDetailModel.order.delivery_charge.toDouble().toStringAsFixed(2)}'),
+              ],
+            ),
           if (widget.orderDetailModel.order.service_charge.toDouble() > 0)
             Row(
               children: [
@@ -155,17 +152,18 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     '${Constants.RUPEE} ${widget.orderDetailModel.order.service_charge.toDouble().toStringAsFixed(2)}'),
               ],
             ),
-          Row(
-            children: [
-              SizedBox(
-                width: 5,
-              ),
-              Text('GST'),
-              Spacer(),
-              Text(
-                  '${Constants.RUPEE} ${widget.orderDetailModel.order.gst_amount.toDouble().toStringAsFixed(2)}'),
-            ],
-          ),
+          if (widget.orderDetailModel.order.gst_amount.toDouble() > 0)
+            Row(
+              children: [
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Taxes'),
+                Spacer(),
+                Text(
+                    '${Constants.RUPEE} ${widget.orderDetailModel.order.gst_amount.toDouble().toStringAsFixed(2)}'),
+              ],
+            ),
           SizedBox(
             height: 10,
           ),
@@ -194,6 +192,14 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     ),
               ),
             ],
+          ),
+          Text(
+            'Address',
+            style: Theme.of(context).textTheme.subtitle2,
+          ),
+          Text(
+            '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
+            style: Theme.of(context).textTheme.caption,
           ),
         ],
       ),

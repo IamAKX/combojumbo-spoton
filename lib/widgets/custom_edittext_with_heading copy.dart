@@ -8,7 +8,8 @@ class CustomTextFieldWithHeading extends StatelessWidget {
       required TextEditingController teCtrl,
       required this.hint,
       required this.inputType,
-      this.enabled})
+      this.enabled,
+      this.fillColor})
       : _teCtrl = teCtrl,
         super(key: key);
 
@@ -16,6 +17,7 @@ class CustomTextFieldWithHeading extends StatelessWidget {
   final String hint;
   final TextInputType inputType;
   final bool? enabled;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,7 @@ class CustomTextFieldWithHeading extends StatelessWidget {
               focusColor: primaryColor,
               alignLabelWithHint: false,
               filled: true,
-              fillColor: Colors.white,
+              fillColor: fillColor == null ? Colors.white : fillColor,
               contentPadding: EdgeInsets.symmetric(horizontal: defaultPadding),
               hoverColor: primaryColor,
               hintStyle: TextStyle(color: hintColor),

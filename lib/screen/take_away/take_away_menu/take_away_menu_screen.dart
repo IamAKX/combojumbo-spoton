@@ -20,6 +20,7 @@ import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/menu_item.dart';
 import 'package:cjspoton/widgets/menu_subheading.dart';
 import 'package:flutter/material.dart';
@@ -48,11 +49,19 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
   late PincodeModel _pincodeModel;
+  List<FoodModel> favList = [];
+
+  loadFavouriteFood() {
+    setState(() {
+      favList = Utilities().getAllFavouriteFood();
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    loadFavouriteFood();
     _outletModel =
         OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     WidgetsBinding.instance!.addPostFrameCallback(
@@ -241,7 +250,7 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'CJ ${_outletModel.outletName} - Take Away',
+                      'Pickup from CJ ${_outletModel.outletName}',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,
@@ -299,6 +308,8 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
                       parentContext: context,
                       foodModel: food,
                       refreshState: refreshState,
+                      favList: favList,
+                      reloadFavList: loadFavouriteFood,
                     ),
                   },
                   SizedBox(

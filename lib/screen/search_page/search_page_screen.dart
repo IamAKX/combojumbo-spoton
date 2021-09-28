@@ -7,6 +7,7 @@ import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/menu_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -30,12 +31,19 @@ class _SearchPageScreenState extends State<SearchPageScreen> {
   late CatalogService _catalogService;
 
   List<FoodModel> searchResultList = [];
+  List<FoodModel> favList = [];
+
+  loadFavouriteFood() {
+    setState(() {
+      favList = Utilities().getAllFavouriteFood();
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    loadFavouriteFood();
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) => _catalogService.fetchAllFoodItem(context).then(
         (value) {
@@ -163,6 +171,8 @@ class _SearchPageScreenState extends State<SearchPageScreen> {
                         parentContext: context,
                         foodModel: food,
                         refreshState: refreshState,
+                        favList: favList,
+                        reloadFavList: loadFavouriteFood,
                       ),
                     },
                 ],

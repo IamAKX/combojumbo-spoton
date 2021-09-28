@@ -17,8 +17,10 @@ import 'package:provider/provider.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class AddDeliveryAddress extends StatefulWidget {
-  const AddDeliveryAddress({Key? key}) : super(key: key);
+  const AddDeliveryAddress({Key? key, required this.filterPincode})
+      : super(key: key);
   static const String ADD_DELIVERY_ADDRESS_ROUTE = '/addDeliveryAddress';
+  final String filterPincode;
 
   @override
   _AddDeliveryAddressState createState() => _AddDeliveryAddressState();
@@ -49,14 +51,21 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _addressService.fetchAllPincodes(context).then((value) {
         pincodeList = value;
+        if (widget.filterPincode != '') {
+          pincodeList = pincodeList
+              .where((e) => e.pincode == widget.filterPincode)
+              .toList();
+        }
+
         selectedPincode = pincodeList.first;
+
         _addressService.getStateList(context).then(
-          (value) { 
-              setState(() {
-                stateList = value;
-                selectedState =
-                    stateList.firstWhere((element) => element.id == '22');
-              });
+          (value) {
+            setState(() {
+              stateList = value;
+              selectedState =
+                  stateList.firstWhere((element) => element.id == '22');
+            });
           },
         );
       });

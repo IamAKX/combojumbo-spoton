@@ -106,7 +106,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                   ),
                                   Spacer(),
                                   Text(
-                                    '${order.orderstatus}',
+                                    '${getOrderStatus(order.orderstatus)}',
                                     style:
                                         Theme.of(context).textTheme.subtitle2,
                                   ),
@@ -121,7 +121,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 ],
                               ),
                               Text(
-                                'CJ s${order.outletname}',
+                                'CJ ${order.outletname}',
                                 style: Theme.of(context).textTheme.caption,
                               ),
                               Text(
@@ -131,7 +131,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 overflow: TextOverflow.ellipsis,
                               ),
                               Text(
-                                'Booking at ${order.datetime}',
+                                'Booking for ${order.datetime}',
                                 style: Theme.of(context).textTheme.subtitle2,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,

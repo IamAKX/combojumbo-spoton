@@ -93,9 +93,9 @@ class AuthenticationService extends ChangeNotifier {
           outletId: 'ECJ29',
           outletName: 'Vashi',
           address:
-              'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
+              'Plot No - 17, Near HDFC Bank, Juhu Nagar, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
           image:
-              "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
+              "https://www.combojumbo.in/master/Outlet/fimages/image16382021-09-23-11-51-25vashi-1.jpg",
         );
         prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
         status = AuthStatus.Authenticated;
@@ -575,6 +575,11 @@ class AuthenticationService extends ChangeNotifier {
     if (newPassword != confPassword) {
       SnackBarService.instance.showSnackBarError(
           'New password and Confirm Password is not matching');
+      return;
+    }
+
+    if (!Utilities().isValidPassword(confPassword)) {
+      status = AuthStatus.Error;
       return;
     }
 

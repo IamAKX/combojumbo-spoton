@@ -504,6 +504,7 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                           )),
                           top: BorderSide(color: hintColor.withOpacity(0.5)),
                           bottom: BorderSide(color: hintColor.withOpacity(0.5)),
+                          right: BorderSide(color: hintColor.withOpacity(0.5)),
                         ),
                       ),
                       child: IntrinsicHeight(
@@ -567,7 +568,7 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('GST'),
+                              Text('Taxes'),
                               Text(
                                   '${Constants.RUPEE} ${CartHelper.getServiceCharge(allChargesModel).toStringAsFixed(2)}')
                             ],

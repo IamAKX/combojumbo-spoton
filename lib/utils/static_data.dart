@@ -106,7 +106,7 @@ List<CJRouteOptionModel> getCJRouteOptions() {
     CJRouteOptionModel(
         name: 'Mini Banquet',
         image: 'https://www.combojumbo.in/img/e-dining.png',
-        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
+        redirectionUrl: WebviewInternal.WEBVIEW_ROUTE),
     CJRouteOptionModel(
         name: 'Party Packs',
         image: 'https://www.combojumbo.in/img/party-packs.png',

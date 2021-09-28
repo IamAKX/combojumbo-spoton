@@ -39,8 +39,11 @@ class API {
   static const String GetSection = '${BASE_URL}section.php';
   static const String TableBookingOrderHistory = '${BASE_URL}table_history.php';
 
+  static const String Feedback = '${BASE_URL}report';
+
   // Webview urls
   static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';
   static const String MUNCHBOX =
       'https://www.combojumbo.in/cj-hotcase/index#munchbox';
+  static const String BANQUET_PPC = 'https://www.combojumbo.in/banquet-ppc/';
 }

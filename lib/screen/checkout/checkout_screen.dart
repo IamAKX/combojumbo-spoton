@@ -21,6 +21,7 @@ import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
 import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -52,6 +53,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       (value) {
         setState(() {
           addressList = value;
+          addressList = addressList
+              .where((element) =>
+                  element.pincode ==
+                  widget.cartVriablesModel.selectedPincode.pincode)
+              .toList();
         });
       },
     );
@@ -97,8 +103,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                           InkWell(
                             onTap: () => Navigator.of(context)
-                                .pushNamed(AddDeliveryAddress
-                                    .ADD_DELIVERY_ADDRESS_ROUTE)
+                                .pushNamed(
+                                    AddDeliveryAddress
+                                        .ADD_DELIVERY_ADDRESS_ROUTE,
+                                    arguments: widget.cartVriablesModel
+                                        .selectedPincode.pincode)
                                 .then((value) {
                               reloadAddressList(context);
                             }),
@@ -124,6 +133,37 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                       SizedBox(
                         height: defaultPadding,
+                      ),
+                      Visibility(
+                        visible: addressList.isEmpty,
+                        child: Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: defaultPadding * 2,
+                              ),
+                              SvgPicture.asset(
+                                'assets/svg/add_address.svg',
+                                width: 200,
+                              ),
+                              SizedBox(
+                                height: defaultPadding,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(defaultPadding),
+                                child: Text(
+                                  'Please add your address',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(fontSize: 20),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                       for (AddressModel address in addressList) ...{
                         Container(

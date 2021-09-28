@@ -48,7 +48,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           ],
           cropStyle: CropStyle.circle,
           maxHeight: 100,
-          maxWidth: 100 ,
+          maxWidth: 100,
           compressQuality: 99,
           aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
           androidUiSettings: AndroidUiSettings(

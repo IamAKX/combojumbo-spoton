@@ -29,6 +29,7 @@ class OrderModel {
   String whosorderadd_id;
   String order_addrole;
   String delivery_boy_id;
+  String delivery_boy_name;
   String delivery_otp;
   String link_uid;
   String noofpeopletable;
@@ -77,6 +78,7 @@ class OrderModel {
     required this.whosorderadd_id,
     required this.order_addrole,
     required this.delivery_boy_id,
+    required this.delivery_boy_name,
     required this.delivery_otp,
     required this.link_uid,
     required this.noofpeopletable,
@@ -127,6 +129,7 @@ class OrderModel {
     String? whosorderadd_id,
     String? order_addrole,
     String? delivery_boy_id,
+    String? delivery_boy_name,
     String? delivery_otp,
     String? link_uid,
     String? noofpeopletable,
@@ -178,6 +181,7 @@ class OrderModel {
       whosorderadd_id: whosorderadd_id ?? this.whosorderadd_id,
       order_addrole: order_addrole ?? this.order_addrole,
       delivery_boy_id: delivery_boy_id ?? this.delivery_boy_id,
+      delivery_boy_name: delivery_boy_name ?? this.delivery_boy_name,
       delivery_otp: delivery_otp ?? this.delivery_otp,
       link_uid: link_uid ?? this.link_uid,
       noofpeopletable: noofpeopletable ?? this.noofpeopletable,
@@ -230,6 +234,7 @@ class OrderModel {
       'whosorderadd_id': whosorderadd_id,
       'order_addrole': order_addrole,
       'delivery_boy_id': delivery_boy_id,
+      'delivery_boy_name': delivery_boy_name,
       'delivery_otp': delivery_otp,
       'link_uid': link_uid,
       'noofpeopletable': noofpeopletable,
@@ -282,6 +287,7 @@ class OrderModel {
       whosorderadd_id: map['whosorderadd_id'],
       order_addrole: map['order_addrole'],
       delivery_boy_id: map['delivery_boy_id'],
+      delivery_boy_name: map['delivery_boy_name'],
       delivery_otp: map['delivery_otp'],
       link_uid: map['link_uid'],
       noofpeopletable: map['noofpeopletable'],
@@ -311,7 +317,7 @@ class OrderModel {
 
   @override
   String toString() {
-    return 'OrderModel(id: $id, trans_id: $trans_id, cust_id: $cust_id, oid: $oid, coupon_code: $coupon_code, coupon_type: $coupon_type, coupon_minimum: $coupon_minimum, coupon_maximum: $coupon_maximum, coupon_orignal_discount: $coupon_orignal_discount, wheelcoupon: $wheelcoupon, coupon_value: $coupon_value, subtotal: $subtotal, coupon_discountamount: $coupon_discountamount, delivery_charge: $delivery_charge, gst: $gst, gst_amount: $gst_amount, service_charge: $service_charge, packging_charge: $packging_charge, total_amount: $total_amount, date_creation: $date_creation, genrated_by: $genrated_by, payment_type: $payment_type, status: $status, order_status: $order_status, ordertype: $ordertype, whosorderadd_id: $whosorderadd_id, order_addrole: $order_addrole, delivery_boy_id: $delivery_boy_id, delivery_otp: $delivery_otp, link_uid: $link_uid, noofpeopletable: $noofpeopletable, tablebook: $tablebook, randpaymeny: $randpaymeny, outletid: $outletid, addrecordid: $addrecordid, waiter_tip: $waiter_tip, txnid: $txnid, cart_id: $cart_id, address_id: $address_id, delivey_who: $delivey_who, uricko_token: $uricko_token, uricko_status: $uricko_status, table_booking_id: $table_booking_id, adjust_amount_table: $adjust_amount_table, refund_amount: $refund_amount, paid_amount: $paid_amount, app: $app)';
+    return 'OrderModel(id: $id, trans_id: $trans_id, cust_id: $cust_id, oid: $oid, coupon_code: $coupon_code, coupon_type: $coupon_type, coupon_minimum: $coupon_minimum, coupon_maximum: $coupon_maximum, coupon_orignal_discount: $coupon_orignal_discount, wheelcoupon: $wheelcoupon, coupon_value: $coupon_value, subtotal: $subtotal, coupon_discountamount: $coupon_discountamount, delivery_charge: $delivery_charge, gst: $gst, gst_amount: $gst_amount, service_charge: $service_charge, packging_charge: $packging_charge, total_amount: $total_amount, date_creation: $date_creation, genrated_by: $genrated_by, payment_type: $payment_type, status: $status, order_status: $order_status, ordertype: $ordertype, whosorderadd_id: $whosorderadd_id, order_addrole: $order_addrole, delivery_boy_id: $delivery_boy_id, delivery_boy_name: $delivery_boy_name, delivery_otp: $delivery_otp, link_uid: $link_uid, noofpeopletable: $noofpeopletable, tablebook: $tablebook, randpaymeny: $randpaymeny, outletid: $outletid, addrecordid: $addrecordid, waiter_tip: $waiter_tip, txnid: $txnid, cart_id: $cart_id, address_id: $address_id, delivey_who: $delivey_who, uricko_token: $uricko_token, uricko_status: $uricko_status, table_booking_id: $table_booking_id, adjust_amount_table: $adjust_amount_table, refund_amount: $refund_amount, paid_amount: $paid_amount, app: $app)';
   }
 
   @override
@@ -347,6 +353,7 @@ class OrderModel {
         other.whosorderadd_id == whosorderadd_id &&
         other.order_addrole == order_addrole &&
         other.delivery_boy_id == delivery_boy_id &&
+        other.delivery_boy_name == delivery_boy_name &&
         other.delivery_otp == delivery_otp &&
         other.link_uid == link_uid &&
         other.noofpeopletable == noofpeopletable &&
@@ -398,6 +405,7 @@ class OrderModel {
         whosorderadd_id.hashCode ^
         order_addrole.hashCode ^
         delivery_boy_id.hashCode ^
+        delivery_boy_name.hashCode ^
         delivery_otp.hashCode ^
         link_uid.hashCode ^
         noofpeopletable.hashCode ^

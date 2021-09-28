@@ -135,7 +135,7 @@ class ProfileManagementService extends ChangeNotifier {
       SnackBarService.instance.showSnackBarError('Invalid Email');
       return;
     }
-    if (!Utilities().isValidEmail(email)) {
+    if (!Utilities().isValidPhone(phone)) {
       SnackBarService.instance.showSnackBarError('Invalid phone');
       return;
     }
@@ -181,6 +181,71 @@ class ProfileManagementService extends ChangeNotifier {
           status = ProfileStatus.Failed;
           notifyListeners();
           SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = ProfileStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = ProfileStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+  }
+
+  Future<void> sendFeedback(String name, String email, String phone,
+      String feedback, BuildContext context, File? image) async {
+    if (name.isEmpty || email.isEmpty || phone.isEmpty || feedback.isEmpty) {
+      SnackBarService.instance.showSnackBarError('All fields are mandatory');
+      return;
+    }
+
+    if (!Utilities().isValidEmail(email)) {
+      SnackBarService.instance.showSnackBarError('Invalid Email');
+      return;
+    }
+    if (!Utilities().isValidPhone(phone)) {
+      SnackBarService.instance.showSnackBarError('Invalid phone');
+      return;
+    }
+
+    status = ProfileStatus.Loading;
+    notifyListeners();
+    UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'cust_id': user.id,
+      'name': name,
+      'contact': phone,
+      'email': email,
+      'type': 'Report',
+      'message': feedback,
+      'image': (image != null)
+          ? await MultipartFile.fromFile(image.path,
+              filename: image.path.split('/').last)
+          : '',
+    });
+
+    try {
+      Response response = await _dio.post(
+        API.Feedback,
+        data: reqBody,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        if (resBody['status'] == 1) {
+          status = ProfileStatus.Success;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarSuccess((resBody['msg']));
+          Navigator.of(context).pop();
+        } else {
+          status = ProfileStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((resBody['msg']));
         }
       } else {
         status = ProfileStatus.Failed;

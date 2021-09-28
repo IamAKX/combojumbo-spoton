@@ -60,7 +60,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             passwordCtrl: _confPasswordCtrl,
             isPasswordVisible: _isConfPassHidden,
             tooglePasswordVisibility: _toggleConfPasswordVisibility,
-            hint: 'Confirm Password',
+            hint: 'Confirm New Password',
           ),
           SizedBox(
             height: defaultPadding,

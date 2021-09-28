@@ -401,6 +401,7 @@ class CartServices extends ChangeNotifier {
             whosorderadd_id: orderJson['whosorderadd_id'],
             order_addrole: orderJson['order_addrole'],
             delivery_boy_id: orderJson['delivery_boy_id'],
+            delivery_boy_name: orderJson['delivery_boy_name'],
             delivery_otp: orderJson['delivery_otp'],
             link_uid: orderJson['link_uid'],
             noofpeopletable: orderJson['noofpeopletable'],

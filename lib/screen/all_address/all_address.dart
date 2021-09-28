@@ -53,7 +53,7 @@ class _AllAddressScreenState extends State<AllAddressScreen> {
         actions: [
           IconButton(
             onPressed: () => Navigator.of(context)
-                .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE)
+                .pushNamed(AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE, arguments: '')
                 .then((value) => reloadAddressList(context)),
             icon: Icon(Icons.add),
           )

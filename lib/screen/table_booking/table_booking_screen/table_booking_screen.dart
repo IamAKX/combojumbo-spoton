@@ -72,9 +72,10 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
             _cartServices
                 .getAllCharges(context)
                 .then((value) => allChargesModel = value);
-            _cartServices
-                .getAllSection(context)
-                .then((value) => sectionList = value);
+            _cartServices.getAllSection(context).then((value) {
+              sectionList = value;
+              selectedSection = sectionList.first;
+            });
           });
         },
       ),
@@ -112,7 +113,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                     'Select Section',
                     style: Theme.of(context).textTheme.subtitle2?.copyWith(
                           // fontWeight: FontWeight.bold,
-                          color: Colors.grey,
+                          color: textColor,
                           fontSize: 18,
                         ),
                   ),
@@ -133,50 +134,89 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                           selectedSection = sectionList.elementAt(index);
                         });
                       },
-                      child: Column(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: ColorFiltered(
-                              colorFilter: ColorFilter.mode(
-                                selectedSection == null ||
-                                        selectedSection!.id !=
-                                            sectionList.elementAt(index).id
-                                    ? hintColor
-                                    : Colors.transparent,
-                                BlendMode.saturation,
-                              ),
-                              child: Container(
-                                width: 100,
-                                height: 100,
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      sectionList.elementAt(index).image.trim(),
-                                  fit: BoxFit.cover,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          Center(
-                                    child: CircularProgressIndicator(
-                                        value: downloadProgress.progress),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Stack(
+                          children: [
+                            Column(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: ColorFiltered(
+                                    colorFilter: ColorFilter.mode(
+                                      selectedSection == null ||
+                                              selectedSection!.id !=
+                                                  sectionList
+                                                      .elementAt(index)
+                                                      .id
+                                          ? hintColor
+                                          : Colors.transparent,
+                                      BlendMode.saturation,
+                                    ),
+                                    child: Container(
+                                      width: 100,
+                                      height: 100,
+                                      child: CachedNetworkImage(
+                                        imageUrl: sectionList
+                                            .elementAt(index)
+                                            .image
+                                            .trim(),
+                                        fit: BoxFit.cover,
+                                        progressIndicatorBuilder:
+                                            (context, url, downloadProgress) =>
+                                                Center(
+                                          child: CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                        ),
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
+                                      ),
+                                    ),
                                   ),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
+                                ),
+                                SizedBox(
+                                  height: defaultPadding / 2,
+                                ),
+                                Text(
+                                  '${sectionList.elementAt(index).sectionname}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      ?.copyWith(
+                                        // fontWeight: FontWeight.bold,
+                                        color: textColor,
+                                      ),
+                                ),
+                              ],
+                            ),
+                            Visibility(
+                              visible: selectedSection!.id ==
+                                  sectionList.elementAt(index).id,
+                              child: Positioned(
+                                right: 4,
+                                child: Container(
+                                  width: 30,
+                                  decoration: new BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: new Border.all(
+                                      color: primaryColor,
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.green,
+                                    child: Icon(
+                                      Icons.check,
+                                      color: bgColor,
+                                      size: 18,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: defaultPadding / 2,
-                          ),
-                          Text(
-                            '${sectionList.elementAt(index).sectionname}',
-                            style:
-                                Theme.of(context).textTheme.subtitle2?.copyWith(
-                                      // fontWeight: FontWeight.bold,
-                                      color: textColor,
-                                    ),
-                          ),
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -186,12 +226,14 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                   hint: 'Outlet',
                   inputType: TextInputType.text,
                   enabled: false,
+                  fillColor: hintColor.withOpacity(0.5),
                 ),
                 CustomTextFieldWithHeading(
                   teCtrl: sectionCtrl,
                   hint: 'Section',
                   inputType: TextInputType.text,
                   enabled: false,
+                  fillColor: hintColor.withOpacity(0.5),
                 ),
                 // Text(
                 //   'Section',
@@ -477,7 +519,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
       headerAnimationLoop: false,
       animType: AnimType.BOTTOMSLIDE,
       title: 'Payment successful',
-      desc: 'Your order has been received.',
+      desc: 'Your booking is confirmed.',
       showCloseIcon: false,
       btnOkOnPress: () {
         SnackBarService.instance.showSnackBarInfo('Please wait...');

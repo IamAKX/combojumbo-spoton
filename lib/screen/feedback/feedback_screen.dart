@@ -1,7 +1,17 @@
+import 'dart:io';
+
+import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/services/profile_management_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart';
+import 'package:provider/provider.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({Key? key}) : super(key: key);
@@ -16,8 +26,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   TextEditingController _emailCtrl = TextEditingController();
   TextEditingController _phoneCtrl = TextEditingController();
   TextEditingController _feedBackCtrl = TextEditingController();
+  TextEditingController _imageAttachment = TextEditingController();
+  File? imageFile = null;
+
+  UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+  late ProfileManagementService _profileManagementService;
   @override
   Widget build(BuildContext context) {
+    _profileManagementService = Provider.of<ProfileManagementService>(context);
+    SnackBarService.instance.buildContext = context;
+    _nameCtrl.text = user.name;
+    _emailCtrl.text = user.email;
+    _phoneCtrl.text = user.phone;
     return Scaffold(
       backgroundColor: greyedBgColor,
       appBar: AppBar(
@@ -46,9 +66,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     hint: 'Email Address',
                     inputType: TextInputType.emailAddress),
                 CustomTextFieldWithHeading(
-                    teCtrl: _nameCtrl,
+                    teCtrl: _phoneCtrl,
                     hint: 'Phone',
                     inputType: TextInputType.phone),
+                InkWell(
+                  onTap: () => pickImage(),
+                  child: CustomTextFieldWithHeading(
+                    teCtrl: _imageAttachment,
+                    hint: 'Attach Image',
+                    inputType: TextInputType.text,
+                    enabled: false,
+                  ),
+                ),
                 Text(
                   'How can we help you?',
                   style: Theme.of(context)
@@ -94,15 +123,41 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: TextButton(
-              onPressed: () {},
+              onPressed:
+                  _profileManagementService.status == ProfileStatus.Loading
+                      ? null
+                      : () {
+                          _profileManagementService.sendFeedback(
+                            _nameCtrl.text,
+                            _emailCtrl.text,
+                            _phoneCtrl.text,
+                            _feedBackCtrl.text,
+                            context,
+                            imageFile,
+                          );
+                        },
               child: Text(
-                'SUBMIT',
-                style: Theme.of(context).textTheme.button,
+                _profileManagementService.status == ProfileStatus.Loading
+                    ? 'Loading...'
+                    : 'Submit',
+                style: Theme.of(context)
+                    .textTheme
+                    .button
+                    ?.copyWith(color: bgColor),
               ),
             ),
           )
         ],
       )),
     );
+  }
+
+  pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imageFile = File(image.path);
+      _imageAttachment.text = basename(image.path);
+    }
   }
 }

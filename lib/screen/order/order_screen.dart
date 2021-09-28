@@ -103,7 +103,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  '${order.order.status}',
+                                  '${getOrderStatus(order.order.order_status)}',
                                   style: Theme.of(context).textTheme.subtitle2,
                                 ),
                                 SizedBox(
@@ -120,12 +120,13 @@ class _OrderScreenState extends State<OrderScreen> {
                               '${order.order.trans_id}',
                               style: Theme.of(context).textTheme.caption,
                             ),
-                            Text(
-                              '${order.address}',
-                              style: Theme.of(context).textTheme.subtitle2,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            if (order.address.isEmpty)
+                              Text(
+                                '${order.address.replaceAll(',', ', ')}',
+                                style: Theme.of(context).textTheme.subtitle2,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             Row(
                               children: [
                                 Text(
@@ -138,7 +139,12 @@ class _OrderScreenState extends State<OrderScreen> {
                                 Icon(
                                   Icons.keyboard_arrow_right,
                                   size: 15,
-                                )
+                                ),
+                                Spacer(),
+                                Text(
+                                  '${order.order.ordertype}',
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -152,8 +158,11 @@ class _OrderScreenState extends State<OrderScreen> {
                               height: 10,
                             ),
                             Text(
-                              '${order.menuDetails.map((e) => e.food.productname.toWordCase()).toList().join(',')}',
-                              style: Theme.of(context).textTheme.subtitle2,
+                              '${order.menuDetails.map((e) => e.food.productname.toWordCase() + ' x ' + e.food.qty).toList().join(', ')}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(color: hintColor),
                             ),
                             Text(
                               '${formatOrderTime(order.order.date_creation)}',

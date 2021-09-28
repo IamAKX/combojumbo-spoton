@@ -4,6 +4,7 @@ import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
@@ -18,6 +19,8 @@ class MenuItem extends StatelessWidget {
     required this.parentContext,
     required this.foodModel,
     required this.refreshState,
+    required this.favList,
+    required this.reloadFavList,
   }) : super(key: key);
   final String title;
   final String subTitle;
@@ -26,6 +29,8 @@ class MenuItem extends StatelessWidget {
   final BuildContext parentContext;
   final FoodModel foodModel;
   final Function() refreshState;
+  final List<FoodModel> favList;
+  final Function() reloadFavList;
 
   @override
   Widget build(BuildContext context) {
@@ -78,22 +83,53 @@ class MenuItem extends StatelessWidget {
           contentPadding:
               EdgeInsets.only(right: defaultPadding, left: defaultPadding),
           minVerticalPadding: 0,
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(4),
-            child: Container(
-              width: 80,
-              height: 80,
-              child: CachedNetworkImage(
-                imageUrl: '$imageUrl',
-                fit: BoxFit.cover,
-                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                    Center(
-                  child: CircularProgressIndicator(
-                      value: downloadProgress.progress),
+          leading: Stack(
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(4),
+                child: Container(
+                  width: 80,
+                  height: 80,
+                  child: CachedNetworkImage(
+                    imageUrl: '$imageUrl',
+                    fit: BoxFit.cover,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) => Center(
+                      child: CircularProgressIndicator(
+                          value: downloadProgress.progress),
+                    ),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                 ),
-                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
-            ),
+              Positioned(
+                right: 1,
+                top: 1,
+                child: InkWell(
+                  onTap: () {
+                    if (Utilities()
+                        .isFoodMarkedFavourite(favList, foodModel.id))
+                      favList
+                          .removeWhere((element) => element.id == foodModel.id);
+                    else
+                      favList.add(foodModel);
+                    Utilities().setFavouriteFood(favList);
+                    reloadFavList();
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: bgColor,
+                    radius: 12,
+                    child: Icon(
+                      Utilities().isFoodMarkedFavourite(favList, foodModel.id)
+                          ? Icons.favorite
+                          : Icons.favorite_outline,
+                      size: 20,
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
         Divider(

@@ -19,6 +19,7 @@ import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/static_data.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/menu_item.dart';
 import 'package:cjspoton/widgets/menu_subheading.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +48,19 @@ class _MenuScreenState extends State<MenuScreen> {
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
   late PincodeModel _pincodeModel;
+  List<FoodModel> favList = [];
+
+  loadFavouriteFood() {
+    setState(() {
+      favList = Utilities().getAllFavouriteFood();
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    loadFavouriteFood();
     _outletModel =
         OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     WidgetsBinding.instance!.addPostFrameCallback(
@@ -298,6 +307,8 @@ class _MenuScreenState extends State<MenuScreen> {
                       parentContext: context,
                       foodModel: food,
                       refreshState: refreshState,
+                      favList: favList,
+                      reloadFavList: loadFavouriteFood,
                     ),
                   },
                   SizedBox(
