@@ -221,7 +221,7 @@ class ProfileManagementService extends ChangeNotifier {
       'email': email,
       'type': 'Report',
       'message': feedback,
-      'image': (image != null)
+      'aimage': (image != null)
           ? await MultipartFile.fromFile(image.path,
               filename: image.path.split('/').last)
           : '',

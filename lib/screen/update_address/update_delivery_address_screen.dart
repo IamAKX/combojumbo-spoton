@@ -389,7 +389,8 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
                       ],
                       borderWidth: 1,
                       dividerColor: hintColor.withOpacity(0.5),
-                      initialLabelIndex: 0,
+                      initialLabelIndex:
+                          ['HOME', 'WORK', 'OTHER'].indexOf(addressType),
                       totalSwitches: 3,
                       labels: ['HOME', 'WORK', 'OTHER'],
                       onToggle: (index) {
