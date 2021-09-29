@@ -317,7 +317,8 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
                       selectedItem: selectedPincode,
                       showSelectedItem: true,
                       items: pincodeList,
-                      itemAsString: (item) => item.pincode,
+                      itemAsString: (item) =>
+                          '${item.pincode} - ${item.location}',
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -340,7 +341,7 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
                       label: "Select pincode",
                       hint: "Select pincode",
                       compareFn: (item, selectedItem) =>
-                          item.pincode == selectedItem?.pincode,
+                          item.id == selectedItem?.id,
                       onChanged: (value) {
                         setState(() {
                           selectedPincode = value;
