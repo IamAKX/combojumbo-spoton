@@ -11,6 +11,7 @@ import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/phone_edittext_with_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -89,7 +90,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         child: ListView(
           children: [
             InkWell(
-              onTap: () => pickProfileImage(),
+              onTap: () async {
+                if (await Permission.storage.request().isGranted) {
+                  pickProfileImage();
+                }
+              },
               child: Container(
                 alignment: Alignment.center,
                 child: ClipRRect(
@@ -102,7 +107,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                         image: imageFile == null
                             ? NetworkImage(
                                 user.profileImage.isEmpty
-                                    ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
+                                    ? 'http://www.ansonika.com/fooyes/img/avatar1.jpg'
                                     : user.profileImage,
                                 scale: 1,
                               )
@@ -121,7 +126,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
               //   backgroundImage: imageFile == null
               //       ? NetworkImage(
               //           user.profileImage.isEmpty
-              //               ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
+              //               ? 'http://www.ansonika.com/fooyes/img/avatar1.jpg'
               //               : user.profileImage,
               //           scale: 1,
               //         )

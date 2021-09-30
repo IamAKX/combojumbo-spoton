@@ -65,7 +65,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                       Padding(
                         padding: const EdgeInsets.all(defaultPadding),
                         child: Text(
-                          'You have no order history',
+                          'Book a Table and start enjoying luscious meals at CJ',
                           textAlign: TextAlign.center,
                           style: Theme.of(context)
                               .textTheme
@@ -95,7 +95,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                               Row(
                                 children: [
                                   Text(
-                                    '${order.ordertype}',
+                                    '${order.ordertype.replaceAll('-', ' ')}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .subtitle1
@@ -152,17 +152,17 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 height: 1,
                                 color: hintColor,
                               ),
-                              // SizedBox(
-                              //   height: 10,
-                              // ),
+                              SizedBox(
+                                height: 10,
+                              ),
                               // Text(
                               //   '${order.menuDetailsList.map((e) => e.food.productname.toWordCase()).toList().join(',')}',
                               //   style: Theme.of(context).textTheme.subtitle2,
                               // ),
-                              // Text(
-                              //   '${order.datetime}',
-                              //   style: Theme.of(context).textTheme.caption,
-                              // ),
+                              Text(
+                                '${order.adddate}',
+                                style: Theme.of(context).textTheme.caption,
+                              ),
                             ],
                           ),
                         ),

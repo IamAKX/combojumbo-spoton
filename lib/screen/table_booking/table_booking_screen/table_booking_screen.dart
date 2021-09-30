@@ -107,6 +107,15 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
           : ListView(
               padding: EdgeInsets.all(defaultPadding),
               children: [
+                Text(
+                  'Opt for a section and book your table. An booking charge of Rs 99 will be levied which will be adjusted on your final bill.',
+                  style: Theme.of(context).textTheme.caption?.copyWith(
+                        color: textColor,
+                      ),
+                ),
+                SizedBox(
+                  height: defaultPadding,
+                ),
                 Align(
                   alignment: Alignment.center,
                   child: Text(
@@ -437,9 +446,9 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      // amount:
-      //     "${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble().toStringAsFixed(2)}",
-      amount: '0.5',
+      amount:
+          "${tableBookingModel.allChargesModel!.Table_Booking_Charge.toDouble().toStringAsFixed(2)}",
+      // amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",

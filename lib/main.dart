@@ -1,23 +1,15 @@
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
-import 'package:cjspoton/screen/home/home_screen.dart';
-import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
-import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
-import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
-import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/services/address_service.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/catalog_service.dart';
-import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
-import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/navigator.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,22 +24,7 @@ Future<void> main() async {
   prefs = await SharedPreferences.getInstance();
   // CURRENT_USER = prefs.getString(PrefernceKey.USER);
   isLoggedIn = prefs.getBool(PrefernceKey.IS_LOGGEDIN);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
   runApp(MyApp());
-}
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  NotificationApi.showNotification(
-      id: message.hashCode,
-      body: message.notification!.body,
-      title: message.notification!.title,
-      payload: message.data.toString());
 }
 
 class MyApp extends StatelessWidget {

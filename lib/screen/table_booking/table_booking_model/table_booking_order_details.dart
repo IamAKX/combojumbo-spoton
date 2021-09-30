@@ -12,6 +12,7 @@ class TableBookingOrderDetails {
   String tableno;
   String noguest;
   String outletname;
+  String adddate;
   List<TableBookingMenuDetails> menuDetailsList;
   TableBookingOrderDetails({
     required this.datetime,
@@ -21,6 +22,7 @@ class TableBookingOrderDetails {
     required this.tableno,
     required this.noguest,
     required this.outletname,
+    required this.adddate,
     required this.menuDetailsList,
   });
 
@@ -32,6 +34,7 @@ class TableBookingOrderDetails {
     String? tableno,
     String? noguest,
     String? outletname,
+    String? adddate,
     List<TableBookingMenuDetails>? menuDetailsList,
   }) {
     return TableBookingOrderDetails(
@@ -42,6 +45,7 @@ class TableBookingOrderDetails {
       tableno: tableno ?? this.tableno,
       noguest: noguest ?? this.noguest,
       outletname: outletname ?? this.outletname,
+      adddate: adddate ?? this.adddate,
       menuDetailsList: menuDetailsList ?? this.menuDetailsList,
     );
   }
@@ -55,6 +59,7 @@ class TableBookingOrderDetails {
       'tableno': tableno,
       'noguest': noguest,
       'outletname': outletname,
+      'adddate': adddate,
       'menuDetailsList': menuDetailsList.map((x) => x.toMap()).toList(),
     };
   }
@@ -68,6 +73,7 @@ class TableBookingOrderDetails {
       tableno: map['tableno'],
       noguest: map['noguest'],
       outletname: map['outletname'],
+      adddate: map['adddate'],
       menuDetailsList: List<TableBookingMenuDetails>.from(map['menuDetailsList']
           ?.map((x) => TableBookingMenuDetails.fromMap(x))),
     );
@@ -80,7 +86,7 @@ class TableBookingOrderDetails {
 
   @override
   String toString() {
-    return 'TableBookingOrderDetails(datetime: $datetime, ordertype: $ordertype, orderstatus: $orderstatus, totalamount: $totalamount, tableno: $tableno, noguest: $noguest, outletname: $outletname, menuDetailsList: $menuDetailsList)';
+    return 'TableBookingOrderDetails(datetime: $datetime, ordertype: $ordertype, orderstatus: $orderstatus, totalamount: $totalamount, tableno: $tableno, noguest: $noguest, outletname: $outletname, adddate: $adddate, menuDetailsList: $menuDetailsList)';
   }
 
   @override
@@ -95,6 +101,7 @@ class TableBookingOrderDetails {
         other.tableno == tableno &&
         other.noguest == noguest &&
         other.outletname == outletname &&
+        other.adddate == adddate &&
         listEquals(other.menuDetailsList, menuDetailsList);
   }
 
@@ -107,6 +114,7 @@ class TableBookingOrderDetails {
         tableno.hashCode ^
         noguest.hashCode ^
         outletname.hashCode ^
+        adddate.hashCode ^
         menuDetailsList.hashCode;
   }
 }

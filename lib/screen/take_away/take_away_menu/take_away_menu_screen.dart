@@ -99,6 +99,7 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
   Widget build(BuildContext context) {
     _pincodeModel = Constants.getDefaultPincode();
     _catalogService = Provider.of<CatalogService>(context);
+    
     SnackBarService.instance.buildContext = context;
     final button = new PopupMenuButton(
       key: _menuKey,
@@ -250,36 +251,36 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Pickup from CJ ${_outletModel.outletName}',
+                      'CJ ${_outletModel.outletName} - Take Away',
                       style: Theme.of(context).textTheme.headline4?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
                     Text(
-                      'Take Away from ${_pincodeModel.pincode} - ${_pincodeModel.location}',
+                      'Pickup from CJ ${_outletModel.outletName}',
                       style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: bgColor,
                             fontWeight: FontWeight.bold,
                           ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(
-                                DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
-                            .then((value) {
-                          setState(() {});
-                        });
-                      },
-                      child: Text(
-                        'Change PIN code',
-                        style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: bgColor,
-                            decoration: TextDecoration.underline,
-                            decorationThickness: 2),
-                      ),
-                    ),
+                    // InkWell(
+                    //   onTap: () {
+                    //     Navigator.of(context)
+                    //         .pushNamed(
+                    //             DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE)
+                    //         .then((value) {
+                    //       setState(() {});
+                    //     });
+                    //   },
+                    //   child: Text(
+                    //     'Change PIN code',
+                    //     style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                    //         color: bgColor,
+                    //         decoration: TextDecoration.underline,
+                    //         decorationThickness: 2),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

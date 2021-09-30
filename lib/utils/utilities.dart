@@ -45,7 +45,7 @@ class Utilities {
     } catch (e) {
       return false;
     }
-    return true;
+    return RegExp(r"^[789]\d{9}$").hasMatch(phone);
   }
 
   bool isValidPassword(String password) {
@@ -62,8 +62,8 @@ class Utilities {
       if (Constants.LOWERCASE_ALPHABET.contains(c)) count++;
     }
     if (count == 0) {
-      SnackBarService.instance
-          .showSnackBarInfo('Password must contain atleast 1 lowercase alphabet');
+      SnackBarService.instance.showSnackBarInfo(
+          'Password must contain atleast 1 lowercase alphabet');
       return false;
     }
 
@@ -73,8 +73,8 @@ class Utilities {
       if (Constants.UPPERCASE_ALPHABET.contains(c)) count++;
     }
     if (count == 0) {
-      SnackBarService.instance
-          .showSnackBarInfo('Password must contain atleast 1 uppercase alphabet');
+      SnackBarService.instance.showSnackBarInfo(
+          'Password must contain atleast 1 uppercase alphabet');
       return false;
     }
 
@@ -95,8 +95,8 @@ class Utilities {
       if (Constants.SPECIAL_CHARACTER.contains(c)) count++;
     }
     if (count == 0) {
-      SnackBarService.instance
-          .showSnackBarInfo('Password must contain atleast 1 special character');
+      SnackBarService.instance.showSnackBarInfo(
+          'Password must contain atleast 1 special character');
       return false;
     }
 
@@ -117,7 +117,7 @@ class Utilities {
   //   List<String> stringList = [];
   //   for (AddressModel m in list) {
   //     stringList.add(m.toJson());
-  //   }  
+  //   }
   //   stringList.add(model.toJson());
   //   prefs.setStringList(PrefernceKey.ADDRESS, stringList);
   // }

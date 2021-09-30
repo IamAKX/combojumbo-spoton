@@ -29,7 +29,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ORDER #${widget.orderDetailModel.order.trans_id}',
+              'ORDER #${widget.orderDetailModel.order.id}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
@@ -134,7 +134,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 SizedBox(
                   width: 5,
                 ),
-                Text('Delivery Partner fee'),
+                Text('Delivery fee'),
                 Spacer(),
                 Text(
                     '${Constants.RUPEE} ${widget.orderDetailModel.order.delivery_charge.toDouble().toStringAsFixed(2)}'),
@@ -193,14 +193,19 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               ),
             ],
           ),
-          Text(
-            'Address',
-            style: Theme.of(context).textTheme.subtitle2,
-          ),
-          Text(
-            '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
-            style: Theme.of(context).textTheme.caption,
-          ),
+          if (widget.orderDetailModel.order.ordertype == 'Delivery')
+            Text(
+              'Address',
+              style: Theme.of(context)
+                  .textTheme
+                  .caption
+                  ?.copyWith(color: textColor),
+            ),
+          if (widget.orderDetailModel.order.ordertype == 'Delivery')
+            Text(
+              '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
+              style: Theme.of(context).textTheme.caption,
+            ),
         ],
       ),
     );

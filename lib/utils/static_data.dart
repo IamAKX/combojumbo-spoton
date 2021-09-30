@@ -68,20 +68,26 @@ List<AddSliderCardModel> getAdSlider() {
 List<ReviewModel> getReview() {
   return [
     ReviewModel(
+        title: 'Tasty & Pocket friendly',
         review:
             '''Amazing North Indian food served with Crisp Indian Breads They have a wide variety of Continental Food also. Will suggest my friends and is pocket friendly also''',
         name: 'Dipak Kumar'),
     ReviewModel(
+        title: 'Great Service & Ambience.',
         review:
             '''The service is good. The ambience is unmatched . The staff cares about your experience especially mr. sameer The food is amazing - everything we tasted melted in our mouth. Great experience especially in navi mumbai.....''',
         name: 'Mohinderpal Singh'),
     ReviewModel(
+        title: 'A worthy Joint to visit repeatedly!!',
         review:
             '''Very Nice Food, Unique Ambience, excellent staff. The price points are less as compared to other establishments in the area. The staff was very accommodative and attentive to ensure good experience. A lot of different cuisines are available with good quality food. Oriental sizzlers, Manchow soup and Lazeez Dum Birayni were sumptuous. The place is also available as a Banquet too.''',
         name: 'Yashraj Thakkar'),
-    ReviewModel(review: '''Amazing place and it has a wide option in their menu
+    ReviewModel(
+        title: 'A worthy Joint to visit repeatedly!!',
+        review: '''Amazing place and it has a wide option in their menu
 Loved the service and food
-Will definetely visit again''', name: 'Paresh Doshi'),
+Will definetely visit again''',
+        name: 'Paresh Doshi'),
   ];
 }
 

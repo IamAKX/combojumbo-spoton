@@ -125,7 +125,6 @@ class ProfileManagementService extends ChangeNotifier {
 
   Future<void> updateProfile(String name, String email, String phone,
       File? image, BuildContext context) async {
-    log(image!.path);
     if (name.isEmpty || email.isEmpty || phone.isEmpty) {
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
       return;
@@ -174,7 +173,7 @@ class ProfileManagementService extends ChangeNotifier {
           user.profileImage = body['image'];
 
           prefs.setString(PrefernceKey.USER, user.toJson());
-
+          status = ProfileStatus.Success;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess((body['msg']));
         } else {

@@ -462,10 +462,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 ),
               ),
               for (ReviewModel r in getReview()) ...{
-                ReviewTile(
-                  name: r.name,
-                  review: r.review,
-                ),
+                ReviewTile(name: r.name, review: r.review, title: r.title),
               }
             ],
           ),
@@ -480,9 +477,11 @@ class ReviewTile extends StatelessWidget {
     Key? key,
     required this.review,
     required this.name,
+    required this.title,
   }) : super(key: key);
   final String review;
   final String name;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -545,7 +544,7 @@ class ReviewTile extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
             child: Text(
-              'A worthy Joint to visit repeatedly!!',
+              title,
               style: Theme.of(context).textTheme.headline6,
             ),
           ),

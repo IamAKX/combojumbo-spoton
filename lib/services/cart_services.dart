@@ -767,6 +767,7 @@ class CartServices extends ChangeNotifier {
                   tableno: history['tableno'],
                   noguest: history['noguest'],
                   outletname: history['outletname'],
+                  adddate: history['adddate'],
                   menuDetailsList: menuDetails);
           list.add(bookingOrderDetails);
         }

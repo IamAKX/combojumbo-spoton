@@ -13,7 +13,6 @@ import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
-import 'package:cjspoton/services/notification_api.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
@@ -43,16 +42,7 @@ class _MainContainerState extends State<MainContainer> {
     // TODO: implement initState
     super.initState();
     _selectedIndex = widget.initialIndex;
-    NotificationApi.init();
-    listenNotification();
-
-    configureFCM();
   }
-
-  void listenNotification() =>
-      NotificationApi.onNotifications.stream.listen((String? payload) {
-        print(payload);
-      });
 
   refreshState() {
     setState(() {});
@@ -236,11 +226,13 @@ class _MainContainerState extends State<MainContainer> {
           actions: [
             GetCartButton(
               refreshState: refreshState,
-            ),
+            ), 
             IconButton(
               onPressed: () => Navigator.of(context)
                   .pushNamed(TableBookingScreens.TABLE_BOOKING_HISTORY_ROUTE),
-              icon: Icon(Icons.history_outlined),
+              icon: Image.asset(
+                'assets/images/outline_table_bar_1.png',
+              ),
             ),
           ],
         );
@@ -272,19 +264,19 @@ class _MainContainerState extends State<MainContainer> {
   }
 }
 
-void configureFCM() {
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    NotificationApi.showNotification(
-        id: message.hashCode,
-        body: message.notification!.body,
-        title: message.notification!.title,
-        payload: message.data.toString());
-  });
+// void configureFCM() {
+//   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+//     NotificationApi.showNotification(
+//         id: message.hashCode,
+//         body: message.notification!.body,
+//         title: message.notification!.title,
+//         payload: message.data.toString());
+//   });
 
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('onMessageOpenedApp');
-  });
-}
+//   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+//     print('onMessageOpenedApp');
+//   });
+// }
 
 class GetCartButton extends StatelessWidget {
   const GetCartButton({

@@ -22,7 +22,7 @@ class AgreementFooter extends StatelessWidget {
         Align(
           alignment: Alignment.center,
           child: Text(
-            'By continuing, your agree our',
+            'By continuing, you agree to our',
             style: Theme.of(context).textTheme.subtitle2?.copyWith(
                   color: Colors.white,
                 ),

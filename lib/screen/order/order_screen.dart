@@ -117,16 +117,16 @@ class _OrderScreenState extends State<OrderScreen> {
                               ],
                             ),
                             Text(
-                              '${order.order.trans_id}',
+                              '#${order.order.id}',
                               style: Theme.of(context).textTheme.caption,
                             ),
-                            if (order.address.isEmpty)
-                              Text(
-                                '${order.address.replaceAll(',', ', ')}',
-                                style: Theme.of(context).textTheme.subtitle2,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                            // if (order.address.isEmpty)
+                            //   Text(
+                            //     '${order.address.replaceAll(',', ', ')}',
+                            //     style: Theme.of(context).textTheme.subtitle2,
+                            //     maxLines: 1,
+                            //     overflow: TextOverflow.ellipsis,
+                            //   ),
                             Row(
                               children: [
                                 Text(
@@ -142,7 +142,7 @@ class _OrderScreenState extends State<OrderScreen> {
                                 ),
                                 Spacer(),
                                 Text(
-                                  '${order.order.ordertype}',
+                                  '${order.order.ordertype.replaceAll('-', '')}',
                                   style: Theme.of(context).textTheme.subtitle2,
                                 ),
                               ],

@@ -1,4 +1,6 @@
+import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/city_model.dart';
+import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/state_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
@@ -56,15 +58,32 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
               .where((e) => e.pincode == widget.filterPincode)
               .toList();
         }
-
-        selectedPincode = pincodeList.first;
+        if (widget.filterPincode != '')
+          selectedPincode = pincodeList
+              .firstWhere((element) => element.pincode == widget.filterPincode);
+        else {
+          PincodeModel pincodeModel = Constants.getDefaultPincode();
+          selectedPincode = pincodeList
+              .firstWhere((element) => element.pincode == pincodeModel.pincode);
+        }
 
         _addressService.getStateList(context).then(
           (value) {
-            setState(() {
+            setState(() async {
               stateList = value;
               selectedState =
                   stateList.firstWhere((element) => element.id == '22');
+
+              await _addressService
+                  .getCityList(selectedState!, context)
+                  .then((value) {
+                cityList = value;
+                if (selectedState != null && selectedState!.id == '22')
+                  selectedCity =
+                      cityList.firstWhere((element) => element.id == '2726');
+                else
+                  selectedCity = cityList.first;
+              });
             });
           },
         );
@@ -212,7 +231,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                               selectedCity = cityList.firstWhere(
                                   (element) => element.id == '2726');
                             else
-                              selectedCity = null;
+                              selectedCity = cityList.first;
                           });
                         });
                       },
@@ -469,7 +488,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                             selectedCity == null ||
                             selectedState == null) {
                           SnackBarService.instance
-                              .showSnackBarError('All fields are mandatory');
+                              .showSnackBarError('Address 1 is mandatory');
                           return;
                         } else {
                           AddressModel addressModel = AddressModel(

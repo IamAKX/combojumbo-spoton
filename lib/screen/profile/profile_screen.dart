@@ -71,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage(user.profileImage.isEmpty
-                    ? 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2978&q=80'
+                    ? 'http://www.ansonika.com/fooyes/img/avatar1.jpg'
                     : user.profileImage),
               ),
               SizedBox(
@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           tileColor: bgColor,
           title: Text(
-            'MunchBox',
+            'Munchox',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),

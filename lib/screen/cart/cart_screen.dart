@@ -116,6 +116,13 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
+    if (couponDiscountDetailModel != null &&
+        couponDiscountDetailModel!.minimum_order_value.isNotEmpty &&
+        CartHelper.getTotalPriceOfCart().toDouble() <
+            couponDiscountDetailModel!.minimum_order_value.toDouble()) {
+      couponDiscountDetailModel = null;
+      selectedCoupon = null;
+    }
     user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -558,7 +565,7 @@ class _CartScreenState extends State<CartScreen> {
                                 controller: sugestionCtrl,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  hintText: 'Any suggestions? Will pass it on',
+                                  hintText: 'Any Suggestions for the chef? Will pass it on',
                                   focusColor: primaryColor,
                                   alignLabelWithHint: false,
                                   filled: true,
@@ -630,7 +637,7 @@ class _CartScreenState extends State<CartScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Delivery Fees'),
+                                Text('Delivery Fee'),
                                 selectedPincode.charge.toDouble() == 0
                                     ? Text(
                                         'FREE',

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/outlet_model.dart';
@@ -64,11 +65,12 @@ class AuthenticationService extends ChangeNotifier {
     var reqBody = FormData.fromMap({
       'name': _googleSignInAccount!.displayName,
       'email': _googleSignInAccount!.email,
-      'g_id': _googleSignInAccount!.id,
+      // 'g_id': _googleSignInAccount!.id,
+      'g_id': googleAuth.accessToken,
       'mobileid': fcmToken,
       'profileImage': googleSignInAccount.photoUrl ?? ''
     });
-    print('Request : $reqBody');
+    log('Request : ${reqBody.fields}');
     Response response = await _dio.post(
       API.GoogleRegisteration,
       data: reqBody,
@@ -85,19 +87,12 @@ class AuthenticationService extends ChangeNotifier {
             token: '',
             email: body['email'],
             fcmToken: fcmToken!,
-            profileImage: googleSignInAccount.photoUrl!);
+            profileImage: body['image'] ?? '');
 
         prefs.setString(PrefernceKey.USER, userModel.toJson());
         prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
-        OutletModel outletModel = OutletModel(
-          outletId: 'ECJ29',
-          outletName: 'Vashi',
-          address:
-              'Plot No - 17, Near HDFC Bank, Juhu Nagar, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
-          image:
-              "https://www.combojumbo.in/master/Outlet/fimages/image16382021-09-23-11-51-25vashi-1.jpg",
-        );
-        prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
+
+        await saveDefaultOutlet(context);
         status = AuthStatus.Authenticated;
         notifyListeners();
         // SnackBarService.instance.showSnackBarSuccess(body['msg']);
@@ -163,6 +158,18 @@ class AuthenticationService extends ChangeNotifier {
     print('Facebook data : ${prettyPrint(_facebookUser)}');
     status = AuthStatus.Authenticating;
     notifyListeners();
+    if (_facebookUser == null ||
+        _facebookUser['name'] == null ||
+        _facebookUser['email'] == null ||
+        _facebookUser['name'].toString().isEmpty ||
+        _facebookUser['email'].toString().isEmpty) {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(
+          'Unable to fetch your details. Please login with another source.');
+      return;
+    }
+
     try {
       String? fcmToken = await FirebaseMessaging.instance.getToken();
       var reqBody = FormData.fromMap({
@@ -174,13 +181,14 @@ class AuthenticationService extends ChangeNotifier {
         'profileImage': _facebookUser['picture']['data']['url']
       });
 
+      log(reqBody.fields.toString());
       Response response = await _dio.post(
         API.FacebookRegisteration,
         data: reqBody,
       );
       var responseBody = json.decode(response.data);
       if (response.statusCode == 200) {
-        print('Response : ${response.data}');
+        log('Response : ${response.data}');
         var body = responseBody['body'];
         if (responseBody['status'] == 1) {
           print('inside if');
@@ -191,20 +199,12 @@ class AuthenticationService extends ChangeNotifier {
               token: '',
               fcmToken: fcmToken ?? '',
               email: _facebookUser['email'] ?? '',
-              profileImage: _facebookUser['picture']['data']['url'] ?? '');
+              profileImage: body['image'] ?? '');
           print(userModel);
           prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
-          OutletModel outletModel = OutletModel(
-            outletId: 'ECJ29',
-            outletName: 'Vashi',
-            address:
-                'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
-            image:
-                "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
-          );
-          prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
+          await saveDefaultOutlet(context);
           status = AuthStatus.Authenticated;
           notifyListeners();
           // SnackBarService.instance.showSnackBarSuccess(body['msg']);
@@ -281,15 +281,7 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: '');
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
-          OutletModel outletModel = OutletModel(
-            outletId: 'ECJ29',
-            outletName: 'Vashi',
-            address:
-                'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
-            image:
-                "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
-          );
-          prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
+          await saveDefaultOutlet(context);
           status = AuthStatus.Authenticated;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
@@ -358,15 +350,7 @@ class AuthenticationService extends ChangeNotifier {
               profileImage: body['image']);
 
           prefs.setString(PrefernceKey.USER, userModel.toJson());
-          OutletModel outletModel = OutletModel(
-            outletId: 'ECJ29',
-            outletName: 'Vashi',
-            address:
-                'Plot No: 17, near HDFC Bank, Sector 28, Vashi, Navi Mumbai, Maharashtra 400703',
-            image:
-                "https://www.combojumbo.in/master/Outlet/fimages/image15022021-09-16-14-40-28avatar-1.jpeg",
-          );
-          prefs.setString(PrefernceKey.SELECTED_OUTLET, outletModel.toJson());
+          await saveDefaultOutlet(context);
           prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
           status = AuthStatus.Authenticated;
           notifyListeners();
@@ -674,6 +658,61 @@ class AuthenticationService extends ChangeNotifier {
           SnackBarService.instance.showSnackBarSuccess(body['msg']);
           // Navigator.of(context).pushNamedAndRemoveUntil(
           //     LoginScreen.LOGIN_ROUTE, (route) => false);
+        } else {
+          status = AuthStatus.Error;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = AuthStatus.Error;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+  }
+
+  Future<void> saveDefaultOutlet(BuildContext context) async {
+    status = AuthStatus.Authenticating;
+    notifyListeners();
+    List<OutletModel> list = [];
+    try {
+      Response response = await _dio.post(
+        API.Outlets,
+      );
+
+      log(response.data);
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['body'];
+
+        if (resBody['status'] == 1) {
+          for (var outlet in body) {
+            OutletModel outletModel = OutletModel(
+                outletId: outlet['OutletId'],
+                outletName: outlet['OutletName'],
+                address: outlet['Address'],
+                image: outlet['Image']);
+            list.add(outletModel);
+          }
+
+          if (list.isEmpty) {
+            status = AuthStatus.Error;
+            SnackBarService.instance
+                .showSnackBarError('Unable to fetch outlet details');
+          } else {
+            await prefs.setString(
+                PrefernceKey.SELECTED_OUTLET, list.first.toJson());
+            status = AuthStatus.Authenticated;
+          }
+          log(prefs.getKeys().toString());
+          notifyListeners();
         } else {
           status = AuthStatus.Error;
           notifyListeners();

@@ -11,6 +11,7 @@ import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class FeedbackScreen extends StatefulWidget {
@@ -70,7 +71,15 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     hint: 'Phone',
                     inputType: TextInputType.phone),
                 InkWell(
-                  onTap: () => pickImage(),
+                  onTap: () async {
+                    if (await Permission.storage.request().isGranted) {
+                      // Either the permission was already granted before or the user just granted it.
+                      pickImage();
+                    } else {
+                      SnackBarService.instance.showSnackBarError(
+                          'Please grant storage permission to access gallery image');
+                    }
+                  },
                   child: CustomTextFieldWithHeading(
                     teCtrl: _imageAttachment,
                     hint: 'Attach Image',
@@ -146,7 +155,10 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     ?.copyWith(color: bgColor),
               ),
             ),
-          )
+          ),
+          SizedBox(
+            height: defaultPadding * 2,
+          ),
         ],
       )),
     );

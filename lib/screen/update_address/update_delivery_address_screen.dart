@@ -64,8 +64,18 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
             .firstWhere((element) => element.pincode == widget.address.pincode);
         _addressService.getStateList(context).then(
           (value) {
-            setState(() {
+            setState(() async {
               stateList = value;
+              await _addressService
+                  .getCityList(selectedState!, context)
+                  .then((value) {
+                cityList = value;
+                if (selectedState != null && selectedState!.id == '22')
+                  selectedCity =
+                      cityList.firstWhere((element) => element.id == '2726');
+                else
+                  selectedCity = cityList.first;
+              });
             });
           },
         );
@@ -188,7 +198,15 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
 
                           _addressService
                               .getCityList(selectedState!, context)
-                              .then((value) => cityList = value);
+                              .then((value) {
+                            cityList = value;
+                            if (selectedState != null &&
+                                selectedState!.id == '22')
+                              selectedCity = cityList.firstWhere(
+                                  (element) => element.id == '2726');
+                            else
+                              selectedCity = cityList.first;
+                          });
                         });
                       },
                     ),
@@ -443,7 +461,7 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
                             selectedCity == null ||
                             selectedState == null) {
                           SnackBarService.instance
-                              .showSnackBarError('All fields are mandatory');
+                              .showSnackBarError('Address 1 mandatory');
                           return;
                         } else {
                           AddressModel addressModel = AddressModel(

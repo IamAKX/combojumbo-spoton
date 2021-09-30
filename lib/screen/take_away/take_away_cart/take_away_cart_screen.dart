@@ -85,6 +85,13 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
     user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    if (couponDiscountDetailModel != null &&
+        couponDiscountDetailModel!.minimum_order_value.isNotEmpty &&
+        CartHelper.getTotalPriceOfCart().toDouble() <
+            couponDiscountDetailModel!.minimum_order_value.toDouble()) {
+      couponDiscountDetailModel = null;
+      selectedCoupon = null;
+    }
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: (allChargesModel == null)
@@ -527,7 +534,8 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                                 controller: sugestionCtrl,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  hintText: 'Any suggestions? Will pass it on',
+                                  hintText:
+                                      'Any Suggestions for the chef? Will pass it on',
                                   focusColor: primaryColor,
                                   alignLabelWithHint: false,
                                   filled: true,
@@ -599,7 +607,7 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                           //   Row(
                           //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           //     children: [
-                          //       Text('Delivery Fees'),
+                          //       Text('Delivery Fee'),
                           //       Text(
                           //           '${Constants.RUPEE} ${double.parse(selectedPincode.charge).toStringAsFixed(2)}')
                           //     ],
