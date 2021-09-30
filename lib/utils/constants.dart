@@ -40,6 +40,27 @@ class Constants {
           outletid: 'ECJ29',
           location: 'Nerul\/Seawoods');
   }
+  static PincodeModel resetDefaultPincode() {
+   
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+    if (outletModel.outletId == 'ECJ2')
+      return PincodeModel(
+          id: '1',
+          pincode: '400705',
+          charge: '0',
+          status: '1',
+          outletid: 'ECJ2',
+          location: 'Sanpada');
+    else
+      return PincodeModel(
+          id: '4',
+          pincode: '400706',
+          charge: '0',
+          status: '1',
+          outletid: 'ECJ29',
+          location: 'Nerul\/Seawoods');
+  }
 }
 
 extension StringExtension on String {

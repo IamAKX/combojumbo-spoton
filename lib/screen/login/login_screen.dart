@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
+import 'package:cjspoton/screen/main_container_ios_specific/main_container_ios_specific.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
@@ -85,9 +88,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 Expanded(
                   child: ListView(
                     children: [
-                      SizedBox(
-                        height: 40,
-                      ),
+                      Platform.isIOS
+                          ? Align(
+                              alignment: Alignment.centerRight,
+                              child: InkWell(
+                                onTap: () => _auth
+                                    .saveDefaultOutlet(context)
+                                    .then((value) => Navigator.of(context)
+                                        .pushNamedAndRemoveUntil(
+                                            MainContainerIosSpecific
+                                                .MAIN_CONTAINER_IOS_SPECIFIC_ROUTE,
+                                            (route) => false,
+                                            arguments: 0)),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(vertical: 15),
+                                  child: Text(
+                                    'Skip Login',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle1
+                                        ?.copyWith(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : SizedBox(
+                              height: 40,
+                            ),
                       Text(
                         'Welcome Back',
                         style: Theme.of(context)

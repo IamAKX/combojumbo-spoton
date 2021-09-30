@@ -8,6 +8,8 @@ import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
+import 'package:cjspoton/screen/home_ios_specific/home_ios_specific.dart';
+import 'package:cjspoton/screen/ios_login_needed/ios_login_needed.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
@@ -22,17 +24,20 @@ import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainContainer extends StatefulWidget {
-  const MainContainer({Key? key, required this.initialIndex}) : super(key: key);
-  static const String MAIN_CONTAINER_ROUTE = '/mainContainer';
+class MainContainerIosSpecific extends StatefulWidget {
+  const MainContainerIosSpecific({Key? key, required this.initialIndex})
+      : super(key: key);
+  static const String MAIN_CONTAINER_IOS_SPECIFIC_ROUTE =
+      '/mainContainerIosSpecific';
   static late ProfileManagementService profileManagementService;
   final int initialIndex;
 
   @override
-  _MainContainerState createState() => _MainContainerState();
+  _MainContainerIosSpecificState createState() =>
+      _MainContainerIosSpecificState();
 }
 
-class _MainContainerState extends State<MainContainer> {
+class _MainContainerIosSpecificState extends State<MainContainerIosSpecific> {
   late int _selectedIndex;
   TextEditingController _searchCtrl = TextEditingController();
   late PincodeModel _pincodeModel;
@@ -51,8 +56,7 @@ class _MainContainerState extends State<MainContainer> {
   @override
   Widget build(BuildContext context) {
     _pincodeModel = Constants.resetDefaultPincode();
-    MainContainer.profileManagementService =
-        Provider.of<ProfileManagementService>(context);
+
     return Scaffold(
         extendBody: true,
         backgroundColor: greyedBgColor,
@@ -111,19 +115,15 @@ class _MainContainerState extends State<MainContainer> {
   getBody() {
     switch (_selectedIndex) {
       case 0:
-        return HomeScreen(refreshState);
+        return HomeScreenIosSpecific(refreshState);
       case 1:
-        return OrderScreen();
+        return IOSLoginNeeded();
       case 2:
-        return CommingSoonScreen(
-            menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
-                refreshMainContainerState: refreshState, categoryId: "0"));
+        return IOSLoginNeeded();
       case 3:
-        return FavouriteScreen(
-          refreshMainContainerState: refreshState,
-        );
+        return IOSLoginNeeded();
       case 4:
-        return ProfileScreen();
+        return IOSLoginNeeded();
     }
   }
 
@@ -227,13 +227,6 @@ class _MainContainerState extends State<MainContainer> {
             GetCartButton(
               refreshState: refreshState,
             ),
-            IconButton(
-              onPressed: () => Navigator.of(context)
-                  .pushNamed(TableBookingScreens.TABLE_BOOKING_HISTORY_ROUTE),
-              icon: Image.asset(
-                'assets/images/outline_table_bar_1.png',
-              ),
-            ),
           ],
         );
       case 2:
@@ -288,8 +281,7 @@ class GetCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        Navigator.of(context)
-            .pushNamed(CartScreen.CART_ROUTE, arguments: refreshState);
+        Navigator.of(context).pushNamed(IOSLoginNeeded.IOS_LOGIN_NEEDED_ROUTE);
       },
       icon: CartHelper.getCartCount() == 0
           ? Icon(
