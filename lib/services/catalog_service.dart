@@ -11,6 +11,7 @@ import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_internet_checker/universal_internet_checker.dart';
 
 enum CatalogStatus {
   Ideal,
@@ -29,6 +30,14 @@ class CatalogService extends ChangeNotifier {
   }
 
   Future<List<CategoryModel>> fetchAllCategories(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CatalogStatus.Loading;
     notifyListeners();
     List<CategoryModel> list = [];
@@ -82,6 +91,14 @@ class CatalogService extends ChangeNotifier {
   }
 
   Future<List<CategoryModel>> fetchAllFoodItem(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CatalogStatus.Loading;
     notifyListeners();
     List<CategoryModel> list = [];

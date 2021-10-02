@@ -535,7 +535,7 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                                 maxLines: 3,
                                 decoration: InputDecoration(
                                   hintText:
-                                      'Any Suggestions for the chef? Will pass it on',
+                                      'Any Suggestions for the Chef? We will pass it on.',
                                   focusColor: primaryColor,
                                   alignLabelWithHint: false,
                                   filled: true,
@@ -682,7 +682,9 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
       Navigator.of(context)
           .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
           .then((value) {
-        setState(() {});
+        setState(() {
+          user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+        });
       });
       return;
     }

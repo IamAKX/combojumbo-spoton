@@ -26,6 +26,7 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
+import 'package:universal_internet_checker/universal_internet_checker.dart';
 import '../utils/constants.dart';
 
 enum CartStatus {
@@ -45,6 +46,14 @@ class CartServices extends ChangeNotifier {
   }
 
   Future<List<PincodeModel>> fetchAllPincodes(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CartStatus.Loading;
     notifyListeners();
     List<PincodeModel> list = [];
@@ -97,7 +106,15 @@ class CartServices extends ChangeNotifier {
     return list;
   }
 
-  Future<AllChargesModel> getAllCharges(BuildContext context) async {
+  Future<AllChargesModel?> getAllCharges(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
     status = CartStatus.Loading;
     notifyListeners();
     late AllChargesModel allChargesModel;
@@ -149,6 +166,14 @@ class CartServices extends ChangeNotifier {
   }
 
   Future<List<CouponModel>> getAllCoupon(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CartStatus.Loading;
     notifyListeners();
     List<CouponModel> couponList = [];
@@ -194,8 +219,16 @@ class CartServices extends ChangeNotifier {
     return couponList;
   }
 
-  Future<CouponDiscountDetailModel> verifyCoupon(
+  Future<CouponDiscountDetailModel?> verifyCoupon(
       String cuponCode, String totalAmount, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
     status = CartStatus.Loading;
     notifyListeners();
     late CouponDiscountDetailModel couponDiscountDetailModel;
@@ -269,6 +302,14 @@ class CartServices extends ChangeNotifier {
       String payUMoneyTxnId,
       String paymentState,
       BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return false;
+    }
     status = CartStatus.Loading;
     notifyListeners();
 
@@ -351,6 +392,14 @@ class CartServices extends ChangeNotifier {
   }
 
   Future<List<OrderDetailModel>> getOrderHistory(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CartStatus.Loading;
     notifyListeners();
     List<OrderDetailModel> list = [];
@@ -496,6 +545,14 @@ class CartServices extends ChangeNotifier {
       String payUMoneyTxnId,
       String paymentState,
       BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return false;
+    }
     status = CartStatus.Loading;
     notifyListeners();
 
@@ -578,6 +635,14 @@ class CartServices extends ChangeNotifier {
   }
 
   Future<List<SectionModel>> getAllSection(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CartStatus.Loading;
     notifyListeners();
     List<SectionModel> list = [];
@@ -633,6 +698,14 @@ class CartServices extends ChangeNotifier {
       String payUMoneyTxnId,
       String paymentState,
       BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return false;
+    }
     status = CartStatus.Loading;
     notifyListeners();
 
@@ -697,6 +770,14 @@ class CartServices extends ChangeNotifier {
 
   Future<List<TableBookingOrderDetails>> getTableBookingOrderHistory(
       BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = CartStatus.Loading;
     notifyListeners();
     List<TableBookingOrderDetails> list = [];

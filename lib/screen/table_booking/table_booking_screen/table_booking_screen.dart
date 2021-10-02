@@ -390,7 +390,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                     startPayUMoneyPayment(tableBookingModel);
                   },
                   child: Text(
-                    'Pay ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge.toDouble()}',
+                    'Pay ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -398,7 +398,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                   height: defaultPadding,
                 ),
                 Text(
-                  'This total sum of ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge.toDouble()}/- will be adjusted in your final bill.',
+                  'This total sum of ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}/- will be adjusted in your final bill.',
                   style: Theme.of(context)
                       .textTheme
                       .caption
@@ -418,7 +418,9 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
       Navigator.of(context)
           .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
           .then((value) {
-        setState(() {});
+        setState(() {
+          user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+        });
       });
       return;
     }

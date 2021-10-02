@@ -10,7 +10,8 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/phone_edittext_with_heading.dart';
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
+import 'package:image_crop/image_crop.dart';
+// import 'package:image_cropper/image_cropper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -31,41 +32,47 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   TextEditingController _phoneCtrl = TextEditingController();
   File? imageFile = null;
   late UserModel user;
+  final cropKey = GlobalKey<CropState>();
 
   pickProfileImage() async {
     final ImagePicker _picker = ImagePicker();
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       // imageFile = File(image.path);
-      imageFile = await ImageCropper.cropImage(
-          sourcePath: image.path,
-          aspectRatioPresets: [
-            CropAspectRatioPreset.square,
+      // imageFile = await ImageCropper.cropImage(
+      //     sourcePath: image.path,
+      //     aspectRatioPresets: [
+      //       CropAspectRatioPreset.square,
 
-            // CropAspectRatioPreset.ratio3x2,
-            // CropAspectRatioPreset.original,
-            // CropAspectRatioPreset.ratio4x3,
-            // CropAspectRatioPreset.ratio16x9
-          ],
-          cropStyle: CropStyle.circle,
-          maxHeight: 100,
-          maxWidth: 100,
-          compressQuality: 99,
-          aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-          androidUiSettings: AndroidUiSettings(
-              toolbarTitle: 'Profile Image',
-              toolbarColor: bgColor,
-              toolbarWidgetColor: primaryColor,
-              initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: true),
-          iosUiSettings: IOSUiSettings(
-            minimumAspectRatio: 1.0,
-            aspectRatioLockEnabled: true,
-            title: 'Profile Image',
-            resetAspectRatioEnabled: true,
-            aspectRatioLockDimensionSwapEnabled: true,
-            aspectRatioPickerButtonHidden: true,
-          ));
+      //       // CropAspectRatioPreset.ratio3x2,
+      //       // CropAspectRatioPreset.original,
+      //       // CropAspectRatioPreset.ratio4x3,
+      //       // CropAspectRatioPreset.ratio16x9
+      //     ],
+      //     cropStyle: CropStyle.circle,
+      //     maxHeight: 100,
+      //     maxWidth: 100,
+      //     compressQuality: 99,
+      //     aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
+      //     androidUiSettings: AndroidUiSettings(
+      //         toolbarTitle: 'Profile Image',
+      //         toolbarColor: bgColor,
+      //         toolbarWidgetColor: primaryColor,
+      //         initAspectRatio: CropAspectRatioPreset.square,
+      //         lockAspectRatio: true),
+      //     iosUiSettings: IOSUiSettings(
+      //       minimumAspectRatio: 1.0,
+      //       aspectRatioLockEnabled: true,
+      //       title: 'Profile Image',
+      //       resetAspectRatioEnabled: true,
+      //       aspectRatioLockDimensionSwapEnabled: true,
+      //       aspectRatioPickerButtonHidden: true,
+      //     ));
+      imageFile = await ImageCrop.sampleImage(
+      file: File(image.path),
+      preferredSize: context.size!.longestSide.ceil(),
+    );
+
       setState(() {});
     }
   }
@@ -91,9 +98,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           children: [
             InkWell(
               onTap: () async {
-                if (await Permission.storage.request().isGranted) {
-                  pickProfileImage();
-                }
+                Map<Permission, PermissionStatus> statuses = await [
+                  Permission.storage,
+                  Permission.manageExternalStorage,
+                ].request();
+
+                await pickProfileImage();
               },
               child: Container(
                 alignment: Alignment.center,

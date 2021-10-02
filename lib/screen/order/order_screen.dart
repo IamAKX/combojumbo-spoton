@@ -117,7 +117,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               ],
                             ),
                             Text(
-                              '#${order.order.id}',
+                              'Order #${order.order.id}',
                               style: Theme.of(context).textTheme.caption,
                             ),
                             // if (order.address.isEmpty)

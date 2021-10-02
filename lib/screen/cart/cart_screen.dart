@@ -565,7 +565,7 @@ class _CartScreenState extends State<CartScreen> {
                                 controller: sugestionCtrl,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  hintText: 'Any Suggestions for the chef? Will pass it on',
+                                  hintText: 'Any Suggestions for the Chef? We will pass it on.',
                                   focusColor: primaryColor,
                                   alignLabelWithHint: false,
                                   filled: true,

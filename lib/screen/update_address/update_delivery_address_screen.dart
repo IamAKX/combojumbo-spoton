@@ -335,8 +335,7 @@ class _UpdateDeliveryAddressState extends State<UpdateDeliveryAddress> {
                       selectedItem: selectedPincode,
                       showSelectedItem: true,
                       items: pincodeList,
-                      itemAsString: (item) =>
-                          '${item.pincode} - ${item.location}',
+                      itemAsString: (item) => '${item.pincode}',
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: defaultPadding),
