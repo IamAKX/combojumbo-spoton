@@ -21,6 +21,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:universal_internet_checker/universal_internet_checker.dart';
 
 enum AuthStatus {
   NotAuthenticated,
@@ -45,6 +46,14 @@ class AuthenticationService extends ChangeNotifier {
   GoogleSignInAccount get googleSignInAccount => _googleSignInAccount!;
 
   Future registerUserWithGoogle(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     final googleUser = await googleSignIn.signIn();
     if (googleUser == null) {
       SnackBarService.instance.showSnackBarError('Login failed');
@@ -122,6 +131,14 @@ class AuthenticationService extends ChangeNotifier {
   }
 
   Future registerUserWithFacebook(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     // final FacebookLoginResult result =
     //     await facebookLogin.logIn(['email', 'public_profile']);
     // late User _facebookUser;
@@ -234,6 +251,14 @@ class AuthenticationService extends ChangeNotifier {
 
   Future<void> registerUserWithPhoneAndPassword(
       String name, String phone, String password, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AuthStatus.Authenticating;
     notifyListeners();
     if (name.isEmpty || phone.isEmpty || password.isEmpty) {
@@ -308,6 +333,14 @@ class AuthenticationService extends ChangeNotifier {
 
   Future<void> loginUserWithPhoneAndPassword(
       String phone, String password, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AuthStatus.Authenticating;
     notifyListeners();
     if (phone.isEmpty || password.isEmpty) {
@@ -378,6 +411,14 @@ class AuthenticationService extends ChangeNotifier {
 
   Future<void> verifyOTP(
       String otp, String currentScreen, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AuthStatus.Authenticating;
     notifyListeners();
     if (otp.isEmpty) {
@@ -442,6 +483,14 @@ class AuthenticationService extends ChangeNotifier {
   }
 
   Future<void> resendOTP(String currentScreen, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AuthStatus.Authenticating;
     notifyListeners();
 
@@ -487,6 +536,14 @@ class AuthenticationService extends ChangeNotifier {
   }
 
   Future<void> forgotPassword(String phone, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AuthStatus.Authenticating;
     notifyListeners();
     if (phone.isEmpty) {
@@ -552,6 +609,14 @@ class AuthenticationService extends ChangeNotifier {
 
   Future<void> resetPassword(
       String newPassword, String confPassword, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     if (newPassword.isEmpty || confPassword.isEmpty) {
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
       return;
@@ -615,6 +680,14 @@ class AuthenticationService extends ChangeNotifier {
 
   Future<void> changePassword(String oldPassword, String newPassword,
       String confPassword, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     if (newPassword.isEmpty || confPassword.isEmpty || oldPassword.isEmpty) {
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
       return;
@@ -677,6 +750,14 @@ class AuthenticationService extends ChangeNotifier {
   }
 
   Future<void> saveDefaultOutlet(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AuthStatus.Authenticating;
     notifyListeners();
     List<OutletModel> list = [];

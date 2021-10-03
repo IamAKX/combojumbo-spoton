@@ -13,6 +13,7 @@ import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:universal_internet_checker/universal_internet_checker.dart';
 
 enum AddressStatus {
   Loading,
@@ -30,6 +31,14 @@ class AddressService extends ChangeNotifier {
   }
 
   Future<List<StateModel>> getStateList(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     List<StateModel> list = [];
@@ -74,6 +83,14 @@ class AddressService extends ChangeNotifier {
 
   Future<List<CityModel>> getCityList(
       StateModel state, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     List<CityModel> list = [];
@@ -118,6 +135,14 @@ class AddressService extends ChangeNotifier {
   }
 
   Future<void> addAddress(AddressModel address, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
@@ -163,6 +188,14 @@ class AddressService extends ChangeNotifier {
   }
 
   Future<List<AddressModel>> getAllAddress(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     List<AddressModel> list = [];
@@ -224,6 +257,14 @@ class AddressService extends ChangeNotifier {
   }
 
   Future<List<PincodeModel>> fetchAllPincodes(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     List<PincodeModel> list = [];
@@ -275,6 +316,14 @@ class AddressService extends ChangeNotifier {
   }
 
   Future<bool> deleteAddress(AddressModel address, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return false;
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
@@ -314,6 +363,14 @@ class AddressService extends ChangeNotifier {
   }
 
   Future<void> updateAddress(AddressModel address, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
     status = AddressStatus.Loading;
     notifyListeners();
     UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);

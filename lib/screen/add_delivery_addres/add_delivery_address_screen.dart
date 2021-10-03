@@ -1,18 +1,13 @@
-import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/city_model.dart';
-import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/state_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
-import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/services/address_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
-import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
-import 'package:cjspoton/widgets/custom_heading_textfield_with_actionbutton.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -362,8 +357,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                       showSearchBox: true,
                       showSelectedItem: true,
                       items: pincodeList,
-                      itemAsString: (item) =>
-                          '${item.pincode} - ${item.location}',
+                      itemAsString: (item) => '${item.pincode}',
                       dropdownSearchDecoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.symmetric(horizontal: defaultPadding),

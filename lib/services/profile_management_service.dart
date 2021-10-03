@@ -14,6 +14,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
+import 'package:universal_internet_checker/universal_internet_checker.dart';
 
 enum ProfileStatus {
   Ideal,
@@ -32,6 +33,14 @@ class ProfileManagementService extends ChangeNotifier {
   }
 
   Future<void> fetchProfile(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
     status = ProfileStatus.Loading;
     notifyListeners();
 
@@ -79,6 +88,14 @@ class ProfileManagementService extends ChangeNotifier {
   }
 
   Future<List<OutletModel>> fetchAllOutlets(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
     status = ProfileStatus.Ideal;
     notifyListeners();
     List<OutletModel> list = [];
@@ -125,6 +142,14 @@ class ProfileManagementService extends ChangeNotifier {
 
   Future<void> updateProfile(String name, String email, String phone,
       File? image, BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
     if (name.isEmpty || email.isEmpty || phone.isEmpty) {
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
       return;
@@ -196,6 +221,14 @@ class ProfileManagementService extends ChangeNotifier {
 
   Future<void> sendFeedback(String name, String email, String phone,
       String feedback, BuildContext context, File? image) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
     if (name.isEmpty || email.isEmpty || phone.isEmpty || feedback.isEmpty) {
       SnackBarService.instance.showSnackBarError('All fields are mandatory');
       return;

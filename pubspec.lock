@@ -471,13 +471,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
-  image_cropper:
+  image_crop:
     dependency: "direct main"
     description:
-      name: image_cropper
+      name: image_crop
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.1"
+    version: "0.4.0"
   image_picker:
     dependency: "direct main"
     description:
@@ -861,6 +861,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+  universal_internet_checker:
+    dependency: "direct main"
+    description:
+      name: universal_internet_checker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   universal_io:
     dependency: transitive
     description:

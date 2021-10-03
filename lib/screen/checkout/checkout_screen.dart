@@ -335,7 +335,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       Navigator.of(context)
           .pushNamed(UpdateProfileScreen.UPDATE_PROFILE_ROUTE)
           .then((value) {
-        setState(() {});
+        setState(() {
+          user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+        });
       });
       return;
     }

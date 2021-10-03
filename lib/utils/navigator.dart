@@ -12,9 +12,11 @@ import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
+import 'package:cjspoton/screen/ios_login_needed/ios_login_needed.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
+import 'package:cjspoton/screen/main_container_ios_specific/main_container_ios_specific.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/order/order_detail.dart';
 import 'package:cjspoton/screen/order/order_details_screen.dart';
@@ -61,6 +63,11 @@ class NavRoute {
       case MainContainer.MAIN_CONTAINER_ROUTE:
         return MaterialPageRoute(
             builder: (_) => MainContainer(
+                  initialIndex: settings.arguments as int,
+                ));
+      case MainContainerIosSpecific.MAIN_CONTAINER_IOS_SPECIFIC_ROUTE:
+        return MaterialPageRoute(
+            builder: (_) => MainContainerIosSpecific(
                   initialIndex: settings.arguments as int,
                 ));
       case AddDeliveryAddress.ADD_DELIVERY_ADDRESS_ROUTE:
@@ -149,6 +156,10 @@ class NavRoute {
       case TableBookingScreens.TABLE_BOOKING_HISTORY_ROUTE:
         return MaterialPageRoute(
           builder: (_) => TableBookingScreens(),
+        );
+      case IOSLoginNeeded.IOS_LOGIN_NEEDED_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => IOSLoginNeeded(),
         );
 
       default:

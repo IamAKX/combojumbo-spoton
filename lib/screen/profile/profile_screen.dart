@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           tileColor: bgColor,
           title: Text(
-            'Munchox',
+            'Munchbox',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),

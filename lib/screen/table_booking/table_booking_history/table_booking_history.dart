@@ -56,7 +56,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
-                        'assets/images/order_history.png',
+                        'assets/images/not_table_booking_history.png',
                         width: 300,
                       ),
                       SizedBox(
