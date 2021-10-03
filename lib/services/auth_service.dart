@@ -63,64 +63,66 @@ class AuthenticationService extends ChangeNotifier {
       ],
     );
 
-    print(credential);
+    print("credential : " + credential.toString());
 
-    // status = AuthStatus.Authenticating;
-    // notifyListeners();
-    // // try {
-    // String? fcmToken = await FirebaseMessaging.instance.getToken();
-    // var reqBody = FormData.fromMap({
-    //   'name': _googleSignInAccount!.displayName,
-    //   'email': _googleSignInAccount!.email,
-    //   // 'g_id': _googleSignInAccount!.id,
-    //   'g_id': googleAuth.accessToken,
-    //   'mobileid': fcmToken,
-    //   'profileImage': googleSignInAccount.photoUrl ?? ''
-    // });
-    // log('Request : ${reqBody.fields}');
-    // Response response = await _dio.post(
-    //   API.GoogleRegisteration,
-    //   data: reqBody,
-    // );
-    // if (response.statusCode == 200) {
-    //   print('Response : ${response.data}');
-    //   var responseBody = json.decode(response.data);
-    //   var body = responseBody['body'];
-    //   if (responseBody['status'] == 1) {
-    //     UserModel userModel = UserModel(
-    //         id: body['user_id'],
-    //         name: googleSignInAccount.displayName!,
-    //         phone: '',
-    //         token: '',
-    //         email: body['email'],
-    //         fcmToken: fcmToken!,
-    //         profileImage: body['image'] ?? '');
+    status = AuthStatus.Authenticating;
+    notifyListeners();
+    // try {
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    var reqBody = FormData.fromMap({
+      'name': '${credential.givenName} ${credential.familyName}',
+      'email': credential.email,
+      // 'g_id': _googleSignInAccount!.id,
+      'g_id': credential.identityToken,
+      'isIos': '1',
+      'mobileid': fcmToken,
+      'profileImage': ''
+    });
+    log('Request apple : ${reqBody.fields}');
+    print('Request apple : ${reqBody.fields}');
+    Response response = await _dio.post(
+      API.GoogleRegisteration,
+      data: reqBody,
+    );
+    if (response.statusCode == 200) {
+      print('Response : ${response.data}');
+      var responseBody = json.decode(response.data);
+      var body = responseBody['body'];
+      if (responseBody['status'] == 1) {
+        UserModel userModel = UserModel(
+            id: body['user_id'],
+            name: '${credential.givenName} ${credential.familyName}',
+            phone: '',
+            token: '',
+            email: body['email'],
+            fcmToken: fcmToken!,
+            profileImage: body['image'] ?? '');
 
-    //     prefs.setString(PrefernceKey.USER, userModel.toJson());
-    //     prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
+        prefs.setString(PrefernceKey.USER, userModel.toJson());
+        prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
 
-    //     await saveDefaultOutlet(context);
-    //     status = AuthStatus.Authenticated;
-    //     notifyListeners();
-    //     // SnackBarService.instance.showSnackBarSuccess(body['msg']);
+        await saveDefaultOutlet(context);
+        status = AuthStatus.Authenticated;
+        notifyListeners();
+        // SnackBarService.instance.showSnackBarSuccess(body['msg']);
 
-    //     if (body['is_new_user'] == 'Y')
-    //       Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
-    //     else
-    //       Navigator.of(context).pushNamedAndRemoveUntil(
-    //           MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-    //           arguments: 0);
-    //   } else {
-    //     status = AuthStatus.Error;
-    //     notifyListeners();
-    //     SnackBarService.instance.showSnackBarError((body['msg']));
-    //   }
-    // } else {
-    //   status = AuthStatus.Error;
-    //   notifyListeners();
-    //   SnackBarService.instance
-    //       .showSnackBarError('Error : ${response.statusMessage!}');
-    // }
+        if (body['is_new_user'] == 'Y')
+          Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+        else
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+              arguments: 0);
+      } else {
+        status = AuthStatus.Error;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarError((body['msg']));
+      }
+    } else {
+      status = AuthStatus.Error;
+      notifyListeners();
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
+    }
     // } catch (e) {
     //   status = AuthStatus.Error;
     //   notifyListeners();
