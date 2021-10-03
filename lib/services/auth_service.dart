@@ -21,6 +21,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:universal_internet_checker/universal_internet_checker.dart';
 
 enum AuthStatus {
@@ -44,6 +45,88 @@ class AuthenticationService extends ChangeNotifier {
   final googleSignIn = GoogleSignIn();
   GoogleSignInAccount? _googleSignInAccount;
   GoogleSignInAccount get googleSignInAccount => _googleSignInAccount!;
+
+  Future registerUserWithApple(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return;
+    }
+
+    final credential = await SignInWithApple.getAppleIDCredential(
+      scopes: [
+        AppleIDAuthorizationScopes.email,
+        AppleIDAuthorizationScopes.fullName,
+      ],
+    );
+
+    print(credential);
+
+    // status = AuthStatus.Authenticating;
+    // notifyListeners();
+    // // try {
+    // String? fcmToken = await FirebaseMessaging.instance.getToken();
+    // var reqBody = FormData.fromMap({
+    //   'name': _googleSignInAccount!.displayName,
+    //   'email': _googleSignInAccount!.email,
+    //   // 'g_id': _googleSignInAccount!.id,
+    //   'g_id': googleAuth.accessToken,
+    //   'mobileid': fcmToken,
+    //   'profileImage': googleSignInAccount.photoUrl ?? ''
+    // });
+    // log('Request : ${reqBody.fields}');
+    // Response response = await _dio.post(
+    //   API.GoogleRegisteration,
+    //   data: reqBody,
+    // );
+    // if (response.statusCode == 200) {
+    //   print('Response : ${response.data}');
+    //   var responseBody = json.decode(response.data);
+    //   var body = responseBody['body'];
+    //   if (responseBody['status'] == 1) {
+    //     UserModel userModel = UserModel(
+    //         id: body['user_id'],
+    //         name: googleSignInAccount.displayName!,
+    //         phone: '',
+    //         token: '',
+    //         email: body['email'],
+    //         fcmToken: fcmToken!,
+    //         profileImage: body['image'] ?? '');
+
+    //     prefs.setString(PrefernceKey.USER, userModel.toJson());
+    //     prefs.setBool(PrefernceKey.IS_LOGGEDIN, true);
+
+    //     await saveDefaultOutlet(context);
+    //     status = AuthStatus.Authenticated;
+    //     notifyListeners();
+    //     // SnackBarService.instance.showSnackBarSuccess(body['msg']);
+
+    //     if (body['is_new_user'] == 'Y')
+    //       Navigator.of(context).pushNamed(Introduction.INTRODUCTION_ROUTE);
+    //     else
+    //       Navigator.of(context).pushNamedAndRemoveUntil(
+    //           MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+    //           arguments: 0);
+    //   } else {
+    //     status = AuthStatus.Error;
+    //     notifyListeners();
+    //     SnackBarService.instance.showSnackBarError((body['msg']));
+    //   }
+    // } else {
+    //   status = AuthStatus.Error;
+    //   notifyListeners();
+    //   SnackBarService.instance
+    //       .showSnackBarError('Error : ${response.statusMessage!}');
+    // }
+    // } catch (e) {
+    //   status = AuthStatus.Error;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
+  }
 
   Future registerUserWithGoogle(BuildContext context) async {
     ConnectionStatus connectionStatus =

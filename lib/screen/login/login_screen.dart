@@ -1,12 +1,8 @@
 import 'dart:io';
 
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
-import 'package:cjspoton/screen/login_email/login_email_screen.dart';
 import 'package:cjspoton/screen/main_container_ios_specific/main_container_ios_specific.dart';
-import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
-import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
-import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -235,6 +231,22 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ],
                       ),
+                      if (Platform.isIOS)
+                        SizedBox(
+                          height: defaultPadding,
+                        ),
+                      if (Platform.isIOS)
+                        IconTextButton(
+                          context: context,
+                          iconAssetPath: 'assets/svg/apple.svg',
+                          onTap: () {
+                            if (_auth.status != AuthStatus.Authenticating)
+                              _auth.registerUserWithApple(context);
+                          },
+                          text: _auth.status != AuthStatus.Authenticating
+                              ? 'Continue with Apple'
+                              : 'Please wait...',
+                        ),
                       SizedBox(
                         height: defaultPadding,
                       ),
