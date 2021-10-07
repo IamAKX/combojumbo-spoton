@@ -5,6 +5,7 @@ import 'package:cjspoton/model/add_slider_model.dart';
 import 'package:cjspoton/model/cj_route_option_model.dart';
 import 'package:cjspoton/model/review_model.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
+import 'package:cjspoton/screen/e_dining/e_dining_table_booking_screen/e_dinig_table_booking_screen.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_screen/table_booking_screen.dart';
 import 'package:cjspoton/screen/take_away/take_away_menu/take_away_menu_screen.dart';
@@ -100,7 +101,7 @@ List<CJRouteOptionModel> getCJRouteOptions() {
     CJRouteOptionModel(
         name: 'E-Dining',
         image: 'https://www.combojumbo.in/img/tbl-booking.png',
-        redirectionUrl: CommingSoonScreen.COMMING_SOON_ROUTE),
+        redirectionUrl: EdiningTableBookingScreen.TABLE_BOOKING_SCREEN_ROUTE),
     CJRouteOptionModel(
         name: 'Delivery',
         image: 'https://www.combojumbo.in/img/delivery.png',

@@ -9,6 +9,9 @@ import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
+import 'package:cjspoton/screen/e_dining/e_dining_table_booking_screen/e_dinig_table_booking_screen.dart';
+import 'package:cjspoton/screen/e_dining/edining_cart/e_dining_cart_screen.dart';
+import 'package:cjspoton/screen/e_dining/edining_menu/e_dining_menu_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
@@ -145,6 +148,28 @@ class NavRoute {
                   refreshMainContainerState: settings.arguments as Function(),
                 ));
 
+      // EDining
+      case EdiningTableBookingScreen.TABLE_BOOKING_SCREEN_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => EdiningTableBookingScreen(
+            menuScreenNavigatorPayloadModel:
+                settings.arguments as MenuScreenNavigatorPayloadModel,
+          ),
+        );
+      case EDiningMenuScreen.E_DINING_MENU_SCREEN_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => EDiningMenuScreen(
+            menuScreenNavigatorPayloadModel:
+                settings.arguments as MenuScreenNavigatorPayloadModel,
+          ),
+        );
+      case EDiningCartScreen.E_DINING_CART_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => EDiningCartScreen(
+            refreshMainContainerState: settings.arguments as Function(),
+          ),
+        );
+
       // Table Booking
       case TableBookingScreen.TABLE_BOOKING_SCREEN_ROUTE:
         return MaterialPageRoute(
@@ -157,6 +182,8 @@ class NavRoute {
         return MaterialPageRoute(
           builder: (_) => TableBookingScreens(),
         );
+
+      // iOS
       case IOSLoginNeeded.IOS_LOGIN_NEEDED_ROUTE:
         return MaterialPageRoute(
           builder: (_) => IOSLoginNeeded(),
