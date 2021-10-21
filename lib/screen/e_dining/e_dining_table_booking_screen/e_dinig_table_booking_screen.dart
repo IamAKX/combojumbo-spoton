@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/all_charges_model.dart';
@@ -16,8 +18,10 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class EdiningTableBookingScreen extends StatefulWidget {
   const EdiningTableBookingScreen({
@@ -47,6 +51,7 @@ class _EdiningTableBookingScreenState extends State<EdiningTableBookingScreen> {
   TextEditingController slotCtrl = TextEditingController();
   TextEditingController guestCtrl = TextEditingController();
   TextEditingController sectionCtrl = TextEditingController();
+  DateTime? selectedDate;
 
   @override
   void initState() {
@@ -232,32 +237,78 @@ class _EdiningTableBookingScreenState extends State<EdiningTableBookingScreen> {
                   fillColor: hintColor.withOpacity(0.5),
                 ),
                 InkWell(
-                  onTap: () {
-                    DatePicker.showDateTimePicker(
-                      context,
-                      showTitleActions: true,
-                      theme: DatePickerTheme(
-                        doneStyle: TextStyle(color: primaryColor),
-                        backgroundColor: bgColor,
-                        itemStyle: TextStyle(color: textColor),
+                  onTap: () async {
+                    // DatePicker.showDateTimePicker(
+                    //   context,
+                    //   showTitleActions: true,
+                    //   theme: DatePickerTheme(
+                    //     doneStyle: TextStyle(color: primaryColor),
+                    //     backgroundColor: bgColor,
+                    //     itemStyle: TextStyle(color: textColor),
+                    //   ),
+                    //   minTime: DateTime.now(),
+                    //   maxTime: DateTime.now().add(
+                    //     Duration(
+                    //       days: 30,
+                    //     ),
+                    //   ),
+                    //   onConfirm: (date) {
+                    //     if (date.isBefore(DateTime.now())) {
+                    //       SnackBarService.instance
+                    //           .showSnackBarError('Enter a valid date');
+                    //       slotCtrl.text = '';
+                    //     } else
+                    //       slotCtrl.text =
+                    //           DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+                    //   },
+                    //   currentTime: DateTime.now(),
+                    // );
+
+                    selectedDate = await showRoundedDatePicker(
+                      context: context,
+                      theme: ThemeData(
+                        primarySwatch: primaryColor,
                       ),
-                      minTime: DateTime.now(),
-                      maxTime: DateTime.now().add(
+                      firstDate: DateTime.now().subtract(Duration(days: 1)),
+                      lastDate: DateTime.now().add(
                         Duration(
                           days: 30,
                         ),
                       ),
-                      onConfirm: (date) {
-                        if (date.isBefore(DateTime.now())) {
+                      initialDate: selectedDate,
+                    );
+                    TimeOfDay? selectedTime;
+                    if (selectedDate != null) {
+                      selectedTime = await showRoundedTimePicker(
+                        context: context,
+                        theme: ThemeData(
+                          primarySwatch: primaryColor,
+                        ),
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (selectedTime != null) {
+                        selectedDate = DateTime(
+                            selectedDate!.year,
+                            selectedDate!.month,
+                            selectedDate!.day,
+                            selectedTime.hour,
+                            selectedTime.minute);
+
+                        if (selectedDate!.isBefore(DateTime.now())) {
                           SnackBarService.instance
                               .showSnackBarError('Enter a valid date');
                           slotCtrl.text = '';
                         } else
-                          slotCtrl.text =
-                              DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
-                      },
-                      currentTime: DateTime.now(),
-                    );
+                          slotCtrl.text = DateFormat('yyyy-MM-dd HH:mm:ss')
+                              .format(selectedDate!);
+                      } else {
+                        SnackBarService.instance
+                            .showSnackBarInfo('Select time');
+                      }
+                    } else {
+                      SnackBarService.instance
+                          .showSnackBarInfo('Select a date');
+                    }
                   },
                   child: CustomTextFieldWithHeading(
                     teCtrl: slotCtrl,

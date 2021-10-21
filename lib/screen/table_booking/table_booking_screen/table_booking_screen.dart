@@ -27,6 +27,7 @@ import 'package:flutter_payu_unofficial/flutter_payu_unofficial.dart';
 import 'package:flutter_payu_unofficial/models/payment_params_model.dart';
 import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -57,6 +58,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
   TextEditingController slotCtrl = TextEditingController();
   TextEditingController guestCtrl = TextEditingController();
   TextEditingController sectionCtrl = TextEditingController();
+  DateTime? selectedDate;
 
   @override
   void initState() {
@@ -315,32 +317,77 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                 //   height: defaultPadding,
                 // ),
                 InkWell(
-                  onTap: () {
-                    DatePicker.showDateTimePicker(
-                      context,
-                      showTitleActions: true,
-                      theme: DatePickerTheme(
-                        doneStyle: TextStyle(color: primaryColor),
-                        backgroundColor: bgColor,
-                        itemStyle: TextStyle(color: textColor),
+                  onTap: () async {
+                    // DatePicker.showDateTimePicker(
+                    //   context,
+                    //   showTitleActions: true,
+                    //   theme: DatePickerTheme(
+                    //     doneStyle: TextStyle(color: primaryColor),
+                    //     backgroundColor: bgColor,
+                    //     itemStyle: TextStyle(color: textColor),
+                    //   ),
+                    //   minTime: DateTime.now(),
+                    //   maxTime: DateTime.now().add(
+                    //     Duration(
+                    //       days: 30,
+                    //     ),
+                    //   ),
+                    //   onConfirm: (date) {
+                    //     if (date.isBefore(DateTime.now())) {
+                    //       SnackBarService.instance
+                    //           .showSnackBarError('Enter a valid date');
+                    //       slotCtrl.text = '';
+                    //     } else
+                    //       slotCtrl.text =
+                    //           DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
+                    //   },
+                    //   currentTime: DateTime.now(),
+                    // );
+                    selectedDate = await showRoundedDatePicker(
+                      context: context,
+                      theme: ThemeData(
+                        primarySwatch: primaryColor,
                       ),
-                      minTime: DateTime.now(),
-                      maxTime: DateTime.now().add(
+                      firstDate: DateTime.now().subtract(Duration(days: 1)),
+                      lastDate: DateTime.now().add(
                         Duration(
                           days: 30,
                         ),
                       ),
-                      onConfirm: (date) {
-                        if (date.isBefore(DateTime.now())) {
+                      initialDate: selectedDate,
+                    );
+                    TimeOfDay? selectedTime;
+                    if (selectedDate != null) {
+                      selectedTime = await showRoundedTimePicker(
+                        context: context,
+                        theme: ThemeData(
+                          primarySwatch: primaryColor,
+                        ),
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (selectedTime != null) {
+                        selectedDate = DateTime(
+                            selectedDate!.year,
+                            selectedDate!.month,
+                            selectedDate!.day,
+                            selectedTime.hour,
+                            selectedTime.minute);
+
+                        if (selectedDate!.isBefore(DateTime.now())) {
                           SnackBarService.instance
                               .showSnackBarError('Enter a valid date');
                           slotCtrl.text = '';
                         } else
-                          slotCtrl.text =
-                              DateFormat('yyyy-MM-dd HH:mm:ss').format(date);
-                      },
-                      currentTime: DateTime.now(),
-                    );
+                          slotCtrl.text = DateFormat('yyyy-MM-dd HH:mm:ss')
+                              .format(selectedDate!);
+                      } else {
+                        SnackBarService.instance
+                            .showSnackBarInfo('Select time');
+                      }
+                    } else {
+                      SnackBarService.instance
+                          .showSnackBarInfo('Select a date');
+                    }
                   },
                   child: CustomTextFieldWithHeading(
                     teCtrl: slotCtrl,
