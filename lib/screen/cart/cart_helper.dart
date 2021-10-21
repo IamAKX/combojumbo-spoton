@@ -168,6 +168,22 @@ class CartHelper {
     return amt;
   }
 
+  static double getEDiningNetAmount(
+      AllChargesModel? allChargesModel,
+      PincodeModel selectedPincode,
+      CouponDiscountDetailModel? couponDiscountDetailModel) {
+    double amt = getTotalPriceOfCart();
+    if (allChargesModel != null)
+      amt += double.parse(allChargesModel.Packing_Charge) +
+          double.parse(allChargesModel.Service_Charge) +
+          double.parse(allChargesModel.EDining_Charges) +
+          getServiceCharge(allChargesModel);
+
+    if (couponDiscountDetailModel != null)
+      amt -= getDiscountPrice(couponDiscountDetailModel);
+    return amt;
+  }
+
   static double getServiceCharge(
     AllChargesModel? allChargesModel,
   ) {

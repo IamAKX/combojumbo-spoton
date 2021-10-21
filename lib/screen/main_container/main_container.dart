@@ -48,7 +48,7 @@ class _MainContainerState extends State<MainContainer> {
 
   @override
   Widget build(BuildContext context) {
-    _pincodeModel = Constants.resetDefaultPincode();
+    _pincodeModel = Constants.getDefaultPincode();
     MainContainer.profileManagementService =
         Provider.of<ProfileManagementService>(context);
     return Scaffold(
