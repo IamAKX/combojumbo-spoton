@@ -195,8 +195,11 @@ class CartServices extends ChangeNotifier {
 
         if (resBody['status'] == 1) {
           for (var c in body) {
-            CouponModel model =
-                CouponModel(Id: c['Id'], code: c['Coupon Code']);
+            CouponModel model = CouponModel(
+              Id: c['Id'],
+              code: c['Coupon Code'],
+              description: c['description'],
+            );
             couponList.add(model);
           }
           status = CartStatus.Success;
@@ -257,10 +260,10 @@ class CartServices extends ChangeNotifier {
           CouponDiscountDetailModel cModel = CouponDiscountDetailModel(
             coupon_code: body['coupon_code'],
             coupon_type: body['coupon_type'],
-            coupon_value: body['coupon_value'],
+            coupon_value: body['coupon_value'] ?? '0',
             coupon_id: body['coupon_id'],
-            minimum_order_value: body['minimum_order_value'],
-            maximum_order_value: body['maximum_order_value'],
+            minimum_order_value: body['minimum_order_value'] ?? '0',
+            maximum_order_value: body['maximum_order_value'] ?? '0',
             no_times: body['no_times'],
           );
           double cartAmt = double.parse(totalAmount);

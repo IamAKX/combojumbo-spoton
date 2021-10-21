@@ -12,6 +12,7 @@ import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
+import 'package:cjspoton/screen/coupon/coupon_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -450,50 +451,77 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                     // ),
                     child: couponList.isEmpty
                         ? Container()
-                        : DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            showSelectedItem: true,
-                            items: couponList.map((e) => e.code).toList(),
-                            dropdownSearchDecoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: defaultPadding),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
+                        : ListTile(
+                            leading: Image.asset(
+                              'assets/images/discount.png',
+                              width: 30,
                             ),
-                            label: "Select coupons",
-                            hint: "Select coupon to get discount",
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCoupon = value;
-                                if (selectedCoupon == null) {
-                                  SnackBarService.instance.showSnackBarInfo(
-                                      'Select a coupon code to apply offer');
-                                }
-                                _cartServices
-                                    .verifyCoupon(
-                                        selectedCoupon!,
-                                        CartHelper.getTotalPriceOfCart()
-                                            .toString(),
-                                        context)
-                                    .then((value) {
-                                  couponDiscountDetailModel = value;
+                            trailing: Icon(Icons.chevron_right_outlined),
+                            subtitle: couponDiscountDetailModel != null
+                                ? Text(
+                                    'Offer applied on the bill',
+                                    style: Theme.of(context).textTheme.caption,
+                                  )
+                                : null,
+                            title: couponDiscountDetailModel == null
+                                ? Text('APPLY COUPON')
+                                : Text(
+                                    '${couponDiscountDetailModel!.coupon_code}'),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(CouponScreen.COUPON_ROUTE)
+                                  .then((value) {
+                                setState(() {
+                                  couponDiscountDetailModel =
+                                      value as CouponDiscountDetailModel?;
                                 });
                               });
                             },
-                            selectedItem: selectedCoupon),
+                          ),
+                    // : DropdownSearch<String>(
+                    //     mode: Mode.MENU,
+                    //     showSelectedItem: true,
+                    //     items: couponList.map((e) => e.code).toList(),
+                    //     dropdownSearchDecoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.symmetric(
+                    //           horizontal: defaultPadding),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //     ),
+                    //     label: "Select coupons",
+                    //     hint: "Select coupon to get discount",
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         selectedCoupon = value;
+                    //         if (selectedCoupon == null) {
+                    //           SnackBarService.instance.showSnackBarInfo(
+                    //               'Select a coupon code to apply offer');
+                    //         }
+                    //         _cartServices
+                    //             .verifyCoupon(
+                    //                 selectedCoupon!,
+                    //                 CartHelper.getTotalPriceOfCart()
+                    //                     .toString(),
+                    //                 context)
+                    //             .then((value) {
+                    //           couponDiscountDetailModel = value;
+                    //         });
+                    //       });
+                    //     },
+                    //     selectedItem: selectedCoupon),
                   ),
                   Container(
                     color: bgColor,

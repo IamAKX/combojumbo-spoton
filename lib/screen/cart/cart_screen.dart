@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/all_charges_model.dart';
@@ -10,6 +12,7 @@ import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
+import 'package:cjspoton/screen/coupon/coupon_screen.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
@@ -17,7 +20,6 @@ import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -69,48 +71,6 @@ class _CartScreenState extends State<CartScreen> {
       ),
     );
   }
-
-  // Widget _customDropDownForPincode(
-  //     BuildContext context, PincodeModel? item, String itemDesignation) {
-  //   if (item == null) {
-  //     return Container();
-  //   }
-
-  //   return Container(
-  //     child: (item.pincode == null)
-  //         ? ListTile(
-  //             contentPadding: EdgeInsets.symmetric(horizontal: 8),
-  //             title: Text("No item selected"),
-  //           )
-  //         : ListTile(
-  //             contentPadding: EdgeInsets.symmetric(horizontal: 8),
-  //             title: Text(item.pincode),
-  //             subtitle: Text(
-  //               item.location.toString(),
-  //             ),
-  //           ),
-  //   );
-  // }
-
-  // Widget _customPopupItemBuilderForPincode(
-  //     BuildContext context, PincodeModel item, bool isSelected) {
-  //   return Container(
-  //     margin: EdgeInsets.symmetric(horizontal: 8),
-  //     decoration: !isSelected
-  //         ? null
-  //         : BoxDecoration(
-  //             border: Border.all(color: Theme.of(context).primaryColor),
-  //             borderRadius: BorderRadius.circular(5),
-  //             color: Colors.white,
-  //           ),
-  //     child: ListTile(
-  //       contentPadding: EdgeInsets.symmetric(horizontal: 8),
-  //       selected: isSelected,
-  //       title: Text(item.pincode),
-  //       subtitle: Text(item.location.toString()),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -410,53 +370,83 @@ class _CartScreenState extends State<CartScreen> {
                     padding: EdgeInsets.symmetric(
                         horizontal: defaultPadding,
                         vertical: defaultPadding / 2),
-                    
                     child: couponList.isEmpty
                         ? Container()
-                        : DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            showSelectedItem: true,
-                            items: couponList.map((e) => e.code).toList(),
-                            dropdownSearchDecoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: defaultPadding),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
+                        : ListTile(
+                            leading: Image.asset(
+                              'assets/images/discount.png',
+                              width: 30,
                             ),
-                            label: "Select coupons",
-                            hint: "Select coupon to get discount",
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCoupon = value;
-                                if (selectedCoupon == null) {
-                                  SnackBarService.instance.showSnackBarInfo(
-                                      'Select a coupon code to apply offer');
-                                }
-                                _cartServices
-                                    .verifyCoupon(
-                                        selectedCoupon!,
-                                        CartHelper.getTotalPriceOfCart()
-                                            .toString(),
-                                        context)
-                                    .then((value) {
-                                  couponDiscountDetailModel = value;
+                            trailing: Icon(Icons.chevron_right_outlined),
+                            subtitle: couponDiscountDetailModel != null
+                                ? Text(
+                                    'Offer applied on the bill',
+                                    style: Theme.of(context).textTheme.caption,
+                                  )
+                                : null,
+                            title: couponDiscountDetailModel == null
+                                ? Text('APPLY COUPON')
+                                : Text(
+                                    '${couponDiscountDetailModel!.coupon_code}'),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(CouponScreen.COUPON_ROUTE)
+                                  .then((value) {
+                                setState(() {
+                                  couponDiscountDetailModel =
+                                      value as CouponDiscountDetailModel?;
+                                  log(couponDiscountDetailModel.toString());
                                 });
                               });
                             },
-                            selectedItem: selectedCoupon),
+                          ),
+                    // : DropdownSearch<String>(
+                    //     mode: Mode.MENU,
+                    //     showSelectedItem: true,
+                    //     items: couponList.map((e) => e.code).toList(),
+                    //     dropdownSearchDecoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.symmetric(
+                    //           horizontal: defaultPadding),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //     ),
+                    //     label: "Select coupons",
+                    //     hint: "Select coupon to get discount",
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         selectedCoupon = value;
+                    //         if (selectedCoupon == null) {
+                    //           SnackBarService.instance.showSnackBarInfo(
+                    //               'Select a coupon code to apply offer');
+                    //         }
+                    //         _cartServices
+                    //             .verifyCoupon(
+                    //                 selectedCoupon!,
+                    //                 CartHelper.getTotalPriceOfCart()
+                    //                     .toString(),
+                    //                 context)
+                    //             .then((value) {
+                    //           couponDiscountDetailModel = value;
+                    //         });
+                    //       });
+                    //     },
+                    //     selectedItem: selectedCoupon),
+                  ),
+                  SizedBox(
+                    height: defaultPadding,
                   ),
                   Container(
                     color: bgColor,
@@ -496,7 +486,8 @@ class _CartScreenState extends State<CartScreen> {
                                 controller: sugestionCtrl,
                                 maxLines: 3,
                                 decoration: InputDecoration(
-                                  hintText: 'Any Suggestions for the Chef? We will pass it on.',
+                                  hintText:
+                                      'Any Suggestions for the Chef? We will pass it on.',
                                   focusColor: primaryColor,
                                   alignLabelWithHint: false,
                                   filled: true,

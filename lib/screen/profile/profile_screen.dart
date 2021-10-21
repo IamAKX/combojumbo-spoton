@@ -1,16 +1,13 @@
 import 'dart:developer';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
-import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/all_address/all_address.dart';
 import 'package:cjspoton/screen/change_password/change_password.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
-import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
@@ -18,7 +15,6 @@ import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/colors.dart';
-import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/webview_internal.dart';

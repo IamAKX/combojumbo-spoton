@@ -12,7 +12,7 @@ import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
-import 'package:cjspoton/screen/checkout/checkout_screen.dart';
+import 'package:cjspoton/screen/coupon/coupon_screen.dart';
 import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/services/cart_services.dart';
@@ -23,6 +23,7 @@ import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_payu_unofficial/flutter_payu_unofficial.dart';
@@ -31,7 +32,6 @@ import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:crypto/crypto.dart';
 
 class EDiningCartScreen extends StatefulWidget {
   const EDiningCartScreen({Key? key, required this.dataContainer})
@@ -386,50 +386,77 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                         vertical: defaultPadding / 2),
                     child: couponList.isEmpty
                         ? Container()
-                        : DropdownSearch<String>(
-                            mode: Mode.MENU,
-                            showSelectedItem: true,
-                            items: couponList.map((e) => e.code).toList(),
-                            dropdownSearchDecoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: defaultPadding),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(4),
-                                borderSide: BorderSide(
-                                    color: hintColor.withOpacity(0.5)),
-                              ),
+                        : ListTile(
+                            leading: Image.asset(
+                              'assets/images/discount.png',
+                              width: 30,
                             ),
-                            label: "Select coupons",
-                            hint: "Select coupon to get discount",
-                            onChanged: (value) {
-                              setState(() {
-                                selectedCoupon = value;
-                                if (selectedCoupon == null) {
-                                  SnackBarService.instance.showSnackBarInfo(
-                                      'Select a coupon code to apply offer');
-                                }
-                                _cartServices
-                                    .verifyCoupon(
-                                        selectedCoupon!,
-                                        CartHelper.getTotalPriceOfCart()
-                                            .toString(),
-                                        context)
-                                    .then((value) {
-                                  couponDiscountDetailModel = value;
+                            trailing: Icon(Icons.chevron_right_outlined),
+                            subtitle: couponDiscountDetailModel != null
+                                ? Text(
+                                    'Offer applied on the bill',
+                                    style: Theme.of(context).textTheme.caption,
+                                  )
+                                : null,
+                            title: couponDiscountDetailModel == null
+                                ? Text('APPLY COUPON')
+                                : Text(
+                                    '${couponDiscountDetailModel!.coupon_code}'),
+                            onTap: () {
+                              Navigator.of(context)
+                                  .pushNamed(CouponScreen.COUPON_ROUTE)
+                                  .then((value) {
+                                setState(() {
+                                  couponDiscountDetailModel =
+                                      value as CouponDiscountDetailModel?;
                                 });
                               });
                             },
-                            selectedItem: selectedCoupon),
+                          ),
+                    // : DropdownSearch<String>(
+                    //     mode: Mode.MENU,
+                    //     showSelectedItem: true,
+                    //     items: couponList.map((e) => e.code).toList(),
+                    //     dropdownSearchDecoration: InputDecoration(
+                    //       contentPadding: EdgeInsets.symmetric(
+                    //           horizontal: defaultPadding),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //       border: OutlineInputBorder(
+                    //         borderRadius: BorderRadius.circular(4),
+                    //         borderSide: BorderSide(
+                    //             color: hintColor.withOpacity(0.5)),
+                    //       ),
+                    //     ),
+                    //     label: "Select coupons",
+                    //     hint: "Select coupon to get discount",
+                    //     onChanged: (value) {
+                    //       setState(() {
+                    //         selectedCoupon = value;
+                    //         if (selectedCoupon == null) {
+                    //           SnackBarService.instance.showSnackBarInfo(
+                    //               'Select a coupon code to apply offer');
+                    //         }
+                    //         _cartServices
+                    //             .verifyCoupon(
+                    //                 selectedCoupon!,
+                    //                 CartHelper.getTotalPriceOfCart()
+                    //                     .toString(),
+                    //                 context)
+                    //             .then((value) {
+                    //           couponDiscountDetailModel = value;
+                    //         });
+                    //       });
+                    //     },
+                    //     selectedItem: selectedCoupon),
                   ),
                   Container(
                     color: bgColor,
@@ -659,9 +686,9 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      // amount:
-      //     "${CartHelper.getEDiningNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}",
-      amount: '0.5',
+      amount:
+          "${CartHelper.getEDiningNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}",
+      // amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",

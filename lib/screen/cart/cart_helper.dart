@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/add_on_model_item.dart';
 import 'package:cjspoton/model/all_charges_model.dart';
@@ -124,13 +126,16 @@ class CartHelper {
       CouponDiscountDetailModel? couponDiscountDetailModel) {
     if (couponDiscountDetailModel == null) return 0;
     double amt = getTotalPriceOfCart();
+
     switch (couponDiscountDetailModel.coupon_type) {
       case 'Percentage':
         amt = amt * double.parse(couponDiscountDetailModel.coupon_value) / 100;
-        if (amt >= couponDiscountDetailModel.maximum_order_value.toDouble())
+        if (amt >= couponDiscountDetailModel.maximum_order_value.toDouble() &&
+            couponDiscountDetailModel.maximum_order_value.toDouble() != 0) {
           return couponDiscountDetailModel.maximum_order_value.toDouble();
-        else
+        } else {
           return amt;
+        }
       default:
         return double.parse(couponDiscountDetailModel.coupon_value);
     }
