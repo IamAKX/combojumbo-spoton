@@ -3,18 +3,22 @@ import 'dart:convert';
 class CouponModel {
   String Id;
   String code;
+  String description;
   CouponModel({
     required this.Id,
     required this.code,
+    required this.description,
   });
 
   CouponModel copyWith({
     String? Id,
     String? code,
+    String? description,
   }) {
     return CouponModel(
       Id: Id ?? this.Id,
       code: code ?? this.code,
+      description: description ?? this.description,
     );
   }
 
@@ -22,6 +26,7 @@ class CouponModel {
     return {
       'Id': Id,
       'code': code,
+      'description': description,
     };
   }
 
@@ -29,6 +34,7 @@ class CouponModel {
     return CouponModel(
       Id: map['Id'],
       code: map['code'],
+      description: map['description'],
     );
   }
 
@@ -38,15 +44,19 @@ class CouponModel {
       CouponModel.fromMap(json.decode(source));
 
   @override
-  String toString() => 'CouponModel(Id: $Id, code: $code)';
+  String toString() =>
+      'CouponModel(Id: $Id, code: $code, description: $description)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is CouponModel && other.Id == Id && other.code == code;
+    return other is CouponModel &&
+        other.Id == Id &&
+        other.code == code &&
+        other.description == description;
   }
 
   @override
-  int get hashCode => Id.hashCode ^ code.hashCode;
+  int get hashCode => Id.hashCode ^ code.hashCode ^ description.hashCode;
 }

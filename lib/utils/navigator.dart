@@ -1,3 +1,4 @@
+import 'package:cjspoton/model/coupon_discount_detail_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
@@ -8,6 +9,7 @@ import 'package:cjspoton/screen/change_password/change_password.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
+import 'package:cjspoton/screen/coupon/coupon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/e_dining/e_dining_table_booking_screen/e_dinig_table_booking_screen.dart';
@@ -128,6 +130,9 @@ class NavRoute {
         return MaterialPageRoute(builder: (_) => UpdateProfileScreen());
       case DeliverPincodeScreen.DELIVERY_PINCODE_ROUTE:
         return MaterialPageRoute(builder: (_) => DeliverPincodeScreen());
+      case CouponScreen.COUPON_ROUTE:
+        return MaterialPageRoute<CouponDiscountDetailModel>(
+            builder: (_) => CouponScreen());
       case WebviewInternal.WEBVIEW_ROUTE:
         return MaterialPageRoute(
           builder: (_) => WebviewInternal(

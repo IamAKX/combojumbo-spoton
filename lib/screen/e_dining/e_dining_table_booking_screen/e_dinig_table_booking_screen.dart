@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
@@ -18,11 +17,9 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 class EdiningTableBookingScreen extends StatefulWidget {
   const EdiningTableBookingScreen({
