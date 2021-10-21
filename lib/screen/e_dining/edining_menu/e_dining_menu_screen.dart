@@ -8,6 +8,7 @@ import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/review_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/e_dining/edining_cart/e_dining_cart_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
@@ -30,17 +31,18 @@ import 'package:whatsapp_unilink/whatsapp_unilink.dart';
 class EDiningMenuScreen extends StatefulWidget {
   const EDiningMenuScreen({
     Key? key,
-    required this.menuScreenNavigatorPayloadModel,
+    required this.dataContainer,
   }) : super(key: key);
   static const String E_DINING_MENU_SCREEN_ROUTE = '/eDiningMenuScreen';
   // final Function() refreshMainContainerState;
-  final MenuScreenNavigatorPayloadModel menuScreenNavigatorPayloadModel;
+  final EDiningDataContainer dataContainer;
 
   @override
   _EDiningMenuScreenState createState() => _EDiningMenuScreenState();
 }
 
 class _EDiningMenuScreenState extends State<EDiningMenuScreen> {
+  MenuScreenNavigatorPayloadModel? menuScreenNavigatorPayloadModel;
   final GlobalKey _menuKey = new GlobalKey();
   ScrollController _scrollController = ScrollController();
   late OutletModel _outletModel;
@@ -59,7 +61,10 @@ class _EDiningMenuScreenState extends State<EDiningMenuScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    menuScreenNavigatorPayloadModel =
+        widget.dataContainer.menuScreenNavigatorPayloadModel;
     loadFavouriteFood();
+
     _outletModel =
         OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     WidgetsBinding.instance!.addPostFrameCallback(
@@ -67,10 +72,10 @@ class _EDiningMenuScreenState extends State<EDiningMenuScreen> {
         (value) {
           setState(() {
             list = value;
-            if (widget.menuScreenNavigatorPayloadModel.categoryId != '0') {
+            if (menuScreenNavigatorPayloadModel!.categoryId != '0') {
               int height = 1;
               for (CategoryModel cat in list) {
-                if (widget.menuScreenNavigatorPayloadModel.categoryId == cat.id)
+                if (menuScreenNavigatorPayloadModel!.categoryId == cat.id)
                   break;
                 height += cat.foodList.length + 1;
               }
@@ -83,7 +88,7 @@ class _EDiningMenuScreenState extends State<EDiningMenuScreen> {
   }
 
   refreshState() {
-    widget.menuScreenNavigatorPayloadModel.refreshMainContainerState();
+    menuScreenNavigatorPayloadModel!.refreshMainContainerState();
     setState(() {});
   }
 
@@ -179,8 +184,7 @@ class _EDiningMenuScreenState extends State<EDiningMenuScreen> {
             onPressed: () {
               Navigator.of(context)
                   .pushNamed(EDiningCartScreen.E_DINING_CART_ROUTE,
-                      arguments: widget.menuScreenNavigatorPayloadModel
-                          .refreshMainContainerState)
+                      arguments: widget.dataContainer)
                   .then((value) => refreshState());
             },
             icon: CartHelper.getCartCount() == 0
@@ -222,7 +226,7 @@ class _EDiningMenuScreenState extends State<EDiningMenuScreen> {
               Navigator.of(context)
                   .pushNamed(
                     SearchPageScreen.SEARCH_SCREEN_ROUTE,
-                    arguments: widget.menuScreenNavigatorPayloadModel,
+                    arguments: menuScreenNavigatorPayloadModel,
                   )
                   .then((value) => refreshState());
             },

@@ -9,6 +9,7 @@ import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
+import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/e_dining/e_dining_table_booking_screen/e_dinig_table_booking_screen.dart';
 import 'package:cjspoton/screen/e_dining/edining_cart/e_dining_cart_screen.dart';
 import 'package:cjspoton/screen/e_dining/edining_menu/e_dining_menu_screen.dart';
@@ -159,14 +160,13 @@ class NavRoute {
       case EDiningMenuScreen.E_DINING_MENU_SCREEN_ROUTE:
         return MaterialPageRoute(
           builder: (_) => EDiningMenuScreen(
-            menuScreenNavigatorPayloadModel:
-                settings.arguments as MenuScreenNavigatorPayloadModel,
+            dataContainer: settings.arguments as EDiningDataContainer,
           ),
         );
       case EDiningCartScreen.E_DINING_CART_ROUTE:
         return MaterialPageRoute(
           builder: (_) => EDiningCartScreen(
-            refreshMainContainerState: settings.arguments as Function(),
+            dataContainer: settings.arguments as EDiningDataContainer,
           ),
         );
 

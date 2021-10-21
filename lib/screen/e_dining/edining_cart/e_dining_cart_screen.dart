@@ -13,6 +13,7 @@ import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
 import 'package:cjspoton/screen/checkout/checkout_screen.dart';
+import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -33,10 +34,11 @@ import 'package:provider/provider.dart';
 import 'package:crypto/crypto.dart';
 
 class EDiningCartScreen extends StatefulWidget {
-  const EDiningCartScreen({Key? key, required this.refreshMainContainerState})
+  const EDiningCartScreen({Key? key, required this.dataContainer})
       : super(key: key);
   static const String E_DINING_CART_ROUTE = '/eDiningCart';
-  final Function() refreshMainContainerState;
+  // final Function() refreshMainContainerState;
+  final EDiningDataContainer dataContainer;
 
   @override
   _EDiningCartScreenState createState() => _EDiningCartScreenState();
@@ -45,6 +47,7 @@ class EDiningCartScreen extends StatefulWidget {
 class _EDiningCartScreenState extends State<EDiningCartScreen> {
   TextEditingController promoCodeCtrl = TextEditingController();
   TextEditingController sugestionCtrl = TextEditingController();
+  late Function() refreshMainContainerState;
   OutletModel outletModel =
       OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
   late UserModel user;
@@ -56,7 +59,7 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
   CouponDiscountDetailModel? couponDiscountDetailModel = null;
 
   refreshState() {
-    widget.refreshMainContainerState();
+    refreshMainContainerState();
     setState(() {});
   }
 
@@ -64,6 +67,8 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    refreshMainContainerState = widget.dataContainer
+        .menuScreenNavigatorPayloadModel.refreshMainContainerState;
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) => _cartServices.fetchAllPincodes(context).then(
         (value) {
@@ -379,76 +384,6 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                     padding: EdgeInsets.symmetric(
                         horizontal: defaultPadding,
                         vertical: defaultPadding / 2),
-                    // child: Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: TextField(
-                    //         autocorrect: true,
-                    //         controller: promoCodeCtrl,
-                    //         decoration: InputDecoration(
-                    //           hintText: 'Enter promo code',
-                    //           focusColor: primaryColor,
-                    //           alignLabelWithHint: false,
-                    //           filled: true,
-                    //           fillColor: Colors.white,
-                    //           contentPadding:
-                    //               EdgeInsets.symmetric(horizontal: defaultPadding),
-                    //           hoverColor: primaryColor,
-                    //           hintStyle: TextStyle(color: hintColor),
-                    //           enabledBorder: OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(4),
-                    //               bottomLeft: Radius.circular(4),
-                    //             ),
-                    //             borderSide:
-                    //                 BorderSide(color: hintColor.withOpacity(0.5)),
-                    //           ),
-                    //           focusedBorder: OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(4),
-                    //               bottomLeft: Radius.circular(4),
-                    //             ),
-                    //             borderSide:
-                    //                 BorderSide(color: hintColor.withOpacity(0.5)),
-                    //           ),
-                    //           border: OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(4),
-                    //               bottomLeft: Radius.circular(4),
-                    //             ),
-                    //             borderSide:
-                    //                 BorderSide(color: hintColor.withOpacity(0.5)),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {},
-                    //       child: Container(
-                    //         alignment: Alignment.center,
-                    //         padding: EdgeInsets.symmetric(
-                    //           horizontal: 5,
-                    //           vertical: 14,
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //           color: primaryColor,
-                    //           borderRadius: BorderRadius.only(
-                    //             topRight: Radius.circular(4),
-                    //             bottomRight: Radius.circular(4),
-                    //           ),
-                    //         ),
-                    //         width: 80,
-                    //         child: Text(
-                    //           'APPLY',
-                    //           style: Theme.of(context)
-                    //               .textTheme
-                    //               .button
-                    //               ?.copyWith(color: bgColor),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
                     child: couponList.isEmpty
                         ? Container()
                         : DropdownSearch<String>(
@@ -724,9 +659,9 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
       merchantID: Constants.PAYU_MONEY_MERCHANT_ID,
       merchantKey: Constants.PAYU_MONEY_MERCHANT_KEY,
       salt: Constants.PAYU_MONEY_SALT,
-      amount:
-          "${CartHelper.getEDiningNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}",
-      // amount: '0.5',
+      // amount:
+      //     "${CartHelper.getEDiningNetAmount(allChargesModel, selectedPincode, couponDiscountDetailModel).toStringAsFixed(2)}",
+      amount: '0.5',
       transactionID: "TXN${user.id}${DateTime.now().millisecond}",
       firstName: "${user.name}",
       email: "${user.email}",
@@ -812,8 +747,14 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
         SnackBarService.instance.showSnackBarInfo('Please wait...');
 
         _cartServices
-            .placeEDiningOrder(cartVriablesModel, response, paymentParam,
-                payUMoneyTxnId, 'success', context)
+            .placeEDiningOrder(
+                cartVriablesModel,
+                response,
+                paymentParam,
+                payUMoneyTxnId,
+                'success',
+                context,
+                widget.dataContainer.tableBookingModel)
             .then((value) {
           if (value)
             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -842,8 +783,14 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
           SnackBarService.instance.showSnackBarInfo('Please wait...');
 
           _cartServices
-              .placeEDiningOrder(cartVriablesModel, response, paymentParam,
-                  payUMoneyTxnId, 'failure', context)
+              .placeEDiningOrder(
+                  cartVriablesModel,
+                  response,
+                  paymentParam,
+                  payUMoneyTxnId,
+                  'failure',
+                  context,
+                  widget.dataContainer.tableBookingModel)
               .then((value) {});
         },
         btnOkColor: Colors.red)

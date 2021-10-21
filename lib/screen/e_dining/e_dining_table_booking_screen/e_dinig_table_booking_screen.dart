@@ -7,6 +7,7 @@ import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/section_model.dart';
 import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/e_dining/edining_menu/e_dining_menu_screen.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_model/table_booking_model.dart';
 import 'package:cjspoton/services/cart_services.dart';
@@ -351,10 +352,13 @@ class _EdiningTableBookingScreenState extends State<EdiningTableBookingScreen> {
                         numberOfGuest: guestCtrl.text,
                         bookingSlot: slotCtrl.text,
                         allChargesModel: allChargesModel);
-
+                    EDiningDataContainer dataContainer = EDiningDataContainer(
+                        menuScreenNavigatorPayloadModel:
+                            widget.menuScreenNavigatorPayloadModel,
+                        tableBookingModel: tableBookingModel);
                     Navigator.of(context).pushNamed(
                         EDiningMenuScreen.E_DINING_MENU_SCREEN_ROUTE,
-                        arguments: widget.menuScreenNavigatorPayloadModel);
+                        arguments: dataContainer);
                   },
                   child: Text(
                     // 'Pay ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}',

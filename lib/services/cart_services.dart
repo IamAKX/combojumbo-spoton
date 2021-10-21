@@ -880,7 +880,8 @@ class CartServices extends ChangeNotifier {
       PaymentParams paymentParam,
       String payUMoneyTxnId,
       String paymentState,
-      BuildContext context) async {
+      BuildContext context,
+      TableBookingModel tableBookingModel) async {
     ConnectionStatus connectionStatus =
         await UniversalInternetChecker.checkInternet();
     if (connectionStatus == ConnectionStatus.offline ||
@@ -928,7 +929,10 @@ class CartServices extends ChangeNotifier {
       'pincode': '${cartVriablesModel.selectedPincode.id}',
       'delivery_suggestion': '${cartVriablesModel.deliverySuggestion}',
       'delivery_instruction': '',
-      'cart': CartHelper.getGroupedCartJson()
+      'cart': CartHelper.getGroupedCartJson(),
+      'sectionid': '${tableBookingModel.section.id}',
+      'dateTime': '${tableBookingModel.bookingSlot}',
+      'guestcount': '${tableBookingModel.numberOfGuest}',
     };
     var reqBody = FormData.fromMap(payload);
 
