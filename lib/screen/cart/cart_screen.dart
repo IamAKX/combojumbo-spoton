@@ -410,76 +410,7 @@ class _CartScreenState extends State<CartScreen> {
                     padding: EdgeInsets.symmetric(
                         horizontal: defaultPadding,
                         vertical: defaultPadding / 2),
-                    // child: Row(
-                    //   children: [
-                    //     Expanded(
-                    //       child: TextField(
-                    //         autocorrect: true,
-                    //         controller: promoCodeCtrl,
-                    //         decoration: InputDecoration(
-                    //           hintText: 'Enter promo code',
-                    //           focusColor: primaryColor,
-                    //           alignLabelWithHint: false,
-                    //           filled: true,
-                    //           fillColor: Colors.white,
-                    //           contentPadding:
-                    //               EdgeInsets.symmetric(horizontal: defaultPadding),
-                    //           hoverColor: primaryColor,
-                    //           hintStyle: TextStyle(color: hintColor),
-                    //           enabledBorder: OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(4),
-                    //               bottomLeft: Radius.circular(4),
-                    //             ),
-                    //             borderSide:
-                    //                 BorderSide(color: hintColor.withOpacity(0.5)),
-                    //           ),
-                    //           focusedBorder: OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(4),
-                    //               bottomLeft: Radius.circular(4),
-                    //             ),
-                    //             borderSide:
-                    //                 BorderSide(color: hintColor.withOpacity(0.5)),
-                    //           ),
-                    //           border: OutlineInputBorder(
-                    //             borderRadius: BorderRadius.only(
-                    //               topLeft: Radius.circular(4),
-                    //               bottomLeft: Radius.circular(4),
-                    //             ),
-                    //             borderSide:
-                    //                 BorderSide(color: hintColor.withOpacity(0.5)),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     InkWell(
-                    //       onTap: () {},
-                    //       child: Container(
-                    //         alignment: Alignment.center,
-                    //         padding: EdgeInsets.symmetric(
-                    //           horizontal: 5,
-                    //           vertical: 14,
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //           color: primaryColor,
-                    //           borderRadius: BorderRadius.only(
-                    //             topRight: Radius.circular(4),
-                    //             bottomRight: Radius.circular(4),
-                    //           ),
-                    //         ),
-                    //         width: 80,
-                    //         child: Text(
-                    //           'APPLY',
-                    //           style: Theme.of(context)
-                    //               .textTheme
-                    //               .button
-                    //               ?.copyWith(color: bgColor),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
+                    
                     child: couponList.isEmpty
                         ? Container()
                         : DropdownSearch<String>(
