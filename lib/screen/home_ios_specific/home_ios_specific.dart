@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -7,13 +6,11 @@ import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
-import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/home_ios_specific/home_ios_specific_widgets.dart';
 import 'package:cjspoton/screen/ios_login_needed/ios_login_needed.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
-import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/static_data.dart';
@@ -21,9 +18,7 @@ import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:cjspoton/widgets/subheading.dart';
-import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 

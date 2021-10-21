@@ -4,14 +4,12 @@ import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/ios_login_needed/ios_login_needed.dart';
-import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:readmore/readmore.dart';
 

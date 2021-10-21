@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:cjspoton/model/food_model.dart';
+import 'package:flutter/foundation.dart';
 
 class CategoryModel {
   String categoryName;

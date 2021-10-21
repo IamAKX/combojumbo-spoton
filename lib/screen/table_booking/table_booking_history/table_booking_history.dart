@@ -1,4 +1,3 @@
-import 'package:cjspoton/screen/order/order_detail.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_model/table_booking_order_details.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';

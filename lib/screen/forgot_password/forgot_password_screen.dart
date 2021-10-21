@@ -1,13 +1,9 @@
-import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/agreement_footer.dart';
-import 'package:cjspoton/widgets/custom_edittext.dart';
-import 'package:cjspoton/widgets/icon_text_button.dart';
-import 'package:cjspoton/widgets/password_edittext.dart';
 import 'package:cjspoton/widgets/phone_edittext.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

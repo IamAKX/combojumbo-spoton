@@ -11,10 +11,10 @@ import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:cjspoton/widgets/phone_edittext_with_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:image_crop/image_crop.dart';
+import 'package:image_picker/image_picker.dart';
 // import 'package:image_cropper/image_cropper.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
   const UpdateProfileScreen({Key? key}) : super(key: key);

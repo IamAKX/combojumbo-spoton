@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:cjspoton/screen/order/order_menu_details.dart';
 import 'package:cjspoton/screen/order/order_model.dart';
+import 'package:flutter/foundation.dart';
 
 class OrderDetailModel {
   OrderModel order;

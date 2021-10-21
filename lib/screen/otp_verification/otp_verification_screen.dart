@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';

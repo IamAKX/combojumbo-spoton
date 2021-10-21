@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/user_model.dart';
-import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
-import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';

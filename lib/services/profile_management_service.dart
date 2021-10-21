@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
-import 'package:async/async.dart';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/outlet_model.dart';
@@ -12,8 +10,6 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'package:universal_internet_checker/universal_internet_checker.dart';
 
 enum ProfileStatus {

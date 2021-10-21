@@ -12,7 +12,6 @@ import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/cart/grouped_cart_item_model.dart';
-import 'package:cjspoton/screen/checkout/checkout_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -22,6 +21,7 @@ import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_payu_unofficial/flutter_payu_unofficial.dart';
@@ -30,7 +30,6 @@ import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import 'package:crypto/crypto.dart';
 
 class TakeAwayCartScreen extends StatefulWidget {
   const TakeAwayCartScreen({Key? key, required this.refreshMainContainerState})

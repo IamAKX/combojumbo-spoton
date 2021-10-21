@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -9,7 +8,6 @@ import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/section_model.dart';
 import 'package:cjspoton/model/user_model.dart';
-import 'package:cjspoton/screen/cart/cart_variable_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_model/table_booking_model.dart';
@@ -22,7 +20,7 @@ import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_payu_unofficial/flutter_payu_unofficial.dart';
@@ -31,7 +29,6 @@ import 'package:flutter_payu_unofficial/models/payment_result.dart';
 import 'package:flutter_payu_unofficial/models/payment_status.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:crypto/crypto.dart';
 
 class TableBookingScreen extends StatefulWidget {
   const TableBookingScreen({

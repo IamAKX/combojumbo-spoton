@@ -7,7 +7,6 @@ import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:readmore/readmore.dart';
 
 class FavouriteScreen extends StatefulWidget {

@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:cjspoton/model/add_on_model.dart';
+import 'package:flutter/foundation.dart';
 
 class FoodModel {
   String id;

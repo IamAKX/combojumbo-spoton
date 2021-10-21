@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:cjspoton/screen/table_booking/table_booking_model/table_booking_menu_details.dart';
+import 'package:flutter/foundation.dart';
 
 class TableBookingOrderDetails {
   String datetime;

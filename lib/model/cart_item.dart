@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:cjspoton/model/add_on_model_item.dart';
+import 'package:flutter/foundation.dart';
 
 class CartItem {
   String id;

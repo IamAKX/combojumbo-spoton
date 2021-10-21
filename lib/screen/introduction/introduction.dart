@@ -2,7 +2,6 @@ import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class Introduction extends StatefulWidget {

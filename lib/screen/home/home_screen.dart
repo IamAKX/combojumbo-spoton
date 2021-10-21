@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -22,7 +21,6 @@ import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:cjspoton/widgets/subheading.dart';
 import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 

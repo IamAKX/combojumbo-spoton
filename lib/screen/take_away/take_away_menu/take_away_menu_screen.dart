@@ -8,8 +8,6 @@ import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/review_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
-import 'package:cjspoton/screen/cart/cart_screen.dart';
-import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
 import 'package:cjspoton/screen/take_away/take_away_cart/take_away_cart_screen.dart';

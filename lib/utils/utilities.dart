@@ -1,6 +1,5 @@
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/food_model.dart';
-import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';

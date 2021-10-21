@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';

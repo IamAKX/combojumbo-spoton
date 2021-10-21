@@ -1,5 +1,4 @@
 import 'package:cjspoton/screen/order/order_detail.dart';
-import 'package:cjspoton/screen/order/order_food_model.dart';
 import 'package:cjspoton/screen/order/order_menu_details.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
