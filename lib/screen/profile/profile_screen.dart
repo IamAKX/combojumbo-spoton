@@ -12,6 +12,7 @@ import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/reset_password/reset_password_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
+import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
@@ -34,7 +35,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   late UserModel user;
-
+  late AuthenticationService _auth;
   @override
   void initState() {
     // TODO: implement initState
@@ -55,6 +56,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SnackBarService.instance.buildContext = context;
+    _auth = Provider.of<AuthenticationService>(context);
     return ListView(
       children: [
         SizedBox(
@@ -326,8 +329,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           height: 1,
         ),
         ListTile(
-          onTap: () {
+          onTap: () async {
             prefs.clear();
+            await _auth.logout(context);
             Navigator.of(context).pushNamedAndRemoveUntil(
                 LoginScreen.LOGIN_ROUTE, (route) => false);
           },

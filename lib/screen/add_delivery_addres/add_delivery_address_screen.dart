@@ -504,7 +504,7 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                         }
                       },
                       child: Text(
-                        'SAVE CHANGES',
+                        'SUBMIT',
                         style: TextStyle(
                           color: bgColor,
                         ),

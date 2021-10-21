@@ -57,166 +57,174 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
               ],
             ),
           )
-        : StaggeredGridView.count(
-            crossAxisCount: 2,
-            padding: EdgeInsets.symmetric(vertical: defaultPadding),
-            crossAxisSpacing: defaultPadding / 2,
-            mainAxisSpacing: defaultPadding,
-            staggeredTiles: [
-              for (int i = 0; i < favList.length; i++) ...{StaggeredTile.fit(1)}
-            ],
-            children: [
-              for (int i = 0; i < favList.length; i++) ...{
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: defaultPadding / 2),
-                  decoration: BoxDecoration(
-                    color: bgColor,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        // width: screenSize.width * 0.7,
-                        decoration: BoxDecoration(),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              child: CachedNetworkImage(
-                                height: screenSize.width * 0.4,
-                                width: screenSize.width * 0.7,
-                                fit: BoxFit.cover,
-                                imageUrl: favList.elementAt(i).foodImage,
-                                progressIndicatorBuilder:
-                                    (context, url, downloadProgress) => Center(
-                                  child: CircularProgressIndicator(
-                                      value: downloadProgress.progress),
+        : Padding(
+            padding: const EdgeInsets.only(bottom: 100),
+            child: StaggeredGridView.count(
+              crossAxisCount: 2,
+              padding: EdgeInsets.symmetric(vertical: defaultPadding),
+              crossAxisSpacing: defaultPadding / 2,
+              mainAxisSpacing: defaultPadding,
+              staggeredTiles: [
+                for (int i = 0; i < favList.length; i++) ...{
+                  StaggeredTile.fit(1)
+                }
+              ],
+              children: [
+                for (int i = 0; i < favList.length; i++) ...{
+                  Container(
+                    margin:
+                        EdgeInsets.symmetric(horizontal: defaultPadding / 2),
+                    decoration: BoxDecoration(
+                      color: bgColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          // width: screenSize.width * 0.7,
+                          decoration: BoxDecoration(),
+                          child: Stack(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
                                 ),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
+                                child: CachedNetworkImage(
+                                  height: screenSize.width * 0.4,
+                                  width: screenSize.width * 0.7,
+                                  fit: BoxFit.cover,
+                                  imageUrl: favList.elementAt(i).foodImage,
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          Center(
+                                    child: CircularProgressIndicator(
+                                        value: downloadProgress.progress),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
                               ),
-                            ),
-                            Positioned(
-                              right: 10,
-                              top: 10,
-                              child: InkWell(
-                                onTap: () {
-                                  if (Utilities().isFoodMarkedFavourite(
-                                      favList, favList.elementAt(i).id))
-                                    favList.removeWhere((element) =>
-                                        element.id == favList.elementAt(i).id);
+                              Positioned(
+                                right: 10,
+                                top: 10,
+                                child: InkWell(
+                                  onTap: () {
+                                    if (Utilities().isFoodMarkedFavourite(
+                                        favList, favList.elementAt(i).id))
+                                      favList.removeWhere((element) =>
+                                          element.id ==
+                                          favList.elementAt(i).id);
+                                    else
+                                      favList.add(favList.elementAt(i));
+                                    Utilities().setFavouriteFood(favList);
+                                    setState(() {});
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: bgColor,
+                                    radius: 15,
+                                    child: Icon(
+                                      Utilities().isFoodMarkedFavourite(
+                                              favList, favList.elementAt(i).id)
+                                          ? Icons.favorite
+                                          : Icons.favorite_outline,
+                                      size: 20,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // Positioned(
+                              //   right: 10,
+                              //   bottom: 10,
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(horizontal: 10),
+                              //     decoration: BoxDecoration(
+                              //         color: Colors.green,
+                              //         borderRadius: BorderRadius.circular(5)),
+                              //     child: Row(
+                              //       children: [
+                              //         Icon(
+                              //           Icons.star_outline,
+                              //           color: Colors.white,
+                              //           size: 18,
+                              //         ),
+                              //         Text(
+                              //           '4.1',
+                              //           style: Theme.of(context)
+                              //               .textTheme
+                              //               .headline6
+                              //               ?.copyWith(
+                              //                 color: Colors.white,
+                              //                 fontSize: 16,
+                              //                 fontWeight: FontWeight.bold,
+                              //               ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // )
+                            ],
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(defaultPadding / 2),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                favList.elementAt(i).foodname,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    ?.copyWith(
+                                      color: textColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              ReadMoreText(
+                                '${favList.elementAt(i).fooddescription}',
+                                style: Theme.of(context).textTheme.caption,
+                                trimLines: 2,
+                                trimMode: TrimMode.Line,
+                                colorClickableText: primaryColor,
+                                trimCollapsedText: 'Read more',
+                                trimExpandedText: 'show less',
+                              ),
+                              Row(
+                                children: [
+                                  Text('₹ ${favList.elementAt(i).foodamount}'),
+                                  Spacer(),
+                                  if (CartHelper.getItemCountInCart(
+                                          CartHelper.transformFoodModel(
+                                              favList.elementAt(i))) ==
+                                      0)
+                                    CartButton().getCartButtonSimple(
+                                      context,
+                                      favList.elementAt(i),
+                                      refreshState,
+                                    )
                                   else
-                                    favList.add(favList.elementAt(i));
-                                  Utilities().setFavouriteFood(favList);
-                                  setState(() {});
-                                },
-                                child: CircleAvatar(
-                                  backgroundColor: bgColor,
-                                  radius: 15,
-                                  child: Icon(
-                                    Utilities().isFoodMarkedFavourite(
-                                            favList, favList.elementAt(i).id)
-                                        ? Icons.favorite
-                                        : Icons.favorite_outline,
-                                    size: 20,
-                                    color: Colors.red,
-                                  ),
-                                ),
+                                    CartButton().getCartButtonComplex(
+                                      context,
+                                      favList.elementAt(i),
+                                      refreshState,
+                                    ),
+                                ],
                               ),
-                            ),
-                            // Positioned(
-                            //   right: 10,
-                            //   bottom: 10,
-                            //   child: Container(
-                            //     padding: EdgeInsets.symmetric(horizontal: 10),
-                            //     decoration: BoxDecoration(
-                            //         color: Colors.green,
-                            //         borderRadius: BorderRadius.circular(5)),
-                            //     child: Row(
-                            //       children: [
-                            //         Icon(
-                            //           Icons.star_outline,
-                            //           color: Colors.white,
-                            //           size: 18,
-                            //         ),
-                            //         Text(
-                            //           '4.1',
-                            //           style: Theme.of(context)
-                            //               .textTheme
-                            //               .headline6
-                            //               ?.copyWith(
-                            //                 color: Colors.white,
-                            //                 fontSize: 16,
-                            //                 fontWeight: FontWeight.bold,
-                            //               ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ),
-                            // )
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(defaultPadding / 2),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              favList.elementAt(i).foodname,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(
-                                    color: textColor,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                            ReadMoreText(
-                              '${favList.elementAt(i).fooddescription}',
-                              style: Theme.of(context).textTheme.caption,
-                              trimLines: 2,
-                              trimMode: TrimMode.Line,
-                              colorClickableText: primaryColor,
-                              trimCollapsedText: 'Read more',
-                              trimExpandedText: 'show less',
-                            ),
-                            Row(
-                              children: [
-                                Text('₹ ${favList.elementAt(i).foodamount}'),
-                                Spacer(),
-                                if (CartHelper.getItemCountInCart(
-                                        CartHelper.transformFoodModel(
-                                            favList.elementAt(i))) ==
-                                    0)
-                                  CartButton().getCartButtonSimple(
-                                    context,
-                                    favList.elementAt(i),
-                                    refreshState,
-                                  )
-                                else
-                                  CartButton().getCartButtonComplex(
-                                    context,
-                                    favList.elementAt(i),
-                                    refreshState,
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              }
-            ],
+                }
+              ],
+            ),
           );
   }
 }

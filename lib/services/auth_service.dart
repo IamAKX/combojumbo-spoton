@@ -222,33 +222,7 @@ class AuthenticationService extends ChangeNotifier {
           .showSnackBarError('You are not connected to internet');
       return;
     }
-    // final FacebookLoginResult result =
-    //     await facebookLogin.logIn(['email', 'public_profile']);
-    // late User _facebookUser;
-    // switch (result.status) {
-    //   case FacebookLoginStatus.cancelledByUser:
-    //     SnackBarService.instance.showSnackBarError('Cancelled by user');
-    //     return;
-    //   case FacebookLoginStatus.error:
-    //     SnackBarService.instance.showSnackBarError('Sign in error');
-    //     return;
-    //   case FacebookLoginStatus.loggedIn:
-    //     try {
-    //       final FacebookAccessToken accessToken = result.accessToken;
-    //       AuthCredential credential =
-    //           FacebookAuthProvider.credential(accessToken.token);
-    //       var userCred = await _auth.signInWithCredential(credential);
-    //       if (userCred.user == null) {
-    //         SnackBarService.instance.showSnackBarError('No user found');
-    //         return;
-    //       }
-    //       _facebookUser = userCred.user!;
-    //     } catch (e) {
-    //       SnackBarService.instance.showSnackBarError(e.toString());
-    //       return;
-    //     }
-    //     break;
-    // }
+
     var _accessToken = await FacebookAuth.instance.login(
       permissions: ['public_profile', 'email'],
     );
@@ -263,10 +237,18 @@ class AuthenticationService extends ChangeNotifier {
         _facebookUser['email'] == null ||
         _facebookUser['name'].toString().isEmpty ||
         _facebookUser['email'].toString().isEmpty) {
+      final AccessToken? accessToken = await FacebookAuth.instance.accessToken;
+// or FacebookAuth.i.accessToken
+      if (accessToken != null) {
+        // user is logged
+        FacebookAuth.instance.logOut();
+        log('FB logout');
+      }
       status = AuthStatus.Error;
       notifyListeners();
       SnackBarService.instance.showSnackBarError(
           'Unable to fetch your details. Please login with another source.');
+
       return;
     }
 
@@ -893,6 +875,11 @@ class AuthenticationService extends ChangeNotifier {
       notifyListeners();
       SnackBarService.instance.showSnackBarError(e.toString());
     }
+  }
+
+  Future<void> logout(BuildContext context) async {
+    await googleSignIn.signOut();
+    await FacebookAuth.instance.logOut();
   }
 }
 
