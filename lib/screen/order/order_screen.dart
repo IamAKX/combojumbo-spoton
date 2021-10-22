@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cjspoton/screen/order/order_detail.dart';
 import 'package:cjspoton/screen/order/order_details_screen.dart';
+import 'package:cjspoton/screen/order_feedback/order_feedback_screen.dart';
 import 'package:cjspoton/services/cart_services.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
@@ -167,6 +168,28 @@ class _OrderScreenState extends State<OrderScreen> {
                               '${formatOrderTime(order.order.date_creation)}',
                               style: Theme.of(context).textTheme.caption,
                             ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            InkWell(
+                              onTap: () => Navigator.of(context).pushNamed(
+                                  OrderFeedback.ORDER_FEEDBACK_ROUTE,
+                                  arguments: order),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 3),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: primaryColor),
+                                  borderRadius: BorderRadius.circular(2),
+                                ),
+                                child: Text(
+                                  'FEEDBACK',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      ?.copyWith(color: primaryColor),
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),

@@ -40,6 +40,7 @@ class API {
   static const String TableBookingOrderHistory = '${BASE_URL}table_history.php';
 
   static const String Feedback = '${BASE_URL}report';
+  static const String OrderFeedback = '${BASE_URL}feedback.php';
 
   // Webview urls
   static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';

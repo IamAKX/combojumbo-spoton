@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/all_charges_model.dart';
@@ -975,5 +976,80 @@ class CartServices extends ChangeNotifier {
     //   return false;
     // }
     return false;
+  }
+
+  Future<void> sendOrderReview(
+      int quality,
+      int service,
+      int punctuality,
+      int price,
+      String title,
+      String review,
+      BuildContext context,
+      File? image,
+      OrderDetailModel orderDetailModel) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
+    if (title.isEmpty || review.isEmpty) {
+      SnackBarService.instance.showSnackBarError('Title or review is empty');
+      return;
+    }
+
+    status = CartStatus.Loading;
+    notifyListeners();
+    UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'food_quality': '$quality',
+      'service': '$service',
+      'location': '$punctuality',
+      'price': '$price',
+      'titlereview': '$title',
+      'review': '$review',
+      'oid': '${orderDetailModel.order.oid}',
+      'outletid': '${orderDetailModel.order.outletid}',
+      'aimage': (image != null)
+          ? await MultipartFile.fromFile(image.path,
+              filename: image.path.split('/').last)
+          : '',
+    });
+
+    try {
+      Response response = await _dio.post(
+        API.OrderFeedback,
+        data: reqBody,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        if (resBody['status'] == 1) {
+          status = CartStatus.Success;
+          notifyListeners();
+          SnackBarService.instance
+              .showSnackBarSuccess((resBody['body']['msg']));
+          Navigator.of(context).pop();
+        } else {
+          status = CartStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((resBody['body']['msg']));
+        }
+      } else {
+        status = CartStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = CartStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
   }
 }

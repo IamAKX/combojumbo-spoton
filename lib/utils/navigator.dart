@@ -26,6 +26,7 @@ import 'package:cjspoton/screen/main_container_ios_specific/main_container_ios_s
 import 'package:cjspoton/screen/menu/menu_screen.dart';
 import 'package:cjspoton/screen/order/order_detail.dart';
 import 'package:cjspoton/screen/order/order_details_screen.dart';
+import 'package:cjspoton/screen/order_feedback/order_feedback_screen.dart';
 import 'package:cjspoton/screen/otp_verification/otp_verification_screen.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/register/register_screen.dart';
@@ -138,6 +139,11 @@ class NavRoute {
           builder: (_) => WebviewInternal(
             url: settings.arguments as String,
           ),
+        );
+      case OrderFeedback.ORDER_FEEDBACK_ROUTE:
+        return MaterialPageRoute(
+          builder: (_) => OrderFeedback(
+              orderDetailModel: settings.arguments as OrderDetailModel),
         );
 
       // Take Away
