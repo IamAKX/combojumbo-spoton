@@ -201,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                           child: RichText(
                             text: TextSpan(
-                              text: 'Already have an acccount? ',
+                              text: 'Already have an account? ',
                               style: Theme.of(context)
                                   .textTheme
                                   .caption

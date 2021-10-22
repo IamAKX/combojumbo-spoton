@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cjspoton/model/add_slider_model.dart';
@@ -96,7 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               cjRouteModel.redirectionUrl,
                               arguments: cjRouteModel.redirectionUrl ==
                                       WebviewInternal.WEBVIEW_ROUTE
-                                  ? API.BANQUET_PPC
+                                  ? cjRouteModel.name == 'Mini Banquet'
+                                      ? API.BANQUET_PPC
+                                      : API.HOTCASE
                                   : MenuScreenNavigatorPayloadModel(
                                       categoryId: "0",
                                       refreshMainContainerState:
