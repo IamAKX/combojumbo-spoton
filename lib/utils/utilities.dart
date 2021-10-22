@@ -3,6 +3,7 @@ import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Utilities {
   List<FoodModel> getAllFavouriteFood() {
@@ -29,6 +30,23 @@ class Utilities {
       }
     }
     return isPresent;
+  }
+
+  String getYoutubeVideoId(String url) {
+    String vID = '';
+    try {
+      vID = YoutubePlayer.convertUrlToId(url)!;
+      print('this is ' + vID);
+    } on Exception catch (exception) {
+      // only executed if error is of type Exception
+      print('exception');
+    } catch (error) {
+      // executed for errors of all types other than Exception
+      print('catch error');
+      //  videoIdd="error";
+
+    }
+    return vID;
   }
 
   bool isValidEmail(String email) {

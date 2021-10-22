@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/user_model.dart';
+import 'package:cjspoton/screen/faq/faq_model.dart';
+import 'package:cjspoton/screen/image_gallery/image_gallery_model.dart';
+import 'package:cjspoton/screen/video_gallery/video_gallery_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -286,5 +289,159 @@ class ProfileManagementService extends ChangeNotifier {
       notifyListeners();
       SnackBarService.instance.showSnackBarError(e.toString());
     }
+  }
+
+  Future<List<ImageGalleryModel>> fetchImageGallery(
+      BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
+    status = ProfileStatus.Ideal;
+    notifyListeners();
+    List<ImageGalleryModel> list = [];
+    try {
+      Response response = await _dio.post(
+        API.ImageGallery,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['data'];
+
+        if (resBody['status'] == "1") {
+          for (var item in body) {
+            ImageGalleryModel model =
+                ImageGalleryModel(image: item['image'], title: item['title']);
+            list.add(model);
+          }
+          status = ProfileStatus.Success;
+          notifyListeners();
+        } else {
+          status = ProfileStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = ProfileStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = ProfileStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+    return list;
+  }
+
+
+  Future<List<VideoGalleryModel>> fetchVideoGallery(
+      BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
+    status = ProfileStatus.Ideal;
+    notifyListeners();
+    List<VideoGalleryModel> list = [];
+    try {
+      Response response = await _dio.post(
+        API.VideoGallery,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['data'];
+
+        if (resBody['status'] == "1") {
+          for (var item in body) {
+            VideoGalleryModel model =
+                VideoGalleryModel(image: item['image'], link: item['link']);
+            list.add(model);
+          }
+          status = ProfileStatus.Success;
+          notifyListeners();
+        } else {
+          status = ProfileStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = ProfileStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = ProfileStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+    return list;
+  }
+
+  Future<List<FAQModel>> fetchFAQ(
+      BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
+    status = ProfileStatus.Ideal;
+    notifyListeners();
+    List<FAQModel> list = [];
+    try {
+      Response response = await _dio.post(
+        API.FAQ,
+      );
+
+      var resBody = json.decode(response.data);
+      if (response.statusCode == 200) {
+        print('Response : ${response.data}');
+
+        var body = resBody['data'];
+
+        if (resBody['status'] == "1") {
+          for (var item in body) {
+            FAQModel model =
+                FAQModel.fromMap(item);
+            list.add(model);
+          }
+          status = ProfileStatus.Success;
+          notifyListeners();
+        } else {
+          status = ProfileStatus.Failed;
+          notifyListeners();
+          SnackBarService.instance.showSnackBarError((body['msg']));
+        }
+      } else {
+        status = ProfileStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance
+            .showSnackBarError('Error : ${response.statusMessage!}');
+      }
+    } catch (e) {
+      status = ProfileStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance.showSnackBarError(e.toString());
+    }
+    return list;
   }
 }

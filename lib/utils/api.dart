@@ -41,6 +41,9 @@ class API {
 
   static const String Feedback = '${BASE_URL}report';
   static const String OrderFeedback = '${BASE_URL}feedback.php';
+  static const String ImageGallery = '${BASE_URL}gallerylist';
+  static const String VideoGallery = '${BASE_URL}videolist';
+  static const String FAQ = '${BASE_URL}faqlist';
 
   // Webview urls
   static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';

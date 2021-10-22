@@ -15,8 +15,10 @@ import 'package:cjspoton/screen/e_dining/e_dining_datacontainer_model.dart';
 import 'package:cjspoton/screen/e_dining/e_dining_table_booking_screen/e_dinig_table_booking_screen.dart';
 import 'package:cjspoton/screen/e_dining/edining_cart/e_dining_cart_screen.dart';
 import 'package:cjspoton/screen/e_dining/edining_menu/e_dining_menu_screen.dart';
+import 'package:cjspoton/screen/faq/faq_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
 import 'package:cjspoton/screen/forgot_password/forgot_password_screen.dart';
+import 'package:cjspoton/screen/image_gallery/image_gallery_screen.dart';
 import 'package:cjspoton/screen/introduction/introduction.dart';
 import 'package:cjspoton/screen/ios_login_needed/ios_login_needed.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
@@ -38,6 +40,8 @@ import 'package:cjspoton/screen/take_away/take_away_cart/take_away_cart_screen.d
 import 'package:cjspoton/screen/take_away/take_away_menu/take_away_menu_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
 import 'package:cjspoton/screen/update_address/update_delivery_address_screen.dart';
+import 'package:cjspoton/screen/video_gallery/video_fullscreen.dart';
+import 'package:cjspoton/screen/video_gallery/video_gallery_screen.dart';
 import 'package:cjspoton/update_profile/update_profile_screen.dart';
 import 'package:cjspoton/widgets/webview_internal.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +149,17 @@ class NavRoute {
           builder: (_) => OrderFeedback(
               orderDetailModel: settings.arguments as OrderDetailModel),
         );
+      case ImageGalleryScreen.IMAGE_GALLERY_ROUTE:
+        return MaterialPageRoute(builder: (_) => ImageGalleryScreen());
+      case VideoGalleryScreen.VIDEO_GALLERY_ROUTE:
+        return MaterialPageRoute(builder: (_) => VideoGalleryScreen());
+      case FAQScreen.FAQ_ROUTE:
+        return MaterialPageRoute(builder: (_) => FAQScreen());
+      case VideoPlayerScreen.VIDEO_PLAYER_ROUTE:
+        return MaterialPageRoute(
+            builder: (_) => VideoPlayerScreen(
+                  videoID: settings.arguments as String,
+                ));
 
       // Take Away
       case TakeAwayMenuScreen.TAKE_AWAY_MENU_SCREEN_ROUTE:

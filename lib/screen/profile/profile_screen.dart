@@ -4,11 +4,14 @@ import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/all_address/all_address.dart';
 import 'package:cjspoton/screen/change_password/change_password.dart';
+import 'package:cjspoton/screen/faq/faq_screen.dart';
 import 'package:cjspoton/screen/feedback/feedback_screen.dart';
+import 'package:cjspoton/screen/image_gallery/image_gallery_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/screen/privacy_policy/privacy_policy_screen.dart';
 import 'package:cjspoton/screen/term_of_use/term_of_use_screen.dart';
+import 'package:cjspoton/screen/video_gallery/video_gallery_screen.dart';
 import 'package:cjspoton/services/auth_service.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -268,6 +271,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
           tileColor: bgColor,
           title: Text(
             'Contact Us',
+            style:
+                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+          ),
+          minVerticalPadding: defaultPadding * 1.5,
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+        Divider(
+          color: borderColor,
+          height: 1,
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(ImageGalleryScreen.IMAGE_GALLERY_ROUTE);
+          },
+          leading: CircleAvatar(
+            backgroundColor: Colors.indigo,
+            child: Icon(
+              Icons.image,
+              color: bgColor,
+            ),
+          ),
+          tileColor: bgColor,
+          title: Text(
+            'Image Gallery',
+            style:
+                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+          ),
+          minVerticalPadding: defaultPadding * 1.5,
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+        Divider(
+          color: borderColor,
+          height: 1,
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.of(context)
+                .pushNamed(VideoGalleryScreen.VIDEO_GALLERY_ROUTE);
+          },
+          leading: CircleAvatar(
+            backgroundColor: Colors.cyan,
+            child: Icon(
+              Icons.play_arrow_outlined,
+              color: bgColor,
+            ),
+          ),
+          tileColor: bgColor,
+          title: Text(
+            'Videos',
+            style:
+                Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
+          ),
+          minVerticalPadding: defaultPadding * 1.5,
+          trailing: Icon(Icons.keyboard_arrow_right),
+        ),
+        Divider(
+          color: borderColor,
+          height: 1,
+        ),
+        ListTile(
+          onTap: () {
+            Navigator.of(context).pushNamed(FAQScreen.FAQ_ROUTE);
+          },
+          leading: CircleAvatar(
+            backgroundColor: Colors.lightBlue,
+            child: Icon(
+              Icons.help_outline_outlined,
+              color: bgColor,
+            ),
+          ),
+          tileColor: bgColor,
+          title: Text(
+            'FAQ',
             style:
                 Theme.of(context).textTheme.subtitle1?.copyWith(fontSize: 18),
           ),

@@ -48,6 +48,7 @@ dependencies:
   fluttertoast: ^8.0.7
   font_awesome_flutter: ^9.1.0
   future_progress_dialog: ^0.2.0
+  gallery_view: ^1.0.0+1
   google_fonts: ^2.1.0
   google_sign_in: ^5.0.7
   http: ^0.13.3
@@ -70,6 +71,7 @@ dependencies:
   video_player: ^2.1.14
   webview_flutter: ^2.0.13
   whatsapp_unilink: ^2.0.0
+  youtube_player_flutter: ^8.0.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.1"
