@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -214,6 +215,25 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                       setState(() {
                         prefs.setString(
                             PrefernceKey.SELECTED_OUTLET, model.toJson());
+                        late PincodeModel _pinCodeModel;
+                        if (model.outletId == 'ECJ2')
+                          _pinCodeModel = PincodeModel(
+                              id: '1',
+                              pincode: '400705',
+                              charge: '0',
+                              status: '1',
+                              outletid: 'ECJ2',
+                              location: 'Sanpada');
+                        else
+                          _pinCodeModel = PincodeModel(
+                              id: '4',
+                              pincode: '400706',
+                              charge: '0',
+                              status: '1',
+                              outletid: 'ECJ29',
+                              location: 'Nerul\/Seawoods');
+                        prefs.setString(PrefernceKey.SELECTED_PINCODE,
+                            _pinCodeModel.toJson());
                       });
                       if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
                         Navigator.of(context).pushNamedAndRemoveUntil(

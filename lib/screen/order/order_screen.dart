@@ -117,7 +117,7 @@ class _OrderScreenState extends State<OrderScreen> {
                               ],
                             ),
                             Text(
-                              'Order #${order.order.id}',
+                              'Order #${order.order.showorderid.isEmpty ? order.order.id : order.order.showorderid}',
                               style: Theme.of(context).textTheme.caption,
                             ),
                             // if (order.address.isEmpty)
@@ -171,25 +171,26 @@ class _OrderScreenState extends State<OrderScreen> {
                             SizedBox(
                               height: 5,
                             ),
-                            InkWell(
-                              onTap: () => Navigator.of(context).pushNamed(
-                                  OrderFeedback.ORDER_FEEDBACK_ROUTE,
-                                  arguments: order),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 3),
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: primaryColor),
-                                  borderRadius: BorderRadius.circular(2),
+                            if (isOrderDelivered(order.order.order_status))
+                              InkWell(
+                                onTap: () => Navigator.of(context).pushNamed(
+                                    OrderFeedback.ORDER_FEEDBACK_ROUTE,
+                                    arguments: order),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: 3),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: primaryColor),
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                  child: Text(
+                                    'FEEDBACK',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .caption
+                                        ?.copyWith(color: primaryColor),
+                                  ),
                                 ),
-                                child: Text(
-                                  'FEEDBACK',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption
-                                      ?.copyWith(color: primaryColor),
-                                ),
-                              ),
-                            )
+                              )
                           ],
                         ),
                       ),

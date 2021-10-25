@@ -48,6 +48,7 @@ class OrderModel {
   String adjust_amount_table;
   String refund_amount;
   String paid_amount;
+  String showorderid;
   String app;
   OrderModel({
     required this.id,
@@ -97,6 +98,7 @@ class OrderModel {
     required this.adjust_amount_table,
     required this.refund_amount,
     required this.paid_amount,
+    required this.showorderid,
     required this.app,
   });
 
@@ -148,6 +150,7 @@ class OrderModel {
     String? adjust_amount_table,
     String? refund_amount,
     String? paid_amount,
+    String? showorderid,
     String? app,
   }) {
     return OrderModel(
@@ -200,6 +203,7 @@ class OrderModel {
       adjust_amount_table: adjust_amount_table ?? this.adjust_amount_table,
       refund_amount: refund_amount ?? this.refund_amount,
       paid_amount: paid_amount ?? this.paid_amount,
+      showorderid: showorderid ?? this.showorderid,
       app: app ?? this.app,
     );
   }
@@ -253,6 +257,7 @@ class OrderModel {
       'adjust_amount_table': adjust_amount_table,
       'refund_amount': refund_amount,
       'paid_amount': paid_amount,
+      'showorderid': showorderid,
       'app': app,
     };
   }
@@ -306,6 +311,7 @@ class OrderModel {
       adjust_amount_table: map['adjust_amount_table'],
       refund_amount: map['refund_amount'],
       paid_amount: map['paid_amount'],
+      showorderid: map['showorderid'],
       app: map['app'],
     );
   }
@@ -317,7 +323,7 @@ class OrderModel {
 
   @override
   String toString() {
-    return 'OrderModel(id: $id, trans_id: $trans_id, cust_id: $cust_id, oid: $oid, coupon_code: $coupon_code, coupon_type: $coupon_type, coupon_minimum: $coupon_minimum, coupon_maximum: $coupon_maximum, coupon_orignal_discount: $coupon_orignal_discount, wheelcoupon: $wheelcoupon, coupon_value: $coupon_value, subtotal: $subtotal, coupon_discountamount: $coupon_discountamount, delivery_charge: $delivery_charge, gst: $gst, gst_amount: $gst_amount, service_charge: $service_charge, packging_charge: $packging_charge, total_amount: $total_amount, date_creation: $date_creation, genrated_by: $genrated_by, payment_type: $payment_type, status: $status, order_status: $order_status, ordertype: $ordertype, whosorderadd_id: $whosorderadd_id, order_addrole: $order_addrole, delivery_boy_id: $delivery_boy_id, delivery_boy_name: $delivery_boy_name, delivery_otp: $delivery_otp, link_uid: $link_uid, noofpeopletable: $noofpeopletable, tablebook: $tablebook, randpaymeny: $randpaymeny, outletid: $outletid, addrecordid: $addrecordid, waiter_tip: $waiter_tip, txnid: $txnid, cart_id: $cart_id, address_id: $address_id, delivey_who: $delivey_who, uricko_token: $uricko_token, uricko_status: $uricko_status, table_booking_id: $table_booking_id, adjust_amount_table: $adjust_amount_table, refund_amount: $refund_amount, paid_amount: $paid_amount, app: $app)';
+    return 'OrderModel(id: $id, trans_id: $trans_id, cust_id: $cust_id, oid: $oid, coupon_code: $coupon_code, coupon_type: $coupon_type, coupon_minimum: $coupon_minimum, coupon_maximum: $coupon_maximum, coupon_orignal_discount: $coupon_orignal_discount, wheelcoupon: $wheelcoupon, coupon_value: $coupon_value, subtotal: $subtotal, coupon_discountamount: $coupon_discountamount, delivery_charge: $delivery_charge, gst: $gst, gst_amount: $gst_amount, service_charge: $service_charge, packging_charge: $packging_charge, total_amount: $total_amount, date_creation: $date_creation, genrated_by: $genrated_by, payment_type: $payment_type, status: $status, order_status: $order_status, ordertype: $ordertype, whosorderadd_id: $whosorderadd_id, order_addrole: $order_addrole, delivery_boy_id: $delivery_boy_id, delivery_boy_name: $delivery_boy_name, delivery_otp: $delivery_otp, link_uid: $link_uid, noofpeopletable: $noofpeopletable, tablebook: $tablebook, randpaymeny: $randpaymeny, outletid: $outletid, addrecordid: $addrecordid, waiter_tip: $waiter_tip, txnid: $txnid, cart_id: $cart_id, address_id: $address_id, delivey_who: $delivey_who, uricko_token: $uricko_token, uricko_status: $uricko_status, table_booking_id: $table_booking_id, adjust_amount_table: $adjust_amount_table, refund_amount: $refund_amount, paid_amount: $paid_amount, showorderid: $showorderid, app: $app)';
   }
 
   @override
@@ -372,6 +378,7 @@ class OrderModel {
         other.adjust_amount_table == adjust_amount_table &&
         other.refund_amount == refund_amount &&
         other.paid_amount == paid_amount &&
+        other.showorderid == showorderid &&
         other.app == app;
   }
 
@@ -424,6 +431,7 @@ class OrderModel {
         adjust_amount_table.hashCode ^
         refund_amount.hashCode ^
         paid_amount.hashCode ^
+        showorderid.hashCode ^
         app.hashCode;
   }
 }

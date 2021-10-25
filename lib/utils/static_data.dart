@@ -115,7 +115,7 @@ List<CJRouteOptionModel> getCJRouteOptions() {
         image: 'https://www.combojumbo.in/img/e-dining.png',
         redirectionUrl: WebviewInternal.WEBVIEW_ROUTE),
     CJRouteOptionModel(
-        name: 'Party Packs',
+        name: 'CJ\'s Hotcase',
         image: 'https://www.combojumbo.in/img/party-packs.png',
         redirectionUrl: WebviewInternal.WEBVIEW_ROUTE),
   ];

@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
@@ -8,13 +9,16 @@ import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
 import 'package:cjspoton/screen/home/home_screen.dart';
+import 'package:cjspoton/screen/ios_login_needed/ios_login_needed.dart';
 import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -286,8 +290,12 @@ class GetCartButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
-        Navigator.of(context)
-            .pushNamed(CartScreen.CART_ROUTE, arguments: refreshState);
+        if (prefs.getString(PrefernceKey.USER)!.isEmpty)
+          Navigator.of(context)
+              .pushNamed(IOSLoginNeeded.IOS_LOGIN_NEEDED_ROUTE);
+        else
+          Navigator.of(context)
+              .pushNamed(CartScreen.CART_ROUTE, arguments: refreshState);
       },
       icon: CartHelper.getCartCount() == 0
           ? Icon(

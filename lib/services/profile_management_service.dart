@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cjspoton/main.dart';
@@ -271,12 +272,13 @@ class ProfileManagementService extends ChangeNotifier {
         if (resBody['status'] == 1) {
           status = ProfileStatus.Success;
           notifyListeners();
-          SnackBarService.instance.showSnackBarSuccess((resBody['msg']));
+          SnackBarService.instance
+              .showSnackBarSuccess((resBody['body']['msg']));
           Navigator.of(context).pop();
         } else {
           status = ProfileStatus.Failed;
           notifyListeners();
-          SnackBarService.instance.showSnackBarError((resBody['msg']));
+          SnackBarService.instance.showSnackBarError((resBody['body']['msg']));
         }
       } else {
         status = ProfileStatus.Failed;
@@ -342,7 +344,6 @@ class ProfileManagementService extends ChangeNotifier {
     return list;
   }
 
-
   Future<List<VideoGalleryModel>> fetchVideoGallery(
       BuildContext context) async {
     ConnectionStatus connectionStatus =
@@ -394,8 +395,7 @@ class ProfileManagementService extends ChangeNotifier {
     return list;
   }
 
-  Future<List<FAQModel>> fetchFAQ(
-      BuildContext context) async {
+  Future<List<FAQModel>> fetchFAQ(BuildContext context) async {
     ConnectionStatus connectionStatus =
         await UniversalInternetChecker.checkInternet();
     if (connectionStatus == ConnectionStatus.offline ||
@@ -420,8 +420,7 @@ class ProfileManagementService extends ChangeNotifier {
 
         if (resBody['status'] == "1") {
           for (var item in body) {
-            FAQModel model =
-                FAQModel.fromMap(item);
+            FAQModel model = FAQModel.fromMap(item);
             list.add(model);
           }
           status = ProfileStatus.Success;

@@ -46,7 +46,7 @@ class API {
   static const String FAQ = '${BASE_URL}faqlist';
 
   // Webview urls
-  static const String HOTCASE = 'http://www.combojumbo.in/cj-hotcase/';
+  static const String HOTCASE = 'https://www.combojumbo.in/cj-hotcase/';
   static const String MUNCHBOX =
       'https://www.combojumbo.in/cj-hotcase/index#munchbox';
   static const String BANQUET_PPC = 'https://www.combojumbo.in/banquet-ppc/';

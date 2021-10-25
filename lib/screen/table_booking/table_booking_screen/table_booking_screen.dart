@@ -441,7 +441,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                   height: defaultPadding,
                 ),
                 Text(
-                  'This total sum of ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}/- will be adjusted in your final bill.',
+                  'Opt for a section and book your table. An booking charge of ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}/- will be levied which will be adjusted on your final bill.',
                   style: Theme.of(context)
                       .textTheme
                       .caption

@@ -475,6 +475,7 @@ class CartServices extends ChangeNotifier {
             refund_amount: orderJson['refund_amount'],
             paid_amount: orderJson['paid_amount'],
             app: orderJson['app'],
+            showorderid: orderJson['showorderid'],
           );
 
           List<OrderMenuDetails>? menuDetails = [];

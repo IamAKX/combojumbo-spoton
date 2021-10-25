@@ -46,7 +46,7 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                 Padding(
                   padding: const EdgeInsets.all(defaultPadding),
                   child: Text(
-                    'Add someting to your favourite list',
+                    'Add something to your favourite list',
                     textAlign: TextAlign.center,
                     style: Theme.of(context)
                         .textTheme

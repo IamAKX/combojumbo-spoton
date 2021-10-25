@@ -28,7 +28,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'ORDER #${widget.orderDetailModel.order.id}',
+              'ORDER #${widget.orderDetailModel.order.showorderid.isEmpty ? widget.orderDetailModel.order.id : widget.orderDetailModel.order.showorderid}',
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(

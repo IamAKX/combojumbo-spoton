@@ -40,8 +40,8 @@ class Constants {
           outletid: 'ECJ29',
           location: 'Nerul\/Seawoods');
   }
+
   static PincodeModel resetDefaultPincode() {
-   
     OutletModel outletModel =
         OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
     if (outletModel.outletId == 'ECJ2')
@@ -108,4 +108,8 @@ String getOrderStatus(String status) {
     default:
       return 'Order Received ';
   }
+}
+
+bool isOrderDelivered(String status) {
+  return status == 'delivered';
 }

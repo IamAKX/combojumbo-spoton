@@ -151,7 +151,8 @@ class CartHelper {
           double.parse(allChargesModel.Service_Charge) +
           getServiceCharge(allChargesModel);
     if (getTotalPriceOfCart() >=
-        allChargesModel!.min_order_free_shipping.toDouble())
+            allChargesModel!.min_order_free_shipping.toDouble() &&
+        allChargesModel.min_order_free_shipping.toDouble() != 0)
       amt += selectedPincode.charge.toDouble();
     if (couponDiscountDetailModel != null)
       amt -= getDiscountPrice(couponDiscountDetailModel);
