@@ -76,6 +76,11 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
+    if (prefs.containsKey(PrefernceKey.COUPON_CODE) &&
+        prefs.getString(PrefernceKey.COUPON_CODE)!.isNotEmpty) {
+      couponDiscountDetailModel = CouponDiscountDetailModel.fromJson(
+          prefs.getString(PrefernceKey.COUPON_CODE)!);
+    }
     if (couponDiscountDetailModel != null &&
         couponDiscountDetailModel!.minimum_order_value.isNotEmpty &&
         CartHelper.getTotalPriceOfCart().toDouble() <
@@ -377,7 +382,9 @@ class _CartScreenState extends State<CartScreen> {
                               'assets/images/discount.png',
                               width: 30,
                             ),
-                            trailing: Icon(Icons.chevron_right_outlined),
+                            trailing: couponDiscountDetailModel != null
+                                ? Icon(Icons.close)
+                                : Icon(Icons.chevron_right_outlined),
                             subtitle: couponDiscountDetailModel != null
                                 ? Text(
                                     'Offer applied on the bill',
@@ -388,17 +395,30 @@ class _CartScreenState extends State<CartScreen> {
                                 ? Text('APPLY COUPON')
                                 : Text(
                                     '${couponDiscountDetailModel!.coupon_code}'),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(CouponScreen.COUPON_ROUTE)
-                                  .then((value) {
-                                setState(() {
-                                  couponDiscountDetailModel =
-                                      value as CouponDiscountDetailModel?;
-                                  log(couponDiscountDetailModel.toString());
-                                });
-                              });
-                            },
+                            onTap: couponDiscountDetailModel != null
+                                ? () {
+                                    setState(() {
+                                      couponDiscountDetailModel = null;
+                                      prefs.remove(PrefernceKey.COUPON_CODE);
+                                    });
+                                  }
+                                : () {
+                                    Navigator.of(context)
+                                        .pushNamed(CouponScreen.COUPON_ROUTE)
+                                        .then((value) {
+                                      setState(() {
+                                        couponDiscountDetailModel =
+                                            value as CouponDiscountDetailModel?;
+                                        log(couponDiscountDetailModel
+                                            .toString());
+                                        if (couponDiscountDetailModel != null)
+                                          prefs.setString(
+                                              PrefernceKey.COUPON_CODE,
+                                              couponDiscountDetailModel!
+                                                  .toJson());
+                                      });
+                                    });
+                                  },
                           ),
                     // : DropdownSearch<String>(
                     //     mode: Mode.MENU,

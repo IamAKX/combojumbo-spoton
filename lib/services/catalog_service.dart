@@ -6,6 +6,7 @@ import 'package:cjspoton/model/add_on_model_item.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
+import 'package:cjspoton/screen/cj_spoton/table_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/api.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
@@ -201,6 +202,57 @@ class CatalogService extends ChangeNotifier {
       );
       list.add(model);
     }
+    return list;
+  }
+
+  Future<List<TableModel>> fetchAllTable(BuildContext context) async {
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return [];
+    }
+    status = CatalogStatus.Loading;
+    notifyListeners();
+    List<TableModel> list = [];
+    // try {
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+
+    var reqBody = FormData.fromMap({'outletid': outletModel.outletId});
+    Response response = await _dio.post(API.AllTable, data: reqBody);
+
+    var resBody = json.decode(response.data);
+    if (response.statusCode == 200) {
+      print('Response : ${response.data}');
+
+      var body = resBody['body'];
+
+      if (resBody['status'] == 1) {
+        for (var item in body) {
+          TableModel model = TableModel.fromMap(item);
+          list.add(model);
+        }
+        status = CatalogStatus.Success;
+        notifyListeners();
+      } else {
+        status = CatalogStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarError((resBody['msg']));
+      }
+    } else {
+      status = CatalogStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
+    }
+    // } catch (e) {
+    //   status = CatalogStatus.Failed;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
     return list;
   }
 }

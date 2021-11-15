@@ -40,7 +40,7 @@ class _FAQScreenState extends State<FAQScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: bgColor,
-        title: Text('Our Gallery'),
+        title: Text('FAQ'),
       ),
       body: _profileManagementService.status == ProfileStatus.Ideal
           ? Center(
@@ -72,7 +72,6 @@ class _FAQScreenState extends State<FAQScreen> {
                 ),
                 for (var question in faq.faqlist) ...{
                   ExpansionTile(
-                    
                     tilePadding:
                         EdgeInsets.symmetric(horizontal: defaultPadding),
                     backgroundColor: bgColor,
@@ -82,7 +81,7 @@ class _FAQScreenState extends State<FAQScreen> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: defaultPadding),
                         child: Text(
-                          question.ans,
+                          question.ans.trim() + "\n",
                         ),
                       ),
                     ],

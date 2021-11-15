@@ -5,6 +5,7 @@ import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
+import 'package:cjspoton/screen/cj_spoton/cj_spoton_table_booking_screen.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
@@ -117,9 +118,10 @@ class _MainContainerState extends State<MainContainer> {
       case 1:
         return OrderScreen();
       case 2:
-        return CommingSoonScreen(
-            menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
-                refreshMainContainerState: refreshState, categoryId: "0"));
+        // return CommingSoonScreen(
+        //     menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
+        //         refreshMainContainerState: refreshState, categoryId: "0"));
+        return CJSpotOnTableBookingScreen(refreshState);
       case 3:
         return FavouriteScreen(
           refreshMainContainerState: refreshState,
@@ -239,7 +241,16 @@ class _MainContainerState extends State<MainContainer> {
           ],
         );
       case 2:
-        return null;
+        return AppBar(
+          title: Text('CJ SpotOn - Book Table'),
+          backgroundColor: bgColor,
+          centerTitle: false,
+          actions: [
+            GetCartButton(
+              refreshState: refreshState,
+            ),
+          ],
+        );
       case 3:
         return AppBar(
           title: Text('CJ Fav'),

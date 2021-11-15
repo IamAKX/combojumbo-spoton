@@ -50,4 +50,7 @@ class API {
   static const String MUNCHBOX =
       'https://www.combojumbo.in/cj-hotcase/index#munchbox';
   static const String BANQUET_PPC = 'https://www.combojumbo.in/banquet-ppc/';
+
+  // CJ-Spotons
+  static const String AllTable = '${BASE_URL}tableapi';
 }
