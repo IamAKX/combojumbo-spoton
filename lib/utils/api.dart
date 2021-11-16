@@ -11,7 +11,9 @@ class API {
 
   static const String ForgotPasswordVerifyOTP =
       '${BASE_URL}forgototpverify.php';
-  static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
+  // static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
+  static const String ForgotPasswordResendOTP =
+      '${BASE_URL}resendotp-forgot.php';
   static const String ForgotPassword = '${BASE_URL}forgotpassword.php';
   static const String ResetPassword = '${BASE_URL}reset-password.php';
   static const String ChangePassword = '${BASE_URL}resetpassword.php';

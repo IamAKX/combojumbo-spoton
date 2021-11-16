@@ -518,6 +518,7 @@ class CartServices extends ChangeNotifier {
           }
           OrderDetailModel orderDetailModel = OrderDetailModel(
               order: orderModel,
+              orderdate: history['orderdate'],
               menuDetails: menuDetails,
               address: history['address'],
               outletname: history['outletname']);

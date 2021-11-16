@@ -659,7 +659,10 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                           //     ],
                           //   ),
                         },
-                        if (couponDiscountDetailModel != null)
+                        if (couponDiscountDetailModel != null &&
+                            CartHelper.getDiscountPrice(
+                                    couponDiscountDetailModel) >
+                                0)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

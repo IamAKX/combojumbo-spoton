@@ -32,7 +32,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
-              'Ordered on ${formatOrderTime(widget.orderDetailModel.order.date_creation)}',
+              'Ordered on ${widget.orderDetailModel.orderdate}',
               style: Theme.of(context).textTheme.caption,
             ),
           ],
@@ -202,9 +202,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   ?.copyWith(color: textColor),
             ),
           if (widget.orderDetailModel.order.ordertype == 'Delivery')
-            Text(
-              '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
-              style: Theme.of(context).textTheme.caption,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
+                style: Theme.of(context).textTheme.caption,
+              ),
             ),
         ],
       ),

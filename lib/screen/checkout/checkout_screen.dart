@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cjspoton/main.dart';
+import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/user_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/add_delivery_address_screen.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
@@ -103,15 +104,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     ),
                           ),
                           InkWell(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(
-                                    AddDeliveryAddress
-                                        .ADD_DELIVERY_ADDRESS_ROUTE,
-                                    arguments: widget.cartVriablesModel
-                                        .selectedPincode.pincode)
-                                .then((value) {
-                              reloadAddressList(context);
-                            }),
+                            onTap: () {
+                              OutletModel outletModel = OutletModel.fromJson(
+                                  prefs.getString(
+                                      PrefernceKey.SELECTED_OUTLET)!);
+
+                              Navigator.of(context)
+                                  .pushNamed(
+                                      AddDeliveryAddress
+                                          .ADD_DELIVERY_ADDRESS_ROUTE,
+                                      arguments: outletModel.outletId)
+                                  .then((value) {
+                                reloadAddressList(context);
+                              });
+                            },
                             child: Container(
                               alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(

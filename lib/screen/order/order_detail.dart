@@ -1,16 +1,19 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+
 import 'package:cjspoton/screen/order/order_menu_details.dart';
 import 'package:cjspoton/screen/order/order_model.dart';
-import 'package:flutter/foundation.dart';
 
 class OrderDetailModel {
   OrderModel order;
+  String orderdate;
   String outletname;
   String address;
   List<OrderMenuDetails> menuDetails;
   OrderDetailModel({
     required this.order,
+    required this.orderdate,
     required this.outletname,
     required this.address,
     required this.menuDetails,
@@ -18,12 +21,14 @@ class OrderDetailModel {
 
   OrderDetailModel copyWith({
     OrderModel? order,
+    String? orderdate,
     String? outletname,
     String? address,
     List<OrderMenuDetails>? menuDetails,
   }) {
     return OrderDetailModel(
       order: order ?? this.order,
+      orderdate: orderdate ?? this.orderdate,
       outletname: outletname ?? this.outletname,
       address: address ?? this.address,
       menuDetails: menuDetails ?? this.menuDetails,
@@ -33,15 +38,17 @@ class OrderDetailModel {
   Map<String, dynamic> toMap() {
     return {
       'order': order.toMap(),
+      'orderdate': orderdate,
       'outletname': outletname,
       'address': address,
-      'menuDetails': menuDetails.map((x) => x.toMap()).toList(),
+      'menuDetails': menuDetails?.map((x) => x.toMap())?.toList(),
     };
   }
 
   factory OrderDetailModel.fromMap(Map<String, dynamic> map) {
     return OrderDetailModel(
       order: OrderModel.fromMap(map['order']),
+      orderdate: map['orderdate'],
       outletname: map['outletname'],
       address: map['address'],
       menuDetails: List<OrderMenuDetails>.from(
@@ -56,7 +63,7 @@ class OrderDetailModel {
 
   @override
   String toString() {
-    return 'OrderDetailModel(order: $order, outletname: $outletname, address: $address, menuDetails: $menuDetails)';
+    return 'OrderDetailModel(order: $order, orderdate: $orderdate, outletname: $outletname, address: $address, menuDetails: $menuDetails)';
   }
 
   @override
@@ -65,6 +72,7 @@ class OrderDetailModel {
 
     return other is OrderDetailModel &&
         other.order == order &&
+        other.orderdate == orderdate &&
         other.outletname == outletname &&
         other.address == address &&
         listEquals(other.menuDetails, menuDetails);
@@ -73,6 +81,7 @@ class OrderDetailModel {
   @override
   int get hashCode {
     return order.hashCode ^
+        orderdate.hashCode ^
         outletname.hashCode ^
         address.hashCode ^
         menuDetails.hashCode;

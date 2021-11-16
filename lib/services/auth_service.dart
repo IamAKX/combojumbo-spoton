@@ -559,45 +559,48 @@ class AuthenticationService extends ChangeNotifier {
     status = AuthStatus.Authenticating;
     notifyListeners();
 
-    try {
-      UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
-      var reqBody = FormData.fromMap({
-        'cust_id': user.id,
-      });
-      String api = currentScreen == 'ForgotPasswordScreen'
-          ? API.ForgotPasswordResendOTP
-          : API.ResendOTP;
-      Response response = await _dio.post(
-        api,
-        data: reqBody,
-      );
-      print('Request : ${reqBody.fields}');
-      var resBody = json.decode(response.data);
-      if (response.statusCode == 200) {
-        print('Response : ${response.data}');
+    // try {
+    UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'cust_id': user.id,
+    });
+    String api = currentScreen == 'ForgotPasswordScreen'
+        ? API.ForgotPasswordResendOTP
+        : API.ResendOTP;
+    Response response = await _dio.post(
+      api,
+      data: reqBody,
+    );
+    log('Request : ${reqBody.fields}');
+    log('Response : ${response.realUri}');
+    log('Response : ${response.data}');
 
-        var body = resBody['body'];
+    var resBody = json.decode(response.data);
+    log('Response : ${response.statusCode}');
 
-        if (resBody['status'] == 1) {
-          status = AuthStatus.Authenticated;
-          notifyListeners();
-          SnackBarService.instance.showSnackBarSuccess(body['msg']);
-        } else {
-          status = AuthStatus.Error;
-          notifyListeners();
-          SnackBarService.instance.showSnackBarError((body['msg']));
-        }
+    if (response.statusCode == 200) {
+      var body = resBody['body'];
+
+      if (resBody['status'] == 1) {
+        status = AuthStatus.Authenticated;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarSuccess(body['msg']);
       } else {
         status = AuthStatus.Error;
         notifyListeners();
-        SnackBarService.instance
-            .showSnackBarError('Error : ${response.statusMessage!}');
+        SnackBarService.instance.showSnackBarError((body['msg']));
       }
-    } catch (e) {
+    } else {
       status = AuthStatus.Error;
       notifyListeners();
-      SnackBarService.instance.showSnackBarError(e.toString());
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
     }
+    // } catch (e) {
+    //   status = AuthStatus.Error;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
   }
 
   Future<void> forgotPassword(String phone, BuildContext context) async {

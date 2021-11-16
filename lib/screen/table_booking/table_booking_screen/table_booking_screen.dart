@@ -433,7 +433,7 @@ class _TableBookingScreenState extends State<TableBookingScreen> {
                     startPayUMoneyPayment(tableBookingModel);
                   },
                   child: Text(
-                    'Pay ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}',
+                    'Pay ${Constants.RUPEE}${allChargesModel!.Table_Booking_Charge}/-',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

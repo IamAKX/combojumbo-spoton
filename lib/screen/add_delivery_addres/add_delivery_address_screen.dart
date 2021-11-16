@@ -50,12 +50,12 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
         pincodeList = value;
         if (widget.filterPincode != '') {
           pincodeList = pincodeList
-              .where((e) => e.pincode == widget.filterPincode)
+              .where((e) => e.outletid == widget.filterPincode)
               .toList();
         }
         if (widget.filterPincode != '')
-          selectedPincode = pincodeList
-              .firstWhere((element) => element.pincode == widget.filterPincode);
+          selectedPincode = pincodeList.firstWhere(
+              (element) => element.outletid == widget.filterPincode);
         else {
           PincodeModel pincodeModel = Constants.getDefaultPincode();
           selectedPincode = pincodeList

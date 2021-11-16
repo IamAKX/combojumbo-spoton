@@ -272,13 +272,12 @@ class ProfileManagementService extends ChangeNotifier {
         if (resBody['status'] == 1) {
           status = ProfileStatus.Success;
           notifyListeners();
-          SnackBarService.instance
-              .showSnackBarSuccess((resBody['body']['msg']));
+          SnackBarService.instance.showSnackBarSuccess((resBody['msg']));
           Navigator.of(context).pop();
         } else {
           status = ProfileStatus.Failed;
           notifyListeners();
-          SnackBarService.instance.showSnackBarError((resBody['body']['msg']));
+          SnackBarService.instance.showSnackBarError((resBody['msg']));
         }
       } else {
         status = ProfileStatus.Failed;

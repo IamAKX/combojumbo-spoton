@@ -69,9 +69,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       //       aspectRatioPickerButtonHidden: true,
       //     ));
       imageFile = await ImageCrop.sampleImage(
-      file: File(image.path),
-      preferredSize: context.size!.longestSide.ceil(),
-    );
+        file: File(image.path),
+        preferredSize: context.size!.longestSide.ceil(),
+      );
 
       setState(() {});
     }
@@ -170,12 +170,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     _profileManagementService.status == ProfileStatus.Loading
                         ? null
                         : () {
-                            _profileManagementService.updateProfile(
-                                _nameCtrl.text,
-                                _emailCtrl.text,
-                                _phoneCtrl.text,
-                                imageFile,
-                                context);
+                            _profileManagementService
+                                .updateProfile(_nameCtrl.text, _emailCtrl.text,
+                                    _phoneCtrl.text, imageFile, context)
+                                .then((value) => Navigator.of(context).pop());
                           },
                 child: Text(
                   _profileManagementService.status == ProfileStatus.Loading

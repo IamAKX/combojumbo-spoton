@@ -606,7 +606,10 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                               ),
                             ],
                           ),
-                        if (couponDiscountDetailModel != null)
+                        if (couponDiscountDetailModel != null &&
+                            CartHelper.getDiscountPrice(
+                                    couponDiscountDetailModel) >
+                                0)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

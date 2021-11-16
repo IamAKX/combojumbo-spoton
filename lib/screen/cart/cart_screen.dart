@@ -590,7 +590,10 @@ class _CartScreenState extends State<CartScreen> {
                               ],
                             ),
                         },
-                        if (couponDiscountDetailModel != null)
+                        if (couponDiscountDetailModel != null &&
+                            CartHelper.getDiscountPrice(
+                                    couponDiscountDetailModel) >
+                                0)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

@@ -125,7 +125,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 style: Theme.of(context).textTheme.caption,
                               ),
                               Text(
-                                '${order.noguest} Guests',
+                                '${order.noguest} Guest${order.noguest == '1' ? '' : 's'}',
                                 style: Theme.of(context).textTheme.subtitle2,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
