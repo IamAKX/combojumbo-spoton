@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cjspoton/model/add_slider_model.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
+import 'package:cjspoton/model/offer_item.dart';
+import 'package:cjspoton/model/offer_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/home/home_widgets.dart';
@@ -36,6 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CategoryModel> list = [];
   List<FoodModel> favList = [];
   late CategoryModel combocategory;
+  OfferModel? offerModel = null;
 
   @override
   void initState() {
@@ -46,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) => _catalogService.fetchAllFoodItem(context).then(
         (value) {
-          setState(() {
+          setState(() async {
             list = value;
             if (list.any((element) =>
                 element.categoryName.toLowerCase().contains('combo')))
@@ -54,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   element.categoryName.toLowerCase().contains('combo'));
             else
               combocategory = list.first;
+            offerModel = await _catalogService.fetchOffer(context);
           });
         },
       ),
@@ -76,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _catalogService = Provider.of<CatalogService>(context);
     SnackBarService.instance.buildContext = context;
     screenSize = MediaQuery.of(context).size;
+
     return list.isEmpty
         ? Center(
             child: CircularProgressIndicator(),
@@ -200,151 +207,174 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 1,
                 color: hintColor,
               ),
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                width: double.infinity,
-                child: CarouselSlider(
-                  items: [
-                    for (AddSliderCardModel model in getAdSlider()) ...{
-                      InkWell(
-                        onTap: () {
-                          switch (model.redirection) {
-                            case MenuScreen.MENU_SCREEN_ROUTE:
-                              Navigator.of(context).pushNamed(
-                                MenuScreen.MENU_SCREEN_ROUTE,
-                                arguments: MenuScreenNavigatorPayloadModel(
-                                  categoryId: "${model.arguments}",
-                                  refreshMainContainerState:
-                                      widget.refreshMainContainerState,
+              if (offerModel != null &&
+                  offerModel!.data != null &&
+                  offerModel!.data!.isNotEmpty)
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  width: double.infinity,
+                  child: CarouselSlider(
+                    items: [
+                      // for (AddSliderCardModel model in getAdSlider()) ...{
+                      for (OfferItemModel model in offerModel!.data!) ...{
+                        InkWell(
+                          onTap: () {
+                            switch (model.data!.type) {
+                              case Constants.OFFER_REDIRECTION_INTERNAL:
+                                Navigator.of(context).pushNamed(
+                                  MenuScreen.MENU_SCREEN_ROUTE,
+                                  arguments: MenuScreenNavigatorPayloadModel(
+                                    categoryId:
+                                        "${model.data!.link!.split('/').last}",
+                                    refreshMainContainerState:
+                                        widget.refreshMainContainerState,
+                                  ),
+                                );
+                                return;
+                              case Constants.OFFER_REDIRECTION_EXTERNAL:
+                                Navigator.of(context).pushNamed(
+                                  WebviewInternal.WEBVIEW_ROUTE,
+                                  arguments: model.data!.link,
+                                );
+                                return;
+                              default:
+                                Navigator.of(context).pushNamed(
+                                  CommingSoonScreen.COMMING_SOON_ROUTE,
+                                  arguments: MenuScreenNavigatorPayloadModel(
+                                    categoryId: "0",
+                                    refreshMainContainerState:
+                                        widget.refreshMainContainerState,
+                                  ),
+                                );
+                                return;
+                            }
+                          },
+                          child: Container(
+                            height: 250,
+                            width: 200,
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            padding: EdgeInsets.only(
+                              left: defaultPadding,
+                              top: defaultPadding,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              gradient: LinearGradient(
+                                end: Alignment.topLeft,
+                                begin: Alignment.bottomRight,
+                                colors: <Color>[
+                                  HexColor.fromHex(model.data!.color!),
+                                  HexColor.fromHex(model.data!.color!)
+                                      .withOpacity(0.5),
+                                  HexColor.fromHex(model.data!.color!)
+                                      .withOpacity(0.3),
+                                ],
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${model.data!.t1}',
+                                  // maxLines: 1,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 35,
+                                          height: 0.8),
                                 ),
-                              );
-                              return;
-                            case WebviewInternal.WEBVIEW_ROUTE:
-                              Navigator.of(context).pushNamed(
-                                WebviewInternal.WEBVIEW_ROUTE,
-                                arguments: model.arguments,
-                              );
-                              return;
-                            case CommingSoonScreen.COMMING_SOON_ROUTE:
-                              Navigator.of(context).pushNamed(
-                                CommingSoonScreen.COMMING_SOON_ROUTE,
-                                arguments: MenuScreenNavigatorPayloadModel(
-                                  categoryId: "${model.arguments}",
-                                  refreshMainContainerState:
-                                      widget.refreshMainContainerState,
+                                Text(
+                                  '${model.data!.t2}',
+                                  maxLines: 1,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        height: 0.9,
+                                      ),
                                 ),
-                              );
-                              return;
-                          }
-                        },
-                        child: Container(
-                          height: 250,
-                          width: 200,
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          padding: EdgeInsets.only(
-                            left: defaultPadding,
-                            top: defaultPadding,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            gradient: LinearGradient(
-                              end: Alignment.topLeft,
-                              begin: Alignment.bottomRight,
-                              colors: <Color>[
-                                model.color,
-                                model.color.withOpacity(0.5),
-                                model.color.withOpacity(0.3),
+                                Text(
+                                  '${model.data!.t3}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .caption
+                                      ?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  height: 118,
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        bottom: -20,
+                                        right: -20,
+                                        child: CachedNetworkImage(
+                                          fit: BoxFit.fitHeight,
+                                          imageUrl: model.image!,
+                                          height: 150,
+                                          width: 160,
+                                          progressIndicatorBuilder: (context,
+                                                  url, downloadProgress) =>
+                                              Center(
+                                                  child:
+                                                      CircularProgressIndicator(
+                                                          value:
+                                                              downloadProgress
+                                                                  .progress)),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        ),
+                                        // child: Image.network(
+                                        //   model.image!,
+                                        //   height: 120,
+                                        //   width: 160,
+                                        //   fit: BoxFit.fitHeight,
+                                        // ),
+                                      ),
+                                      Positioned(
+                                        top: 10,
+                                        left: 0,
+                                        child: CircleAvatar(
+                                          backgroundColor: bgColor,
+                                          radius: 20,
+                                          child: Icon(
+                                            Icons.keyboard_arrow_right,
+                                            size: 30,
+                                            color: textColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '${model.text1}',
-                                // maxLines: 1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    ?.copyWith(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w900,
-                                        fontSize: 35,
-                                        height: 0.8),
-                              ),
-                              Text(
-                                '${model.text2}',
-                                maxLines: 1,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      height: 0.9,
-                                    ),
-                              ),
-                              Text(
-                                '${model.text3}',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .caption
-                                    ?.copyWith(
-                                      color: Colors.white,
-                                    ),
-                              ),
-                              Spacer(),
-                              Container(
-                                height: 118,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      bottom: -20,
-                                      right: -30,
-                                      child: Image.asset(
-                                        model.imageLink,
-                                        height: 120,
-                                        width: 160,
-                                        fit: BoxFit.fitHeight,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 10,
-                                      left: 0,
-                                      child: CircleAvatar(
-                                        backgroundColor: bgColor,
-                                        radius: 20,
-                                        child: Icon(
-                                          Icons.keyboard_arrow_right,
-                                          size: 30,
-                                          color: textColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
                         ),
-                      ),
-                    }
-                  ],
-                  options: CarouselOptions(
-                    height: 250,
-                    initialPage: 0,
-                    viewportFraction: 0.5,
-                    enableInfiniteScroll: true,
-                    reverse: false,
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 5),
-                    autoPlayAnimationDuration: Duration(milliseconds: 800),
-                    autoPlayCurve: Curves.fastOutSlowIn,
-                    enlargeCenterPage: false,
-                    scrollDirection: Axis.horizontal,
+                      }
+                    ],
+                    options: CarouselOptions(
+                      height: 250,
+                      initialPage: 0,
+                      viewportFraction: 0.5,
+                      enableInfiniteScroll: true,
+                      reverse: false,
+                      autoPlay: true,
+                      autoPlayInterval: Duration(seconds: 5),
+                      autoPlayAnimationDuration: Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enlargeCenterPage: false,
+                      scrollDirection: Axis.horizontal,
+                    ),
                   ),
                 ),
-              ),
               SizedBox(
                 height: defaultPadding,
               ),
@@ -369,37 +399,39 @@ class _HomeScreenState extends State<HomeScreen> {
                   favList: favList,
                   reloadFavList: loadFavouriteFood,
                   refreshState: refreshState),
-              InkWell(
-                onTap: () => Navigator.of(context).pushNamed(
-                  MenuScreen.MENU_SCREEN_ROUTE,
-                  arguments: MenuScreenNavigatorPayloadModel(
-                    categoryId: "0",
-                    refreshMainContainerState: widget.refreshMainContainerState,
+              if (offerModel != null && offerModel!.coupon_image != null)
+                InkWell(
+                  onTap: () => Navigator.of(context).pushNamed(
+                    MenuScreen.MENU_SCREEN_ROUTE,
+                    arguments: MenuScreenNavigatorPayloadModel(
+                      categoryId: "0",
+                      refreshMainContainerState:
+                          widget.refreshMainContainerState,
+                    ),
                   ),
-                ),
-                child: Container(
-                  margin: EdgeInsets.symmetric(
-                      vertical: defaultPadding, horizontal: defaultPadding / 2),
-                  height: 200,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    // child: CachedNetworkImage(
-                    //   fit: BoxFit.cover,
-                    //   imageUrl:
-                    //       'https://askbootstrap.com/preview/swiggi/template2/img/banner.png',
-                    //   progressIndicatorBuilder:
-                    //       (context, url, downloadProgress) => Center(
-                    //           child: CircularProgressIndicator(
-                    //               value: downloadProgress.progress)),
-                    //   errorWidget: (context, url, error) => Icon(Icons.error),
-                    // ),
-                    child: Image.asset(
-                      'assets/images/banner.jpg',
-                      fit: BoxFit.cover,
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: defaultPadding,
+                        horizontal: defaultPadding / 2),
+                    height: 200,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        fit: BoxFit.cover,
+                        imageUrl: offerModel!.coupon_image!,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
+                      // child: Image.asset(
+                      //   'assets/images/banner.jpg',
+                      //   fit: BoxFit.cover,
+                      // ),
                     ),
                   ),
                 ),
-              ),
               SubHeading(
                 title: 'Combos',
                 context: context,

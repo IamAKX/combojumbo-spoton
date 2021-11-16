@@ -16,6 +16,9 @@ class Constants {
   static const String DIGITS = '0123456789';
   static const String SPECIAL_CHARACTER = '.,/<>?;:[]\{}|!@#%^&*()-=_+';
 
+  static const String OFFER_REDIRECTION_INTERNAL = 'internal';
+  static const String OFFER_REDIRECTION_EXTERNAL = 'external';
+
   static PincodeModel getDefaultPincode() {
     if (prefs.getString(PrefernceKey.SELECTED_PINCODE) != null)
       return PincodeModel.fromJson(

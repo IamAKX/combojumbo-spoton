@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/add_on_model.dart';
 import 'package:cjspoton/model/add_on_model_item.dart';
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/model/offer_model.dart';
 import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/screen/cj_spoton/table_model.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
@@ -54,8 +56,6 @@ class CatalogService extends ChangeNotifier {
 
       var resBody = json.decode(response.data);
       if (response.statusCode == 200) {
-        print('Response : ${response.data}');
-
         var body = resBody['body'];
 
         if (resBody['status'] == 1) {
@@ -115,8 +115,6 @@ class CatalogService extends ChangeNotifier {
 
     var resBody = json.decode(response.data.toString());
     if (response.statusCode == 200) {
-      print('Response : $resBody');
-
       var body = resBody['Category'];
 
       if (resBody['status'] == "1") {
@@ -226,8 +224,6 @@ class CatalogService extends ChangeNotifier {
 
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
-      print('Response : ${response.data}');
-
       var body = resBody['body'];
 
       if (resBody['status'] == 1) {
@@ -254,5 +250,52 @@ class CatalogService extends ChangeNotifier {
     //   SnackBarService.instance.showSnackBarError(e.toString());
     // }
     return list;
+  }
+
+  Future<OfferModel?> fetchOffer(BuildContext context) async {
+    late OfferModel offerModel;
+    ConnectionStatus connectionStatus =
+        await UniversalInternetChecker.checkInternet();
+    if (connectionStatus == ConnectionStatus.offline ||
+        connectionStatus == ConnectionStatus.unknown) {
+      SnackBarService.instance
+          .showSnackBarError('You are not connected to internet');
+      return null;
+    }
+    status = CatalogStatus.Loading;
+    notifyListeners();
+    // try {
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+    var reqBody = FormData.fromMap({'outletid': outletModel.outletId});
+
+    Response response = await _dio.post(
+      API.OfferHome,
+      data: reqBody,
+    );
+
+    var resBody = json.decode(response.data.toString());
+    if (response.statusCode == 200) {
+      if (resBody['status'] == 1) {
+        offerModel = OfferModel.fromMap(resBody);
+        status = CatalogStatus.Success;
+        notifyListeners();
+      } else {
+        status = CatalogStatus.Failed;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarError('${resBody['status']}');
+      }
+    } else {
+      status = CatalogStatus.Failed;
+      notifyListeners();
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
+    }
+    // } catch (e) {
+    //   status = CatalogStatus.Failed;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
+    return offerModel;
   }
 }
