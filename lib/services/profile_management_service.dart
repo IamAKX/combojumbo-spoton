@@ -201,6 +201,7 @@ class ProfileManagementService extends ChangeNotifier {
           status = ProfileStatus.Success;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess((body['msg']));
+          Navigator.of(context).pop();
         } else {
           status = ProfileStatus.Failed;
           notifyListeners();

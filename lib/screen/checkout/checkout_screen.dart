@@ -299,6 +299,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             .placeOrder(cartVriablesModel, address, response, paymentParam,
                 payUMoneyTxnId, 'success', context)
             .then((value) {
+          Utilities().removeAppliedDiscout();
           if (value)
             Navigator.of(context).pushNamedAndRemoveUntil(
                 MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,

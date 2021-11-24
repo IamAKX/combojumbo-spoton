@@ -1,4 +1,6 @@
+import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/city_model.dart';
+import 'package:cjspoton/model/outlet_model.dart';
 import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/model/state_model.dart';
 import 'package:cjspoton/screen/add_delivery_addres/address_model.dart';
@@ -6,6 +8,7 @@ import 'package:cjspoton/services/address_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
+import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/widgets/custom_edittext_with_heading%20copy.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -485,6 +488,8 @@ class _AddDeliveryAddressState extends State<AddDeliveryAddress> {
                               .showSnackBarError('Address 1 is mandatory');
                           return;
                         } else {
+                          OutletModel outletModel = OutletModel.fromJson(
+                              prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
                           AddressModel addressModel = AddressModel(
                               pincode: selectedPincode!.id,
                               address1: completeAddressCtrl1.text,

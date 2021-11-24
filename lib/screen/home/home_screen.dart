@@ -47,20 +47,36 @@ class _HomeScreenState extends State<HomeScreen> {
     // TODO: implement initState
     super.initState();
     loadFavouriteFood();
-
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) => _catalogService.fetchAllFoodItem(context).then(
-        (value) {
-          setState(() async {
-            list = value;
-            if (list.any((element) =>
-                element.categoryName.toLowerCase().contains('combo')))
-              combocategory = list.firstWhere((element) =>
-                  element.categoryName.toLowerCase().contains('combo'));
-            else
-              combocategory = list.first;
-            offerModel = await _catalogService.fetchOffer(context);
+        (value) async {
+          list = value;
+          if (list.any((element) =>
+              element.categoryName.toLowerCase().contains('combo')))
+            combocategory = list.firstWhere((element) =>
+                element.categoryName.toLowerCase().contains('combo'));
+          else
+            combocategory = list.first;
+          await _catalogService.fetchOffer(context).then((value) {
+            setState(() {
+              offerModel = value;
+            });
           });
+
+          await CatalogService.instance.getAllFavourite(context).then((value) {
+            Utilities().setFavouriteFood(value);
+            loadFavouriteFood();
+          });
+          // setState(() async {
+          //   list = value;
+          //   if (list.any((element) =>
+          //       element.categoryName.toLowerCase().contains('combo')))
+          //     combocategory = list.firstWhere((element) =>
+          //         element.categoryName.toLowerCase().contains('combo'));
+          //   else
+          //     combocategory = list.first;
+          //   offerModel = await _catalogService.fetchOffer(context);
+          // });
         },
       ),
     );
@@ -69,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   loadFavouriteFood() {
     setState(() {
       favList = Utilities().getAllFavouriteFood();
+      log('loading fav : ${favList.length}');
     });
   }
 
@@ -394,11 +411,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 refreshState: refreshState,
               ),
               RecomendedItems(
-                  screenSize: screenSize,
-                  list: list,
-                  favList: favList,
-                  reloadFavList: loadFavouriteFood,
-                  refreshState: refreshState),
+                screenSize: screenSize,
+                list: list,
+                favList: favList,
+                reloadFavList: loadFavouriteFood,
+                refreshState: refreshState,
+                catalogService: _catalogService,
+                context: context,
+              ),
               if (offerModel != null && offerModel!.coupon_image != null)
                 InkWell(
                   onTap: () => Navigator.of(context).pushNamed(
@@ -514,7 +534,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${foodModel.foodname.toWordCase()}',
+                                  '${foodModel.foodname}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6

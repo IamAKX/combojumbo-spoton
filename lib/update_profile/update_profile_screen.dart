@@ -170,10 +170,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     _profileManagementService.status == ProfileStatus.Loading
                         ? null
                         : () {
-                            _profileManagementService
-                                .updateProfile(_nameCtrl.text, _emailCtrl.text,
-                                    _phoneCtrl.text, imageFile, context)
-                                .then((value) => Navigator.of(context).pop());
+                            _profileManagementService.updateProfile(
+                                _nameCtrl.text,
+                                _emailCtrl.text,
+                                _phoneCtrl.text,
+                                imageFile,
+                                context);
                           },
                 child: Text(
                   _profileManagementService.status == ProfileStatus.Loading

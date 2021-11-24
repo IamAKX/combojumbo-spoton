@@ -294,7 +294,7 @@ class _CartScreenState extends State<CartScreen> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
-                                      '${groupedItem.cartItem.foodname.toWordCase()}',
+                                      '${groupedItem.cartItem.foodname}',
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
                                       overflow: TextOverflow.ellipsis,
@@ -409,8 +409,8 @@ class _CartScreenState extends State<CartScreen> {
                                       setState(() {
                                         couponDiscountDetailModel =
                                             value as CouponDiscountDetailModel?;
-                                        log(couponDiscountDetailModel
-                                            .toString());
+                                        // log(couponDiscountDetailModel
+                                        // .toString());
                                         if (couponDiscountDetailModel != null)
                                           prefs.setString(
                                               PrefernceKey.COUPON_CODE,

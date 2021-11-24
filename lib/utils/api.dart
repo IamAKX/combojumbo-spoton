@@ -56,4 +56,9 @@ class API {
 
   // CJ-Spotons
   static const String AllTable = '${BASE_URL}tableapi';
+
+  // Favourite
+  static const String FavouriteList = '${BASE_URL}fav-list.php';
+  static const String AddFavourite = '${BASE_URL}addfav.php';
+  static const String RemoveFavourite = '${BASE_URL}removefav';
 }

@@ -113,7 +113,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 children: [
                   Container(
                     child: Text(
-                      '${_cat.categoryName.toWordCase()}',
+                      '${_cat.categoryName}',
                       overflow: TextOverflow.ellipsis,
                     ),
                     width: 220,
@@ -309,6 +309,8 @@ class _MenuScreenState extends State<MenuScreen> {
                       refreshState: refreshState,
                       favList: favList,
                       reloadFavList: loadFavouriteFood,
+                      catalogService: _catalogService,
+                      context: context,
                     ),
                   },
                   SizedBox(

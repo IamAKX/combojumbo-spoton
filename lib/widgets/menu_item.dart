@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
@@ -21,6 +22,8 @@ class MenuItem extends StatelessWidget {
     required this.refreshState,
     required this.favList,
     required this.reloadFavList,
+    required this.catalogService,
+    required this.context,
   }) : super(key: key);
   final String title;
   final String subTitle;
@@ -31,6 +34,8 @@ class MenuItem extends StatelessWidget {
   final Function() refreshState;
   final List<FoodModel> favList;
   final Function() reloadFavList;
+  final CatalogService catalogService;
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +44,7 @@ class MenuItem extends StatelessWidget {
       children: [
         ListTile(
           title: Text(
-            '${title.toWordCase()}',
+            '${title}',
             style: Theme.of(context)
                 .textTheme
                 .subtitle1
@@ -106,13 +111,24 @@ class MenuItem extends StatelessWidget {
                 right: 1,
                 top: 1,
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async {
                     if (Utilities()
-                        .isFoodMarkedFavourite(favList, foodModel.id))
-                      favList
-                          .removeWhere((element) => element.id == foodModel.id);
-                    else
-                      favList.add(foodModel);
+                        .isFoodMarkedFavourite(favList, foodModel.id)) {
+                      await catalogService
+                          .removeFavourite(foodModel.id, context)
+                          .then((value) {
+                        if (value)
+                          favList.removeWhere(
+                              (element) => element.id == foodModel.id);
+                      });
+                    } else {
+                      await catalogService
+                          .addFavourite(foodModel.id, context)
+                          .then((value) {
+                        if (value) favList.add(foodModel);
+                      });
+                    }
+
                     Utilities().setFavouriteFood(favList);
                     reloadFavList();
                   },

@@ -76,7 +76,7 @@ class AuthenticationService extends ChangeNotifier {
       'mobileid': fcmToken,
       'profileImage': ''
     });
-    log('Request apple : ${reqBody.fields}');
+    // log('Request apple : ${reqBody.fields}');
     print('Request apple : ${reqBody.fields}');
     Response response = await _dio.post(
       API.GoogleRegisteration,
@@ -162,7 +162,7 @@ class AuthenticationService extends ChangeNotifier {
       'mobileid': fcmToken,
       'profileImage': googleSignInAccount.photoUrl ?? ''
     });
-    log('Request : ${reqBody.fields}');
+    // log('Request : ${reqBody.fields}');
     Response response = await _dio.post(
       API.GoogleRegisteration,
       data: reqBody,
@@ -242,7 +242,7 @@ class AuthenticationService extends ChangeNotifier {
       if (accessToken != null) {
         // user is logged
         FacebookAuth.instance.logOut();
-        log('FB logout');
+        // log('FB logout');
       }
       status = AuthStatus.Error;
       notifyListeners();
@@ -263,14 +263,14 @@ class AuthenticationService extends ChangeNotifier {
         'profileImage': _facebookUser['picture']['data']['url']
       });
 
-      log(reqBody.fields.toString());
+      // log(reqBody.fields.toString());
       Response response = await _dio.post(
         API.FacebookRegisteration,
         data: reqBody,
       );
       var responseBody = json.decode(response.data);
       if (response.statusCode == 200) {
-        log('Response : ${response.data}');
+        // log('Response : ${response.data}');
         var body = responseBody['body'];
         if (responseBody['status'] == 1) {
           print('inside if');
@@ -571,12 +571,12 @@ class AuthenticationService extends ChangeNotifier {
       api,
       data: reqBody,
     );
-    log('Request : ${reqBody.fields}');
-    log('Response : ${response.realUri}');
-    log('Response : ${response.data}');
+    // log('Request : ${reqBody.fields}');
+    // log('Response : ${response.realUri}');
+    // log('Response : ${response.data}');
 
     var resBody = json.decode(response.data);
-    log('Response : ${response.statusCode}');
+    // log('Response : ${response.statusCode}');
 
     if (response.statusCode == 200) {
       var body = resBody['body'];
@@ -834,7 +834,7 @@ class AuthenticationService extends ChangeNotifier {
         API.Outlets,
       );
 
-      log(response.data);
+      // log(response.data);
       var resBody = json.decode(response.data);
       if (response.statusCode == 200) {
         print('Response : ${response.data}');

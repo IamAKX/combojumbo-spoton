@@ -41,7 +41,7 @@ class OrderDetailModel {
       'orderdate': orderdate,
       'outletname': outletname,
       'address': address,
-      'menuDetails': menuDetails?.map((x) => x.toMap())?.toList(),
+      'menuDetails': menuDetails.map((x) => x.toMap()).toList(),
     };
   }
 

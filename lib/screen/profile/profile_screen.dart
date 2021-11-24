@@ -126,7 +126,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 .then((value) {
               setState(() {
                 user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
-                log(user.toString());
+                // log(user.toString());
               });
             });
           },

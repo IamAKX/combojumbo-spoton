@@ -303,7 +303,7 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
-                                      '${groupedItem.cartItem.foodname.toWordCase()}',
+                                      '${groupedItem.cartItem.foodname}',
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
                                       overflow: TextOverflow.ellipsis,
@@ -852,6 +852,7 @@ class _TakeAwayCartScreenState extends State<TakeAwayCartScreen> {
             .placeTakeAwayOrder(cartVriablesModel, response, paymentParam,
                 payUMoneyTxnId, 'success', context)
             .then((value) {
+          Utilities().removeAppliedDiscout();
           if (value)
             Navigator.of(context).pushNamedAndRemoveUntil(
                 MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,

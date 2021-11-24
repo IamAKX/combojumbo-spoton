@@ -8,6 +8,7 @@ import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
@@ -235,12 +236,14 @@ class _ChooseOutletScreenState extends State<ChooseOutletScreen> {
                         prefs.setString(PrefernceKey.SELECTED_PINCODE,
                             _pinCodeModel.toJson());
                       });
-                      if (prefs.getString(PrefernceKey.SELECTED_OUTLET) != null)
+                      if (prefs.getString(PrefernceKey.SELECTED_OUTLET) !=
+                          null) {
+                        Utilities().removeAppliedDiscout();
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             MainContainer.MAIN_CONTAINER_ROUTE,
                             (route) => false,
                             arguments: 0);
-                      else
+                      } else
                         SnackBarService.instance
                             .showSnackBarError('Choose an outlet');
                     },

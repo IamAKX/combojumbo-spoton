@@ -156,7 +156,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 height: 10,
                               ),
                               // Text(
-                              //   '${order.menuDetailsList.map((e) => e.food.productname.toWordCase()).toList().join(',')}',
+                              //   '${order.menuDetailsList.map((e) => e.food.productname).toList().join(',')}',
                               //   style: Theme.of(context).textTheme.subtitle2,
                               // ),
                               Text(

@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:cjspoton/main.dart';
 import 'package:cjspoton/model/food_model.dart';
+import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
+import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class Utilities {
@@ -12,6 +17,21 @@ class Utilities {
       for (String food in prefs.getStringList(PrefernceKey.FAVOURITE_FOOD)!)
         favList.add(FoodModel.fromJson(food));
     }
+
+    return favList;
+  }
+
+  Future<List<FoodModel>> getAllFavouriteFoodOnline(
+      CatalogService _catalogService, BuildContext context) async {
+    List<FoodModel> favList = [];
+    // if (prefs.getStringList(PrefernceKey.FAVOURITE_FOOD) != null) {
+    //   for (String food in prefs.getStringList(PrefernceKey.FAVOURITE_FOOD)!)
+    //     favList.add(FoodModel.fromJson(food));
+    // }
+    await _catalogService
+        .getAllFavourite(context)
+        .then((value) => favList = value);
+
     return favList;
   }
 
@@ -53,6 +73,10 @@ class Utilities {
     return RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
+  }
+
+  Future<bool> removeAppliedDiscout() {
+    return prefs.remove(PrefernceKey.COUPON_CODE);
   }
 
   bool isValidPhone(String phone) {

@@ -1,4 +1,3 @@
-
 import 'package:cjspoton/model/category_model.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
@@ -172,6 +171,8 @@ class _SearchPageScreenState extends State<SearchPageScreen> {
                         refreshState: refreshState,
                         favList: favList,
                         reloadFavList: loadFavouriteFood,
+                        catalogService: _catalogService,
+                        context: context,
                       ),
                     },
                 ],

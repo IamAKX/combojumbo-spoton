@@ -308,7 +308,7 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
-                                      '${groupedItem.cartItem.foodname.toWordCase()}',
+                                      '${groupedItem.cartItem.foodname}',
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
                                       overflow: TextOverflow.ellipsis,
@@ -805,10 +805,10 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                 context,
                 widget.dataContainer.tableBookingModel)
             .then((value) {
-          if (value)
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-                arguments: 1);
+          if (value) Utilities().removeAppliedDiscout();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+              arguments: 1);
         });
       },
     )..show();

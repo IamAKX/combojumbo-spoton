@@ -4,6 +4,7 @@ import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/model/menu_screen_navigator_payload.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/menu/menu_screen.dart';
+import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/theme_config.dart';
@@ -21,6 +22,8 @@ class RecomendedItems extends StatelessWidget {
     required this.favList,
     required this.reloadFavList,
     required this.refreshState,
+    required this.catalogService,
+    required this.context,
   }) : super(key: key);
 
   final Size screenSize;
@@ -28,6 +31,8 @@ class RecomendedItems extends StatelessWidget {
   final List<FoodModel> favList;
   final Function() reloadFavList;
   final Function() refreshState;
+  final CatalogService catalogService;
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -78,14 +83,29 @@ class RecomendedItems extends StatelessWidget {
                         right: 10,
                         top: 10,
                         child: InkWell(
-                          onTap: () {
+                          onTap: () async {
                             if (Utilities().isFoodMarkedFavourite(
-                                favList, list.first.foodList.elementAt(i).id))
-                              favList.removeWhere((element) =>
-                                  element.id ==
-                                  list.first.foodList.elementAt(i).id);
-                            else
-                              favList.add(list.first.foodList.elementAt(i));
+                                favList, list.first.foodList.elementAt(i).id)) {
+                              await catalogService
+                                  .removeFavourite(
+                                      list.first.foodList.elementAt(i).id,
+                                      context)
+                                  .then((value) {
+                                if (value)
+                                  favList.removeWhere((element) =>
+                                      element.id ==
+                                      list.first.foodList.elementAt(i).id);
+                              });
+                            } else {
+                              await catalogService
+                                  .addFavourite(
+                                      list.first.foodList.elementAt(i).id,
+                                      context)
+                                  .then((value) {
+                                if (value)
+                                  favList.add(list.first.foodList.elementAt(i));
+                              });
+                            }
                             Utilities().setFavouriteFood(favList);
                             reloadFavList();
                           },
@@ -142,7 +162,7 @@ class RecomendedItems extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${list.first.foodList.elementAt(i).foodname.toWordCase()}',
+                        '${list.first.foodList.elementAt(i).foodname}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(
@@ -208,7 +228,7 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell( 
+    return InkWell(
       onTap: () {
         Navigator.of(context).pushNamed(
           MenuScreen.MENU_SCREEN_ROUTE,

@@ -1,12 +1,17 @@
+import 'dart:developer';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cjspoton/model/food_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
+import 'package:cjspoton/services/catalog_service.dart';
+import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/theme_config.dart';
 import 'package:cjspoton/utils/utilities.dart';
 import 'package:cjspoton/widgets/cart_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 
 class FavouriteScreen extends StatefulWidget {
@@ -19,8 +24,8 @@ class FavouriteScreen extends StatefulWidget {
 
 class _FavouriteScreenState extends State<FavouriteScreen> {
   late Size screenSize;
-
-  late List<FoodModel> favList;
+  late CatalogService _catalogService;
+  List<FoodModel> favList = [];
 
   refreshState() {
     widget.refreshMainContainerState();
@@ -28,8 +33,24 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) => _catalogService.getAllFavourite(context).then(
+        (value) {
+          setState(() {
+            favList = value;
+          });
+        },
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    favList = Utilities().getAllFavouriteFood();
+    _catalogService = Provider.of<CatalogService>(context);
+    SnackBarService.instance.buildContext = context;
     screenSize = MediaQuery.of(context).size;
     return favList.isEmpty
         ? Center(
@@ -110,14 +131,27 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
                                 right: 10,
                                 top: 10,
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
                                     if (Utilities().isFoodMarkedFavourite(
-                                        favList, favList.elementAt(i).id))
-                                      favList.removeWhere((element) =>
-                                          element.id ==
-                                          favList.elementAt(i).id);
-                                    else
-                                      favList.add(favList.elementAt(i));
+                                        favList, favList.elementAt(i).id)) {
+                                      await _catalogService
+                                          .removeFavourite(
+                                              favList.elementAt(i).id, context)
+                                          .then((value) {
+                                        if (value)
+                                          favList.removeWhere((element) =>
+                                              element.id ==
+                                              favList.elementAt(i).id);
+                                      });
+                                    } else {
+                                      await _catalogService
+                                          .addFavourite(
+                                              favList.elementAt(i).id, context)
+                                          .then((value) {
+                                        if (value)
+                                          favList.add(favList.elementAt(i));
+                                      });
+                                    }
                                     Utilities().setFavouriteFood(favList);
                                     setState(() {});
                                   },
