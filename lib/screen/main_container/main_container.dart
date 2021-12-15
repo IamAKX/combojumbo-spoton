@@ -123,10 +123,10 @@ class _MainContainerState extends State<MainContainer> {
       case 1:
         return OrderScreen();
       case 2:
-        // return CommingSoonScreen(
-        //     menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
-        //         refreshMainContainerState: refreshState, categoryId: "0"));
-        return CJSpotOnTableBookingScreen(refreshState);
+        return CommingSoonScreen(
+            menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
+                refreshMainContainerState: refreshState, categoryId: "0"));
+      // return CJSpotOnTableBookingScreen(refreshState);
       case 3:
         return FavouriteScreen(
           refreshMainContainerState: refreshState,
