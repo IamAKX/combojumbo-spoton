@@ -69,9 +69,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       //       aspectRatioPickerButtonHidden: true,
       //     ));
       imageFile = await ImageCrop.sampleImage(
-      file: File(image.path),
-      preferredSize: context.size!.longestSide.ceil(),
-    );
+        file: File(image.path),
+        preferredSize: context.size!.longestSide.ceil(),
+      );
 
       setState(() {});
     }

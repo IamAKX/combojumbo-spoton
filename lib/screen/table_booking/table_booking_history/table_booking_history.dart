@@ -125,7 +125,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 style: Theme.of(context).textTheme.caption,
                               ),
                               Text(
-                                '${order.noguest} Guests',
+                                '${order.noguest} Guest${order.noguest == '1' ? '' : 's'}',
                                 style: Theme.of(context).textTheme.subtitle2,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -156,7 +156,7 @@ class _TableBookingScreensState extends State<TableBookingScreens> {
                                 height: 10,
                               ),
                               // Text(
-                              //   '${order.menuDetailsList.map((e) => e.food.productname.toWordCase()).toList().join(',')}',
+                              //   '${order.menuDetailsList.map((e) => e.food.productname).toList().join(',')}',
                               //   style: Theme.of(context).textTheme.subtitle2,
                               // ),
                               Text(

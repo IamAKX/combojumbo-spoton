@@ -42,7 +42,7 @@ class _OrderScreenState extends State<OrderScreen> {
   Widget build(BuildContext context) {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
-    log('orders.length = ${orders.length}');
+    // log('orders.length = ${orders.length}');
     return _cartServices.status == CartStatus.Loading
         ? Center(
             child: CircularProgressIndicator(),
@@ -157,15 +157,16 @@ class _OrderScreenState extends State<OrderScreen> {
                             SizedBox(
                               height: 10,
                             ),
+                            if (order.menuDetails.isNotEmpty)
+                              Text(
+                                '${order.menuDetails.map((e) => e.food.productname + ' x ' + e.food.qty).toList().join(', ')}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .subtitle2
+                                    ?.copyWith(color: hintColor),
+                              ),
                             Text(
-                              '${order.menuDetails.map((e) => e.food.productname.toWordCase() + ' x ' + e.food.qty).toList().join(', ')}',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .subtitle2
-                                  ?.copyWith(color: hintColor),
-                            ),
-                            Text(
-                              '${formatOrderTime(order.order.date_creation)}',
+                              '${order.orderdate}',
                               style: Theme.of(context).textTheme.caption,
                             ),
                             SizedBox(

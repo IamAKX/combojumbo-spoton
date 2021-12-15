@@ -90,6 +90,11 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
     _cartServices = Provider.of<CartServices>(context);
     SnackBarService.instance.buildContext = context;
     user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    if (prefs.containsKey(PrefernceKey.COUPON_CODE) &&
+        prefs.getString(PrefernceKey.COUPON_CODE)!.isNotEmpty) {
+      couponDiscountDetailModel = CouponDiscountDetailModel.fromJson(
+          prefs.getString(PrefernceKey.COUPON_CODE)!);
+    }
     if (couponDiscountDetailModel != null &&
         couponDiscountDetailModel!.minimum_order_value.isNotEmpty &&
         CartHelper.getTotalPriceOfCart().toDouble() <
@@ -303,7 +308,7 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                                     width:
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: Text(
-                                      '${groupedItem.cartItem.foodname.toWordCase()}',
+                                      '${groupedItem.cartItem.foodname}',
                                       style:
                                           Theme.of(context).textTheme.subtitle1,
                                       overflow: TextOverflow.ellipsis,
@@ -391,7 +396,9 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                               'assets/images/discount.png',
                               width: 30,
                             ),
-                            trailing: Icon(Icons.chevron_right_outlined),
+                            trailing: couponDiscountDetailModel != null
+                                ? Icon(Icons.close)
+                                : Icon(Icons.chevron_right_outlined),
                             subtitle: couponDiscountDetailModel != null
                                 ? Text(
                                     'Offer applied on the bill',
@@ -402,16 +409,28 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                                 ? Text('APPLY COUPON')
                                 : Text(
                                     '${couponDiscountDetailModel!.coupon_code}'),
-                            onTap: () {
-                              Navigator.of(context)
-                                  .pushNamed(CouponScreen.COUPON_ROUTE)
-                                  .then((value) {
-                                setState(() {
-                                  couponDiscountDetailModel =
-                                      value as CouponDiscountDetailModel?;
-                                });
-                              });
-                            },
+                            onTap: couponDiscountDetailModel != null
+                                ? () {
+                                    setState(() {
+                                      couponDiscountDetailModel = null;
+                                      prefs.remove(PrefernceKey.COUPON_CODE);
+                                    });
+                                  }
+                                : () {
+                                    Navigator.of(context)
+                                        .pushNamed(CouponScreen.COUPON_ROUTE)
+                                        .then((value) {
+                                      setState(() {
+                                        couponDiscountDetailModel =
+                                            value as CouponDiscountDetailModel?;
+                                        if (couponDiscountDetailModel != null)
+                                          prefs.setString(
+                                              PrefernceKey.COUPON_CODE,
+                                              couponDiscountDetailModel!
+                                                  .toJson());
+                                      });
+                                    });
+                                  },
                           ),
                     // : DropdownSearch<String>(
                     //     mode: Mode.MENU,
@@ -587,7 +606,10 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                               ),
                             ],
                           ),
-                        if (couponDiscountDetailModel != null)
+                        if (couponDiscountDetailModel != null &&
+                            CartHelper.getDiscountPrice(
+                                    couponDiscountDetailModel) >
+                                0)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -783,10 +805,10 @@ class _EDiningCartScreenState extends State<EDiningCartScreen> {
                 context,
                 widget.dataContainer.tableBookingModel)
             .then((value) {
-          if (value)
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
-                arguments: 1);
+          if (value) Utilities().removeAppliedDiscout();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              MainContainer.MAIN_CONTAINER_ROUTE, (route) => false,
+              arguments: 1);
         });
       },
     )..show();

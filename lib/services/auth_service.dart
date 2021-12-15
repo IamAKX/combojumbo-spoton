@@ -76,7 +76,7 @@ class AuthenticationService extends ChangeNotifier {
       'mobileid': fcmToken,
       'profileImage': ''
     });
-    log('Request apple : ${reqBody.fields}');
+    // log('Request apple : ${reqBody.fields}');
     print('Request apple : ${reqBody.fields}');
     Response response = await _dio.post(
       API.GoogleRegisteration,
@@ -162,7 +162,7 @@ class AuthenticationService extends ChangeNotifier {
       'mobileid': fcmToken,
       'profileImage': googleSignInAccount.photoUrl ?? ''
     });
-    log('Request : ${reqBody.fields}');
+    // log('Request : ${reqBody.fields}');
     Response response = await _dio.post(
       API.GoogleRegisteration,
       data: reqBody,
@@ -242,7 +242,7 @@ class AuthenticationService extends ChangeNotifier {
       if (accessToken != null) {
         // user is logged
         FacebookAuth.instance.logOut();
-        log('FB logout');
+        // log('FB logout');
       }
       status = AuthStatus.Error;
       notifyListeners();
@@ -263,14 +263,14 @@ class AuthenticationService extends ChangeNotifier {
         'profileImage': _facebookUser['picture']['data']['url']
       });
 
-      log(reqBody.fields.toString());
+      // log(reqBody.fields.toString());
       Response response = await _dio.post(
         API.FacebookRegisteration,
         data: reqBody,
       );
       var responseBody = json.decode(response.data);
       if (response.statusCode == 200) {
-        log('Response : ${response.data}');
+        // log('Response : ${response.data}');
         var body = responseBody['body'];
         if (responseBody['status'] == 1) {
           print('inside if');
@@ -559,45 +559,48 @@ class AuthenticationService extends ChangeNotifier {
     status = AuthStatus.Authenticating;
     notifyListeners();
 
-    try {
-      UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
-      var reqBody = FormData.fromMap({
-        'cust_id': user.id,
-      });
-      String api = currentScreen == 'ForgotPasswordScreen'
-          ? API.ForgotPasswordResendOTP
-          : API.ResendOTP;
-      Response response = await _dio.post(
-        api,
-        data: reqBody,
-      );
-      print('Request : ${reqBody.fields}');
-      var resBody = json.decode(response.data);
-      if (response.statusCode == 200) {
-        print('Response : ${response.data}');
+    // try {
+    UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    var reqBody = FormData.fromMap({
+      'cust_id': user.id,
+    });
+    String api = currentScreen == 'ForgotPasswordScreen'
+        ? API.ForgotPasswordResendOTP
+        : API.ResendOTP;
+    Response response = await _dio.post(
+      api,
+      data: reqBody,
+    );
+    // log('Request : ${reqBody.fields}');
+    // log('Response : ${response.realUri}');
+    // log('Response : ${response.data}');
 
-        var body = resBody['body'];
+    var resBody = json.decode(response.data);
+    // log('Response : ${response.statusCode}');
 
-        if (resBody['status'] == 1) {
-          status = AuthStatus.Authenticated;
-          notifyListeners();
-          SnackBarService.instance.showSnackBarSuccess(body['msg']);
-        } else {
-          status = AuthStatus.Error;
-          notifyListeners();
-          SnackBarService.instance.showSnackBarError((body['msg']));
-        }
+    if (response.statusCode == 200) {
+      var body = resBody['body'];
+
+      if (resBody['status'] == 1) {
+        status = AuthStatus.Authenticated;
+        notifyListeners();
+        SnackBarService.instance.showSnackBarSuccess(body['msg']);
       } else {
         status = AuthStatus.Error;
         notifyListeners();
-        SnackBarService.instance
-            .showSnackBarError('Error : ${response.statusMessage!}');
+        SnackBarService.instance.showSnackBarError((body['msg']));
       }
-    } catch (e) {
+    } else {
       status = AuthStatus.Error;
       notifyListeners();
-      SnackBarService.instance.showSnackBarError(e.toString());
+      SnackBarService.instance
+          .showSnackBarError('Error : ${response.statusMessage!}');
     }
+    // } catch (e) {
+    //   status = AuthStatus.Error;
+    //   notifyListeners();
+    //   SnackBarService.instance.showSnackBarError(e.toString());
+    // }
   }
 
   Future<void> forgotPassword(String phone, BuildContext context) async {
@@ -831,7 +834,7 @@ class AuthenticationService extends ChangeNotifier {
         API.Outlets,
       );
 
-      log(response.data);
+      // log(response.data);
       var resBody = json.decode(response.data);
       if (response.statusCode == 200) {
         print('Response : ${response.data}');

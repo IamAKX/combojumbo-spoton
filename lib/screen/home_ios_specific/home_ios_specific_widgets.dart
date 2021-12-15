@@ -142,7 +142,7 @@ class RecomendedItemsIosSpecific extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${list.first.foodList.elementAt(i).foodname.toWordCase()}',
+                        '${list.first.foodList.elementAt(i).foodname}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6?.copyWith(

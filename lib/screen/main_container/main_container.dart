@@ -5,6 +5,7 @@ import 'package:cjspoton/model/pincode_model.dart';
 import 'package:cjspoton/screen/cart/cart_helper.dart';
 import 'package:cjspoton/screen/cart/cart_screen.dart';
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
+import 'package:cjspoton/screen/cj_spoton/cj_spoton_table_booking_screen.dart';
 import 'package:cjspoton/screen/comming_soon/comming_soon_screen.dart';
 import 'package:cjspoton/screen/delivery_pincode/delivery_pincode_screen.dart';
 import 'package:cjspoton/screen/favourite/favourite_screen.dart';
@@ -14,12 +15,14 @@ import 'package:cjspoton/screen/order/order_screen.dart';
 import 'package:cjspoton/screen/profile/profile_screen.dart';
 import 'package:cjspoton/screen/search_page/search_page_screen.dart';
 import 'package:cjspoton/screen/table_booking/table_booking_history/table_booking_history.dart';
+import 'package:cjspoton/services/catalog_service.dart';
 import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/services/snackbar_service.dart';
 import 'package:cjspoton/utils/colors.dart';
 import 'package:cjspoton/utils/constants.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +41,7 @@ class _MainContainerState extends State<MainContainer> {
   late int _selectedIndex;
   TextEditingController _searchCtrl = TextEditingController();
   late PincodeModel _pincodeModel;
+  late CatalogService _catalogService;
 
   @override
   void initState() {
@@ -52,6 +56,8 @@ class _MainContainerState extends State<MainContainer> {
 
   @override
   Widget build(BuildContext context) {
+    _catalogService = Provider.of<CatalogService>(context);
+
     _pincodeModel = Constants.getDefaultPincode();
     MainContainer.profileManagementService =
         Provider.of<ProfileManagementService>(context);
@@ -120,6 +126,7 @@ class _MainContainerState extends State<MainContainer> {
         return CommingSoonScreen(
             menuScreenNavigatorPayloadModel: MenuScreenNavigatorPayloadModel(
                 refreshMainContainerState: refreshState, categoryId: "0"));
+      // return CJSpotOnTableBookingScreen(refreshState);
       case 3:
         return FavouriteScreen(
           refreshMainContainerState: refreshState,
@@ -239,7 +246,16 @@ class _MainContainerState extends State<MainContainer> {
           ],
         );
       case 2:
-        return null;
+        return AppBar(
+          title: Text('CJ SpotOn - Book Table'),
+          backgroundColor: bgColor,
+          centerTitle: false,
+          actions: [
+            GetCartButton(
+              refreshState: refreshState,
+            ),
+          ],
+        );
       case 3:
         return AppBar(
           title: Text('CJ Fav'),

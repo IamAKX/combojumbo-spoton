@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cjspoton/screen/choose_outlet/choose_outlet_screen.dart';
 import 'package:cjspoton/screen/login/login_screen.dart';
 import 'package:cjspoton/screen/main_container/main_container.dart';
@@ -9,6 +11,7 @@ import 'package:cjspoton/services/profile_management_service.dart';
 import 'package:cjspoton/utils/navigator.dart';
 import 'package:cjspoton/utils/prefs_key.dart';
 import 'package:cjspoton/utils/theme_config.dart';
+import 'package:cjspoton/utils/utilities.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

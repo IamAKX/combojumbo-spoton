@@ -97,7 +97,7 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
   Widget build(BuildContext context) {
     _pincodeModel = Constants.getDefaultPincode();
     _catalogService = Provider.of<CatalogService>(context);
-    
+
     SnackBarService.instance.buildContext = context;
     final button = new PopupMenuButton(
       key: _menuKey,
@@ -113,7 +113,7 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
                 children: [
                   Container(
                     child: Text(
-                      '${_cat.categoryName.toWordCase()}',
+                      '${_cat.categoryName}',
                       overflow: TextOverflow.ellipsis,
                     ),
                     width: 220,
@@ -309,6 +309,8 @@ class _TakeAwayMenuScreenState extends State<TakeAwayMenuScreen> {
                       refreshState: refreshState,
                       favList: favList,
                       reloadFavList: loadFavouriteFood,
+                      catalogService: _catalogService,
+                      context: context,
                     ),
                   },
                   SizedBox(

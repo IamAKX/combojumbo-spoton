@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cjspoton/model/add_slider_model.dart';
@@ -33,20 +32,19 @@ class _HomeScreenIosSpecificState extends State<HomeScreenIosSpecific> {
   late Size screenSize;
   late CatalogService _catalogService;
   List<CategoryModel> list = [];
-  List<FoodModel> favList = [];
   late CategoryModel combocategory;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadFavouriteFood();
 
     WidgetsBinding.instance!.addPostFrameCallback(
       (_) => _catalogService.fetchAllFoodItem(context).then(
         (value) {
           setState(() {
             list = value;
+
             if (list.any((element) =>
                 element.categoryName.toLowerCase().contains('combo')))
               combocategory = list.firstWhere((element) =>
@@ -57,12 +55,6 @@ class _HomeScreenIosSpecificState extends State<HomeScreenIosSpecific> {
         },
       ),
     );
-  }
-
-  loadFavouriteFood() {
-    setState(() {
-      favList = Utilities().getAllFavouriteFood();
-    });
   }
 
   refreshState() {
@@ -331,8 +323,8 @@ class _HomeScreenIosSpecificState extends State<HomeScreenIosSpecific> {
               RecomendedItemsIosSpecific(
                   screenSize: screenSize,
                   list: list,
-                  favList: favList,
-                  reloadFavList: loadFavouriteFood,
+                  favList: [],
+                  reloadFavList: () {},
                   refreshState: refreshState),
               InkWell(
                 onTap: () => Navigator.of(context).pushNamed(
@@ -447,7 +439,7 @@ class _HomeScreenIosSpecificState extends State<HomeScreenIosSpecific> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${foodModel.foodname.toWordCase()}',
+                                  '${foodModel.foodname}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .headline6

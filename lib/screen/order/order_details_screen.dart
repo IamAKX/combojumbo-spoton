@@ -32,7 +32,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
               style: Theme.of(context).textTheme.bodyText1,
             ),
             Text(
-              'Ordered on ${formatOrderTime(widget.orderDetailModel.order.date_creation)}',
+              'Ordered on ${widget.orderDetailModel.orderdate}',
               style: Theme.of(context).textTheme.caption,
             ),
           ],
@@ -42,7 +42,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       body: ListView(
         padding: EdgeInsets.all(defaultPadding),
         children: [
-          if (widget.orderDetailModel.order.delivery_boy_name.trim().isNotEmpty)
+          if (isOrderDelivered(widget.orderDetailModel.order.order_status) &&
+              widget.orderDetailModel.order.delivery_boy_name.trim().isNotEmpty)
             Row(
               children: [
                 Icon(
@@ -53,7 +54,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   width: defaultPadding / 2,
                 ),
                 Text(
-                  'Order delivered by ${widget.orderDetailModel.order.delivery_boy_name.isEmpty ? 'unknown' : widget.orderDetailModel.order.delivery_boy_name}',
+                  'Order delivered by ${widget.orderDetailModel.order.delivery_boy_name}',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
@@ -201,9 +202,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                   ?.copyWith(color: textColor),
             ),
           if (widget.orderDetailModel.order.ordertype == 'Delivery')
-            Text(
-              '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
-              style: Theme.of(context).textTheme.caption,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: Text(
+                '${widget.orderDetailModel.address.replaceAll(',', ', ')}',
+                style: Theme.of(context).textTheme.caption,
+              ),
             ),
         ],
       ),

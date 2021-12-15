@@ -126,18 +126,24 @@ class CartHelper {
       CouponDiscountDetailModel? couponDiscountDetailModel) {
     if (couponDiscountDetailModel == null) return 0;
     double amt = getTotalPriceOfCart();
-
+    double total = amt;
     switch (couponDiscountDetailModel.coupon_type) {
       case 'Percentage':
         amt = amt * double.parse(couponDiscountDetailModel.coupon_value) / 100;
-        if (amt >= couponDiscountDetailModel.maximum_order_value.toDouble() &&
+        if (total < amt)
+          return 0;
+        else if (amt >=
+                couponDiscountDetailModel.maximum_order_value.toDouble() &&
             couponDiscountDetailModel.maximum_order_value.toDouble() != 0) {
           return couponDiscountDetailModel.maximum_order_value.toDouble();
         } else {
           return amt;
         }
       default:
-        return double.parse(couponDiscountDetailModel.coupon_value);
+        if (total < double.parse(couponDiscountDetailModel.coupon_value))
+          return 0;
+        else
+          return double.parse(couponDiscountDetailModel.coupon_value);
     }
   }
 

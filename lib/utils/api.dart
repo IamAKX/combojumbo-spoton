@@ -11,7 +11,9 @@ class API {
 
   static const String ForgotPasswordVerifyOTP =
       '${BASE_URL}forgototpverify.php';
-  static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
+  // static const String ForgotPasswordResendOTP = '${BASE_URL}resendotp.php';
+  static const String ForgotPasswordResendOTP =
+      '${BASE_URL}resendotp-forgot.php';
   static const String ForgotPassword = '${BASE_URL}forgotpassword.php';
   static const String ResetPassword = '${BASE_URL}reset-password.php';
   static const String ChangePassword = '${BASE_URL}resetpassword.php';
@@ -28,6 +30,7 @@ class API {
   static const String VerifyCouponCode = '${BASE_URL}coupon';
   static const String PlaceOrder = '${BASE_URL}payment-response';
   static const String OrderHistory = '${BASE_URL}orderhistory.php';
+  static const String OfferHome = '${BASE_URL}offer';
 
   static const String State = '${BASE_URL}state';
   static const String City = '${BASE_URL}city';
@@ -50,4 +53,12 @@ class API {
   static const String MUNCHBOX =
       'https://www.combojumbo.in/cj-hotcase/index#munchbox';
   static const String BANQUET_PPC = 'https://www.combojumbo.in/banquet-ppc/';
+
+  // CJ-Spotons
+  static const String AllTable = '${BASE_URL}tableapi';
+
+  // Favourite
+  static const String FavouriteList = '${BASE_URL}fav-list.php';
+  static const String AddFavourite = '${BASE_URL}addfav.php';
+  static const String RemoveFavourite = '${BASE_URL}removefav';
 }

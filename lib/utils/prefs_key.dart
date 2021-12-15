@@ -6,4 +6,5 @@ class PrefernceKey {
   static const String SELECTED_PINCODE = 'SELECTED_PINCODE';
   static const String ADDRESS = 'ADDRESS';
   static const String IS_LOGGEDIN = 'IS_LOGGEDIN';
+  static const String COUPON_CODE = 'COUPON_CODE';
 }

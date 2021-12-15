@@ -146,6 +146,9 @@ class AddressService extends ChangeNotifier {
     status = AddressStatus.Loading;
     notifyListeners();
     UserModel user = UserModel.fromJson(prefs.getString(PrefernceKey.USER)!);
+    OutletModel outletModel =
+        OutletModel.fromJson(prefs.getString(PrefernceKey.SELECTED_OUTLET)!);
+
     var reqBody = FormData.fromMap({
       'cust_id': '${user.id}',
       'add1': '${address.address1}',
@@ -398,7 +401,6 @@ class AddressService extends ChangeNotifier {
       'nickname': '${address.addressType}',
       'delivery_instruction': '${address.deliveryInstruction}',
     };
-    log(tem.toString());
     try {
       Response response = await _dio.post(API.UpdateAddress, data: reqBody);
 
@@ -410,6 +412,7 @@ class AddressService extends ChangeNotifier {
           status = AddressStatus.Success;
           notifyListeners();
           SnackBarService.instance.showSnackBarSuccess((resBody['msg']));
+          Navigator.of(context).pop();
         } else {
           status = AddressStatus.Error;
           notifyListeners();

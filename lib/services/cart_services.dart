@@ -358,10 +358,7 @@ class CartServices extends ChangeNotifier {
     };
     var reqBody = FormData.fromMap(payload);
 
-    log(json.encode(payload));
-
     Response response = await _dio.post(API.PlaceOrder, data: payload);
-    log('response : ' + response.data.toString());
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
       print('Response : ${response.data}');
@@ -418,8 +415,6 @@ class CartServices extends ChangeNotifier {
 
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
-      log('Response : ${response.data}');
-
       var body = resBody['body'] ?? [];
 
       if (resBody['status'] == "1" || resBody['status'] == 1) {
@@ -518,6 +513,7 @@ class CartServices extends ChangeNotifier {
           }
           OrderDetailModel orderDetailModel = OrderDetailModel(
               order: orderModel,
+              orderdate: history['orderdate'],
               menuDetails: menuDetails,
               address: history['address'],
               outletname: history['outletname']);
@@ -602,10 +598,7 @@ class CartServices extends ChangeNotifier {
     };
     var reqBody = FormData.fromMap(payload);
 
-    log(json.encode(payload));
-
     Response response = await _dio.post(API.PlaceOrder, data: payload);
-    log('response : ' + response.data.toString());
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
       print('Response : ${response.data}');
@@ -737,10 +730,7 @@ class CartServices extends ChangeNotifier {
     };
     var reqBody = FormData.fromMap(payload);
 
-    log(json.encode(payload));
-
     Response response = await _dio.post(API.PlaceOrder, data: payload);
-    log('response : ' + response.data.toString());
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
       print('Response : ${response.data}');
@@ -795,11 +785,8 @@ class CartServices extends ChangeNotifier {
     });
     Response response =
         await _dio.post(API.TableBookingOrderHistory, data: reqBody);
-    log(reqBody.toString());
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
-      log('Response : ${response.data}');
-
       var body = resBody['body'] ?? [];
 
       if (resBody['status'] == "1" || resBody['status'] == 1) {
@@ -941,10 +928,7 @@ class CartServices extends ChangeNotifier {
     };
     var reqBody = FormData.fromMap(payload);
 
-    log(json.encode(payload));
-
     Response response = await _dio.post(API.PlaceOrder, data: payload);
-    log('response : ' + response.data.toString());
     var resBody = json.decode(response.data);
     if (response.statusCode == 200) {
       print('Response : ${response.data}');
