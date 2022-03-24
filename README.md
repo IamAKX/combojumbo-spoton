@@ -1,5 +1,9 @@
 # cjspoton
 
+### App link
+https://play.google.com/store/apps/details?id=com.combojumbo.cjspoton
+
+
 App for Combojumbo
 
 ![Screenshot_1631078686_google-pixel4-clearlywhite-portrait](https://user-images.githubusercontent.com/17857031/132654292-9b275b9c-9b79-4d59-ba13-9bba92050d3a.png)
